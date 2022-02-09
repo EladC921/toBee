@@ -16,19 +16,6 @@ const Tabs = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="home" size={32} />
-            ) : (
-              <Ionicons name="home-outline" size={32} />
-            ),
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -51,6 +38,19 @@ const Tabs = () => {
               <Ionicons name="people" size={32} />
             ) : (
               <Ionicons name="people-outline" size={32} />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="home" size={32} />
+            ) : (
+              <Ionicons name="home-outline" size={32} />
             ),
         }}
       />
