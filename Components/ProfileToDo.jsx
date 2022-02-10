@@ -10,7 +10,7 @@ import {
 import React from "react";
 import Task from "./Tasks/Task";
 import { useState } from "react";
-import { Icon } from "react-native-elements";
+// import { Icon } from "react-native-elements";
 
 let toDoList = [
   {
@@ -143,7 +143,7 @@ const ProfileToDo = () => {
         />
       </View>
       {/** Modal add Task*/}
-      <View>
+      {/* <View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -176,7 +176,7 @@ const ProfileToDo = () => {
             </View>
           </View>
         </Modal>
-      </View>
+      </View> */}
     </View>
   );
 };
