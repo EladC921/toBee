@@ -9,27 +9,19 @@ import {
 import React from "react";
 import Task from "./Tasks/Task";
 import GroupTask from "./Tasks/GroupTask";
+import GroupsTask from "./Tasks/GroupsTask";
 
 let toDoList = [
   {
-    id: 0,
-    gid: 1,
-    tid: 1,
-    groupName: "Ruppin Computer Science",
-    title: "Learn React Native 1",
+    id: 3,
+    gid: 3,
+    tid: 4,
+    groupName: "Cohen Fam",
+    title: "Learn React Native 4",
     completed: false,
-    text: "Learn React Native Now",
+    text: "Learn React Native Now!!!",
     createdAt: new Date(),
-  },
-  {
-    id: 1,
-    gid: 1,
-    tid: 2,
-    groupName: "Ruppin Computer Science",
-    title: "Learn React Native 2",
-    completed: false,
-    text: "Learn React Native Now!",
-    createdAt: new Date(),
+    dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
   },
   {
     id: 2,
@@ -40,16 +32,65 @@ let toDoList = [
     completed: false,
     text: "Learn React Native Now!!",
     createdAt: new Date(),
+    dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
   },
   {
-    id: 3,
-    gid: 3,
-    tid: 4,
-    groupName: "Cohen Fam",
-    title: "Learn React Native 4",
+    id: 0,
+    gid: 4,
+    tid: 1,
+    groupName: "Shustermen!",
+    title: "Make a Modal",
     completed: false,
-    text: "Learn React Native Now!!!",
+    text: "Make a modal on the Register Page.",
     createdAt: new Date(),
+    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+  },
+  {
+    id: 1,
+    gid: 1,
+    tid: 2,
+    groupName: "Ruppin Computer Science",
+    title: "Learn React Native 2",
+    completed: false,
+    text: "Learn React Native Now!",
+    createdAt: new Date(),
+    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+  },
+];
+
+let toDoList2 = [
+  {
+    id: 3,
+    gid: 4,
+    tid: 4,
+    groupName: "Shustermen!",
+    title: "Getting ready to complexity",
+    completed: false,
+    text: "This is very complex and therefore very hard, but I'm ready!",
+    createdAt: new Date(),
+    dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
+  },
+  {
+    id: 1,
+    gid: 1,
+    tid: 2,
+    groupName: "Ruppin Computer Science",
+    title: "Finish this App",
+    completed: false,
+    text: "Apply the Backend to the Frontend",
+    createdAt: new Date(),
+    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+  },
+  {
+    id: 0,
+    gid: 4,
+    tid: 1,
+    groupName: "Shustermen!",
+    title: "Make a Modal",
+    completed: false,
+    text: "Make a modal on the Register Page.",
+    createdAt: new Date(),
+    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
   },
 ];
 
@@ -93,40 +134,43 @@ const Home = () => {
         <Text style={{ color: "black", fontSize: 20 }}>Welcome toBee!</Text>
       </View>
       {/** Registerable Tasks */}
-      <View style={{ flex: 3 }}>
+      <View style={{ flex: 2 }}>
         <Text style={{ position: "absolute", top: 0, left: 5 }}>
           Registerable Tasks
         </Text>
         <FlatList
           horizontal
-          data={toDoList}
+          data={toDoList2}
           contentContainerStyle={styles.list_container}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-            <Task
+            <GroupsTask
+              color={getColor(item.gid)}
+              groupName={item.groupName}
               title={item.title}
               text={item.text}
               createdAt={item.createdAt}
+              dueDate={item.dueDate}
             />
           )}
         />
       </View>
-
       {/** My Tasks */}
-      <View style={{ flex: 4 }}>
-        <Text style={{ position: "absolute", top: 50, left: 5 }}>My Tasks</Text>
+      <View style={{ flex: 2 }}>
+        <Text style={{ alignSelf: "flex-start", marginLeft: 5 }}>My Tasks</Text>
         <FlatList
           horizontal
           data={toDoList}
           contentContainerStyle={styles.list_container}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-            <GroupTask
+            <GroupsTask
               color={getColor(item.gid)}
               groupName={item.groupName}
               title={item.title}
               text={item.text}
               createdAt={item.createdAt}
+              dueDate={item.dueDate}
             />
           )}
         />
@@ -154,6 +198,7 @@ const styles = StyleSheet.create({
   list_container: {
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 5,
   },
 });
 
