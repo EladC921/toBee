@@ -13,6 +13,7 @@ import Task from "./Tasks/Task";
 import { useState } from "react";
 import { Icon } from "react-native-elements";
 
+
 let toDoList = [
   {
     id: 3,
@@ -146,6 +147,7 @@ const ProfileToDo = () => {
       </View>
       {/** Modal add Task*/}
       <View>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -201,6 +203,7 @@ const ProfileToDo = () => {
           </View>
         </Modal>
       </View>
+
     </View>
   );
 };
@@ -309,6 +312,7 @@ const styles = StyleSheet.create({
     padding: 2,
     elevation: 2,
   },
+
 });
 
 export default ProfileToDo;
