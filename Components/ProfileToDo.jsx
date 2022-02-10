@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  TextInput,
 } from "react-native";
 import React from "react";
 import Task from "./Tasks/Task";
 import { useState } from "react";
-// import { Icon } from "react-native-elements";
+import { Icon } from "react-native-elements";
 
 let toDoList = [
   {
@@ -111,7 +112,7 @@ const ProfileToDo = () => {
       <View style={{ margin: 10 }}>
         <Text style={{ fontSize: 16, fontWeight: "700" }}>My to-do List</Text>
       </View>
-      <View style={{ height: "92%", width: "100%" }}>
+      <View style={{ height: "95%", width: "100%" }}>
         <FlatList
           data={[...toDoList, { addTask: true }]}
           contentContainerStyle={styles.list_container}
@@ -143,7 +144,7 @@ const ProfileToDo = () => {
         />
       </View>
       {/** Modal add Task*/}
-      {/* <View>
+      <View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -155,7 +156,7 @@ const ProfileToDo = () => {
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
               <Pressable
-                style={[styles.button]}
+                style={[styles.closeBtn, styles.btnContainer]}
                 onPress={() => {
                   setModal(!modal);
                 }}
@@ -167,22 +168,146 @@ const ProfileToDo = () => {
                   iconStyle={{ fontWeight: "1600" }}
                 />
               </Pressable>
+              <Text style={{ fontSize: 16, fontWeight: "800" }}>
+                Create New Task
+              </Text>
             </View>
             <View style={styles.modalContent}>
-              <Text>jbjkbkjb</Text>
+              <View style={styles.inputArea}>
+                <Text style={styles.inputLabel}>Title:</Text>
+                <TextInput style={styles.modalInput} value={""} />
+              </View>
+              <View style={styles.inputArea}>
+                <Text style={styles.inputLabel}>Task:</Text>
+                <TextInput
+                  style={styles.modalInput}
+                  multiline={true}
+                  numberOfLines={3}
+                />
+              </View>
             </View>
             <View style={styles.modalFooter}>
-              <Text>jbjkbkjb</Text>
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => {
+                  //add new task
+                  setModal(false);
+                }}
+              >
+                <Text style={styles.addTask}>Add Task</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
-      </View> */}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   list_container: {},
+
+  modalView: {
+    flex: 0.6,
+    margin: 20,
+    top: "20%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  btnContainer: {
+    backgroundColor: "#FCA311",
+    position: "absolute",
+    right: "2%",
+    top: "5%",
+    alignItems: "center",
+    borderRadius: 800,
+  },
+
+  modalHeader: {
+    flex: 1,
+    backgroundColor: "#FCA311",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderColor: "black",
+    borderWidth: 1,
+  },
+
+  modalContent: {
+    flex: 7,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+
+  inputArea: {
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+  },
+
+  modalInput: {
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 20,
+    width: "50%",
+    height: 30,
+    padding: 10,
+    margin: 10,
+  },
+
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: "700",
+    margin: 10,
+  },
+
+  modalFooter: {
+    flex: 2,
+    borderColor: "black",
+    borderWidth: 1,
+    backgroundColor: "#FCA311",
+    width: "100%",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  addTask: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  addBtn: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "black",
+    padding: 10,
+  },
+
+  closeBtn: {
+    borderRadius: 20,
+    padding: 2,
+    elevation: 2,
+  },
 });
 
 export default ProfileToDo;
