@@ -139,6 +139,7 @@ const Home = () => {
           Registerable Tasks
         </Text>
         <FlatList
+          keyExtractor={(item) => item.id}
           horizontal
           data={toDoList2}
           contentContainerStyle={styles.list_container}
@@ -159,6 +160,7 @@ const Home = () => {
       <View style={{ flex: 2 }}>
         <Text style={{ alignSelf: "flex-start", marginLeft: 5 }}>My Tasks</Text>
         <FlatList
+          keyExtractor={(item) => item.id}
           horizontal
           data={toDoList}
           contentContainerStyle={styles.list_container}
