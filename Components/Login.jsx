@@ -12,8 +12,8 @@ const Login = ({ navigation }) => {
       .signInWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user; 
+        navigation.navigate("Main");
         console.log('Logged in with:', user.email);
-        
       })
       .catch(error => alert(error.message))
   }
@@ -29,13 +29,16 @@ const Login = ({ navigation }) => {
       })
       .catch(error => alert(error.message))
   }
+  
   const [signmail, setSignupmail] = useState()
   const [csignpass, setcpass] = useState()
   const [signpass, setsignpass ] = useState()
   const [password, setPassword] = useState()
   const [email, setEmail] = useState()
   const [openModal, setOpenModal] = useState(false)
+
   return (
+    
     <>
        <View style={styles.container}>
          
