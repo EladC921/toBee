@@ -41,6 +41,7 @@ const PopupChat = (props) => {
 
   const sendMsg = () => {};
 
+
   return (
     <View style={styles.btnContainer}>
       <TouchableOpacity activeOpacity={0.5} style={styles.chatBTN}>
@@ -63,12 +64,14 @@ const PopupChat = (props) => {
         }}
       >
         <View style={[styles.modalView, { top: chatTopMargin }]}>
+
           <View style={styles.chatHeader}>
             <Pressable
               style={[styles.button]}
               onPress={() => {
                 setModalVisible(!modalVisible);
                 setinputText("");
+
               }}
             >
               <Icon
@@ -110,6 +113,7 @@ const PopupChat = (props) => {
                 />
               </Pressable>
             </View>
+
           </View>
         </View>
       </Modal>
@@ -123,6 +127,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "#d6d7da",
   },
+
   btnContainer: {
     backgroundColor: "#FCA311",
     position: "absolute",
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     flex: 0.6,
+
     backgroundColor: "white",
     borderRadius: 20,
     flexDirection: "column",
@@ -202,5 +208,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
   },
+
 });
 export default PopupChat;

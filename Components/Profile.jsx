@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import React from "react";
 import { useState } from "react";
+import ProfileToDo from "./ProfileToDo";
 
 let user = {
   id: 1,
@@ -55,7 +56,9 @@ const Profile = () => {
             </View>
           </View>
           {/** My - ToDo */}
-          <View style={{ height: "70%", backgroundColor: "#fff" }}></View>
+          <View style={{ height: "70%", backgroundColor: "#fff" }}>
+            <ProfileToDo />
+          </View>
         </View>
       </View>
 
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     alignItems: "center",
-    height: "30%",
+    height: "25%",
     backgroundColor: "rgba(52, 52, 52, 0.2)",
   },
 

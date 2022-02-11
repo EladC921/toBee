@@ -8,6 +8,9 @@ import {
 import { useState } from "react";
 import GroupCard from "./GroupCard";
 
+
+import React from "react";
+import PopupChat from "./PopupChat";
 const MyGroups = () => {
   const renderItem = ({ item: t }) => (
     <GroupCard
@@ -35,6 +38,7 @@ const MyGroups = () => {
           <Text>Creat new group</Text>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 };
@@ -60,6 +64,7 @@ const styles = StyleSheet.create({
   },
   hederTxt: {
     marginTop: 50,
+
     color: "#FFFFFF",
     fontSize: 17,
     fontFamily: "AppleSDGothicNeo-Bold",
@@ -68,6 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FCA311",
     padding: 20,
     borderRadius: 20,
+
   },
 });
 

@@ -26,8 +26,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     margin: 5,
     borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
   },
-
   grouplist_title: {
     padding: 5,
     alignItems: "center",
