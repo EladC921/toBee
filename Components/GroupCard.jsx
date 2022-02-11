@@ -1,42 +1,37 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 
-const GroupCard = (props, { navigation }) => {
+const GroupCard = (props) => {
   const tempMembersList = props.memberList.slice(0, 5);
   return (
-    <TouchableOpacity
-      activeOpacity={0.5}
-      onPress={() => navigation.navigate("CreateTask")}
-    >
-      <View style={[styles.cardContainer]}>
-        <View style={[styles.headerContainer, styles.fullWidthCentred]}>
-          <Text>{props.groupName}</Text>
+    <View style={[styles.cardContainer]}>
+      <View style={[styles.headerContainer, styles.fullWidthCentred]}>
+        <Text>{props.groupName}</Text>
+      </View>
+      <View style={[styles.groupContentContainer, styles.fullWidthCentred]}>
+        <View style={[styles.fullWidthCentred, { flex: 1 }]}>
+          <Image
+            style={{ width: 65, height: 65 }}
+            source={{
+              uri: props.imgUrl,
+            }}
+          />
         </View>
-        <View style={[styles.groupContentContainer, styles.fullWidthCentred]}>
-          <View style={[styles.fullWidthCentred, { flex: 1 }]}>
-            <Image
-              style={{ width: 65, height: 65 }}
-              source={{
-                uri: props.imgUrl,
-              }}
-            />
+        <View
+          style={[
+            styles.fullWidthCentred,
+            { flex: 2, flexDirection: "column" },
+          ]}
+        >
+          <View style={[styles.fullWidthCentred, { flex: 4 }]}>
+            <Text>{props.description}</Text>
           </View>
-          <View
-            style={[
-              styles.fullWidthCentred,
-              { flex: 2, flexDirection: "column" },
-            ]}
-          >
-            <View style={[styles.fullWidthCentred, { flex: 4 }]}>
-              <Text>{props.description}</Text>
-            </View>
-            <View style={{ flex: "1" }}>
-              <Text>{tempMembersList}</Text>
-            </View>
+          <View style={{ flex: "1" }}>
+            <Text>{tempMembersList}</Text>
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
