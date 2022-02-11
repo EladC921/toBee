@@ -115,6 +115,7 @@ const ProfileToDo = () => {
       </View>
       <View style={{ height: "95%", width: "100%" }}>
         <FlatList
+          keyExtractor={(item) => item.id}
           data={[...toDoList, { addTask: true }]}
           contentContainerStyle={styles.list_container}
           showsHorizontalScrollIndicator={false}
