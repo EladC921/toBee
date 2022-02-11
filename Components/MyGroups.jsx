@@ -8,14 +8,19 @@ import {
 import { useState } from "react";
 import GroupCard from "./GroupCard";
 
-const MyGroups = () => {
+const MyGroups = ({ navigation }) => {
   const renderItem = ({ item: t }) => (
-    <GroupCard
-      memberList={["Chen", "Elad", "Nofar"]}
-      groupName={"tweetFluent"}
-      imgUrl={"https://reactnative.dev/img/tiny_logo.png"}
-      description={"nsknc csnjkjnc sbcjkbcsjk"}
-    />
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={() => navigation.navigate("GroupPage")}
+    >
+      <GroupCard
+        memberList={["Chen", "Elad", "Nofar"]}
+        groupName={"tweetFluent"}
+        imgUrl={"https://reactnative.dev/img/tiny_logo.png"}
+        description={"nsknc csnjkjnc sbcjkbcsjk"}
+      />
+    </TouchableOpacity>
   );
   const tempGroupList = [{ id: 1 }, { id: 2 }];
   return (
