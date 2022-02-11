@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   },
   hederTxt: {
     marginTop: 50,
+
     color: "#FFFFFF",
     fontSize: 17,
     fontFamily: "AppleSDGothicNeo-Bold",
