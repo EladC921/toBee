@@ -1,33 +1,38 @@
-import { StyleSheet, Pressable, Alert, SafeAreaView, KeyboardAvoidingView, View, Text, TextInput, Modal, Image, TouchableOpacity } from "react-native";
+import { StyleSheet,ImageBackground, Pressable, Alert, SafeAreaView, KeyboardAvoidingView, View, Text, TextInput, Modal, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import { auth } from '../db/firebaseSDK';
 import RegisterModal from "./RegisterModal";
-import { CheckBox } from "react-native-elements/dist/checkbox/CheckBox";
-
-
 
 
 
 const Login = ({ navigation }) => {
+ auth.onAuthStateChanged(function(user){
+   if (user){
+    navigation.navigate("Main");
+   } 
+ })
+
   const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      
-      .then(userCredentials => {
-        
-        navigation.navigate("Main");
-        console.log('Logged in with:', user.email);
-      })
-      
-      .catch(error => alert(error.message))
+    if(email&&password){
+      try{ auth
+        .signInWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          navigation.navigate("Main");       
+        })
+        .catch(error =>  alert(error.message))
+      } 
+      catch(error){
+        alert(error.message)
+      }
+    }
+    else
+    alert("You have to enter both email and password")
+   
      
   }
   
-  const [isSelected, setSelection] = useState(false)
-  const [signmail, setSignupmail] = useState()
-  const [csignpass, setcpass] = useState()
-  const [signpass, setsignpass] = useState()
+  
   const [password, setPassword] = useState()
   const [email, setEmail] = useState()
   const [openModal, setOpenModal] = useState(false)
@@ -41,17 +46,20 @@ const Login = ({ navigation }) => {
           style={styles.container}
           behavior="padding"
         >
-        <View style={styles.logophoto}>
+        
+          <View style={styles.logophoto}>
           <Image
-            source={require('../image/logo.png')}
+            source={require('../Images/bee.png')}
             style={styles.images} />
         </View>
        
           <Text style={styles.logo}>toBee</Text>
-
-          <View style={styles.inputView} >
+          
+        <View style={styles.inputView} >
             <TextInput
-
+              keyboardType="email-address"
+              autoCompleteType="email"
+              textContentType="emailAddress"
               style={styles.inputText}
               placeholder="Email..."
               placeholderTextColor="white"
@@ -69,12 +77,11 @@ const Login = ({ navigation }) => {
           <TouchableOpacity onPress={() => { handleLogin() }} style={styles.loginBtn}>
             <Text style={styles.loginText}>LOGIN</Text>
           </TouchableOpacity>
-        <CheckBox
-          disabled={false}
-          value={isSelected}
-          onValueChange={(newValue) => setSelection(newValue)}
-          />
+        
+       
           <RegisterModal />
+        
+         
         </KeyboardAvoidingView>
       </View>
 
@@ -83,6 +90,7 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#FFE889',
@@ -127,7 +135,8 @@ const styles = StyleSheet.create({
   },
   inputText: {
     height: 50,
-    color: "white"
+    color: "white",
+    textAlign:"left"
   },
 
   forgot: {

@@ -1,11 +1,22 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import React from "react";
+import { auth } from '../db/firebaseSDK';
 
 const Settings = ({ navigation }) => {
+const handleSignOut = () => {
+ auth 
+    .signOut()
+    .then(() => {
+      navigation.navigate("Login")
+    })
+    .catch(error => alert(error.message))
+
+}
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Login")}
+        onPress={handleSignOut}
         style={styles.btnLogout}
       >
         <Text style={{ color: "#fff" }}>Logout</Text>

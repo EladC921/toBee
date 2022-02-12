@@ -1,21 +1,29 @@
 import { StyleSheet, Pressable, Alert, SafeAreaView, KeyboardAvoidingView, View, Text, TextInput, Modal, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+
 import { auth } from '../db/firebaseSDK';
 
 const RegisterModal = () => {
 
     const handleSignUp = () => {
-
-        auth
-            .createUserWithEmailAndPassword(signmail, csignpass)
-            .then(userCredentials => {
-                const user = userCredentials.user;
-                setOpenModal(false)
-                console.log(user.email);
-            })
-            .catch(error => alert(error.message))
-        
+      if(signmail&&csignpass&&signpass)
+       {
+        if (signpass == csignpass) {
+            auth
+                .createUserWithEmailAndPassword(signmail, csignpass)
+                .then(userCredentials => {
+                    const user = userCredentials.user;
+                    setOpenModal(false);                   
+                })
+                .catch(error =>  alert(error.message))
+        }
+        else{
+            alert("The passwords do not match")
+        }
+       }
+       else
+       alert("Please enter all required fields")
+       
     }
 
     const [signmail, setSignupmail] = useState()
@@ -35,7 +43,8 @@ const RegisterModal = () => {
                 animationType="slide"
                 transparent={true}
             >
-                <KeyboardAvoidingView behavior="position"
+                <KeyboardAvoidingView
+                    behavior="position"
                     style={styles.container}>
 
 
@@ -43,15 +52,25 @@ const RegisterModal = () => {
                         <TouchableOpacity style={styles.xbut} onPress={() => setOpenModal(false)}>
                             <Text>X</Text>
                         </TouchableOpacity>
-                        <Text style={styles.logo_reg}>Register</Text>
-                        <View style={styles.inputView} >
+                        <Text style={styles.logo_reg}>Sign up</Text>
+                      <View style={styles.flname}>
+                      <View style={styles.flview} >
                             <TextInput
 
                                 style={styles.inputText}
-                                placeholder="Enter Full Name..."
+                                placeholder="Name"
                                 placeholderTextColor="white"
                             />
                         </View>
+                        <View style={styles.flview} >
+                            <TextInput
+
+                                style={styles.inputText}
+                                placeholder="Surname"
+                                placeholderTextColor="white"
+                            />
+                        </View>
+                      </View>
                         <View style={styles.inputView} >
                             <TextInput
 
@@ -62,7 +81,15 @@ const RegisterModal = () => {
                         </View>
                         <View style={styles.inputView} >
                             <TextInput
-
+                                keyboardType="phone-pad"
+                                style={styles.inputText}
+                                placeholder="Enter Phone number..."
+                                placeholderTextColor="white"
+                            />
+                        </View>
+                        <View style={styles.inputView} >
+                            <TextInput
+                                keyboardType="email-address"
                                 style={styles.inputText}
                                 placeholder="Enter Email..."
                                 placeholderTextColor="white"
@@ -103,7 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFE889',
         alignItems: 'center',
         marginTop: 22,
-        
+
         width: '100%',
 
 
@@ -115,17 +142,26 @@ const styles = StyleSheet.create({
         alignItems: "center",
 
     },
+    flname:{
+    paddingTop:20,
+    flexDirection:"row",
+    justifyContent:"space-between",
+    width:'80%',
+    
+    },
 
 
     logo_reg: {
         fontWeight: "bold",
         fontSize: 50,
         color: "#B35A3F",
-        marginBottom: 10,
-        paddingBottom: 30
+        position:"absolute",
+        top:10,
+        
+       
     },
     loginBtn: {
-        marginTop:20,
+        marginTop: 20,
         width: "50%",
         backgroundColor: "#B35A3F",
         borderRadius: 25,
@@ -135,6 +171,24 @@ const styles = StyleSheet.create({
         justifyContent: "center",
 
         marginBottom: 10,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    flview:{
+        width: "45%",
+        backgroundColor: "#B35A3F",
+        borderRadius: 25,
+        height: 50,
+
+
+        marginBottom: 20,
+        justifyContent: "center",
+        padding: 20,
         shadowOffset: {
             width: 0,
             height: 2
@@ -163,7 +217,8 @@ const styles = StyleSheet.create({
     },
     inputText: {
         height: 50,
-        color: "white"
+        color: "white",
+        textAlign:"left"
     },
 
     forgot: {
@@ -172,7 +227,7 @@ const styles = StyleSheet.create({
     },
 
     loginText: {
-        
+
         color: "white"
     },
 
@@ -181,7 +236,7 @@ const styles = StyleSheet.create({
         padding: 70,
         margin: 20,
         flex: 1,
-       
+
         backgroundColor: "white",
         borderRadius: 55,
         padding: 35,
