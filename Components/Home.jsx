@@ -95,13 +95,13 @@ let toDoList2 = [
 ];
 
 let colors = [
-  "rgba(106, 242, 167, 0.5)",
-  "rgba(251, 255, 68, 0.5)",
-  "rgba(107, 240, 255, 0.5)",
-  "rgba(247, 98, 232, 0.5)",
-  "rgba(255, 25, 25, 0.5)",
-  "rgba(79, 255, 87, 0.5)",
-  "rgba(249, 167, 67, 0.5)",
+  "rgba(106, 242, 167, 0.1)",
+  "rgba(214, 214, 74, 0.1)",
+  "rgba(107, 240, 255, 0.1)",
+  "rgba(247, 98, 232, 0.1)",
+  "rgba(255, 25, 25, 0.1)",
+  "rgba(79, 255, 87, 0.1)",
+  "rgba(249, 167, 67, 0.1)",
 ];
 
 // generate random color for list item
@@ -139,6 +139,7 @@ const Home = () => {
           Registerable Tasks
         </Text>
         <FlatList
+          keyExtractor={(item) => item.id}
           horizontal
           data={toDoList2}
           contentContainerStyle={styles.list_container}
@@ -159,6 +160,7 @@ const Home = () => {
       <View style={{ flex: 2 }}>
         <Text style={{ alignSelf: "flex-start", marginLeft: 5 }}>My Tasks</Text>
         <FlatList
+          keyExtractor={(item) => item.id}
           horizontal
           data={toDoList}
           contentContainerStyle={styles.list_container}

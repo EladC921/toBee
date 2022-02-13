@@ -39,6 +39,13 @@ const styles = StyleSheet.create({
     height: 180,
     borderRadius: 20,
     margin: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
 
   list_item_title: {
