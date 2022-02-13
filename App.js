@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tabs from "./Components/Tabs";
 import Login from "./Components/Login";
 import Group from "./Components/Group";
+import CameraComp from "./Components/CameraComp";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,13 @@ export default function App() {
         <Stack.Screen
           name="GroupPage"
           component={Group}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="CameraComp"
+          component={CameraComp}
           options={{
             headerShown: false,
           }}

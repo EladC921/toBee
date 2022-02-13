@@ -21,7 +21,7 @@ let user = {
   email: "jimmy_jim@gmail.com",
 };
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const [modal, setModal] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
   const [nicknameEdit, setNicknameEdit] = useState(false);
@@ -49,7 +49,9 @@ const Profile = () => {
                 style={styles.profilePic}
               />
               <View style={styles.cameraBtn}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("CameraComp")}
+                >
                   <Ionicons name="camera" />
                 </TouchableOpacity>
               </View>
