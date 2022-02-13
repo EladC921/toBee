@@ -12,6 +12,7 @@ import {
 import React from "react";
 import { useState } from "react";
 import ProfileToDo from "./ProfileToDo";
+import { Ionicons } from "@expo/vector-icons";
 
 let user = {
   id: 1,
@@ -19,7 +20,6 @@ let user = {
   nickname: "JimmyNewton_012",
   email: "jimmy_jim@gmail.com",
 };
-import { Ionicons } from "@expo/vector-icons";
 
 const Profile = () => {
   const [modal, setModal] = useState(false);
@@ -48,6 +48,11 @@ const Profile = () => {
                 source={require("../Images/bee.png")}
                 style={styles.profilePic}
               />
+              <View style={styles.cameraBtn}>
+                <TouchableOpacity>
+                  <Ionicons name="camera" />
+                </TouchableOpacity>
+              </View>
             </View>
             {/** Profile Name */}
             <View style={styles.profileName_container}>
@@ -61,7 +66,7 @@ const Profile = () => {
           </View>
         </View>
       </View>
-
+      {/** Modal - add new task */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -114,7 +119,7 @@ const Profile = () => {
               <TouchableOpacity
                 style={{ position: "absolute", right: 10 }}
                 onPress={() => {
-                  setNameEdit(true);
+                  setNicknameEdit(true);
                   setNickname("");
                 }}
               >
@@ -168,7 +173,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     alignItems: "center",
-    height: "30%",
+    height: "25%",
     backgroundColor: "rgba(52, 52, 52, 0.2)",
   },
 
@@ -179,6 +184,18 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: "black",
     borderRadius: 50,
+  },
+
+  cameraBtn: {
+    position: "absolute",
+    right: 1,
+    bottom: 3,
+    padding: 5,
+    borderRadius: 50,
+    backgroundColor: "rgba(255,255,255,0.95)",
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 5,
+    shadowOpacity: 0.6,
   },
 
   profilePic_container: {

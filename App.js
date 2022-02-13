@@ -1,11 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from "react-native";
 // React Native Navigation
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Nav Component
-import Tabs from './Components/Tabs';
-import Login from './Components/Login';
+import Tabs from "./Components/Tabs";
+import Login from "./Components/Login";
+import Group from "./Components/Group";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,14 @@ export default function App() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="GroupPage"
+          component={Group}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
