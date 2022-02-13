@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   groupHeaderContainer: {
-    flex: 2.5,
+    flex: 2.2,
     width: "100%",
     flexDirection: "row",
     alignItems: "flex-start",
