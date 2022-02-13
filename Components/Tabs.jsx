@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./Home";
 import Profile from "./Profile";
 import MyGroups from "./MyGroups";
-import Calendar from "./Calendar";
+import Calendaric from "./Calendaric";
 import Settings from "./Settings";
 // External
 import { Ionicons } from "@expo/vector-icons";
@@ -56,7 +56,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Calendar"
-        component={Calendar}
+        component={Calendaric}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
