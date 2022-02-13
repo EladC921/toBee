@@ -1,44 +1,38 @@
 import { StyleSheet, View, Text } from "react-native";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Icon } from "react-native-elements";
 
 const Task = (props) => {
   return (
-    <View
-      style={[
-        styles.list_item,
-        { backgroundColor: props.create ? "white" : "lightgray" },
-      ]}
-    >
-      <View style={styles.list_item_title}>
+    <View style={styles.list_item_container}>
+      <View style={styles.left}>
         <Text style={styles.list_item_title_Text}>{props.title}</Text>
-      </View>
-      <View style={styles.list_item_text}>
-        <Text>{props.text}</Text>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          {props.create && (
-            <Ionicons style={{ fontWeight: 1000, fontSize: 40 }} name="add" />
-          )}
-        </View>
-      </View>
-      <View style={styles.list_item_date}>
+        <Text style={styles.list_item_text_Text}>{props.text}</Text>
         <Text style={styles.list_item_date_Text}>
           {props.createdAt.toString()}
         </Text>
       </View>
+      <View style={styles.right}>
+        <Icon
+          name="checkbox-outline"
+          type="ionicon"
+          color="#E2AB05"
+          iconStyle={{ fontWeight: "1600" }}
+        />
+      </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  list_item: {
-    backgroundColor: "lightgray",
-    width: 150,
-    maxWidth: 120,
-    maxHeight: 180,
-    height: 180,
+  list_item_container: {
+    backgroundColor: "#F7F7F7",
+    width: "100%",
     borderRadius: 20,
     margin: 5,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -47,22 +41,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
   },
-
-  list_item_title: {
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    padding: 5,
+  left: { flex: 5 },
+  right: { flex: 1 },
+  list_item_title_Text: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#575757",
+    marginBottom: 5,
   },
-
-  list_item_title_Text: { fontSize: 12, padding: 5, fontWeight: "600" },
-
-  list_item_text: { marginTop: "10%", padding: 5 },
-
-  list_item_text_Text: { fontSize: 10, padding: 5 },
-
-  list_item_date: { position: "absolute", right: 8, bottom: 8 },
-
-  list_item_date_Text: { fontSize: 7, color: "gray" },
+  list_item_text_Text: {
+    fontSize: 14,
+    color: "#6b6b6b",
+    marginBottom: 10,
+  },
+  list_item_date_Text: { fontSize: 10, color: "#6b6b6b" },
 });
 
 export default Task;
