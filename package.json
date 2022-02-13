@@ -10,12 +10,15 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.2",
     "@react-native-picker/picker": "2.2.1",
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.4.1",
     "css-tree": "1.0.0-alpha.39",
     "expo": "~44.0.0",
+    "expo-camera": "~12.1.2",
+    "expo-font": "~10.0.4",
     "expo-status-bar": "~1.2.0",
     "firebase": "^8.2.3",
     "material-icons-react": "^1.0.4",
@@ -32,8 +35,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-vector-icons": "^9.0.0",
-    "react-native-web": "0.17.1",
-    "expo-camera": "~12.1.2"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
