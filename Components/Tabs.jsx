@@ -33,8 +33,8 @@ const CoustomTabBTN = ({ children, onPress }) => (
   </TouchableOpacity>
 );
 
-const Tabs = ({ route }) => {
-  const { userEmail } = route.params;
+const Tabs = ({ navigation, route }) => {
+  const { user } = route.params;
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -44,7 +44,7 @@ const Tabs = ({ route }) => {
     >
       <Tab.Screen
         name="Profile"
-        children={() => <Profile userEmail={userEmail} />}
+        children={() => <Profile navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -65,7 +65,7 @@ const Tabs = ({ route }) => {
       />
       <Tab.Screen
         name="Groups"
-        children={() => <MyGroups userEmail={userEmail} />}
+        children={() => <MyGroups navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -86,7 +86,7 @@ const Tabs = ({ route }) => {
       />
       <Tab.Screen
         name="Home"
-        children={() => <Home userEmail={userEmail} />}
+        children={() => <Home navigation={navigation} user={user} />}
         // component={Home}
         options={{
           headerShown: false,
@@ -109,7 +109,7 @@ const Tabs = ({ route }) => {
       />
       <Tab.Screen
         name="Calendar"
-        children={() => <Calendaric userEmail={userEmail} />}
+        children={() => <Calendaric navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -130,7 +130,7 @@ const Tabs = ({ route }) => {
       />
       <Tab.Screen
         name="Settings"
-        children={() => <Settings userEmail={userEmail} />}
+        children={() => <Settings navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
