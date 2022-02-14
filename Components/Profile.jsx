@@ -55,7 +55,14 @@ const Profile = ({ navigation }) => {
           style={[styles.button]}
           onPress={() => setModal(true)}
         >
-          <Text style={{ fontSize: 16, fontWeight: "700", color: "#FFC30B" }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "700",
+              color: "#FFC30B",
+              top: -10,
+            }}
+          >
             Edit Profile
           </Text>
         </TouchableOpacity>

@@ -5,6 +5,7 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import Task from "./Tasks/Task";
@@ -129,78 +130,69 @@ const getColor = (gid) => {
 
 const Home = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.pageContainer}>
+      <View style={styles.headerbackground}></View>
       <View style={styles.header}>
-        <Text style={{ color: "black", fontSize: 20 }}>Welcome toBee!</Text>
+        <Text style={styles.hederTxt}>Welcome</Text>
       </View>
-      {/** Registerable Tasks */}
-      <View style={{ flex: 2 }}>
-        <Text style={{ position: "absolute", top: 0, left: 5 }}>
-          Registerable Tasks
-        </Text>
-        <FlatList
-          keyExtractor={(item) => item.id}
-          horizontal
-          data={toDoList2}
-          contentContainerStyle={styles.list_container}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <GroupsTask
-              color={getColor(item.gid)}
-              groupName={item.groupName}
-              title={item.title}
-              text={item.text}
-              createdAt={item.createdAt}
-              dueDate={item.dueDate}
-            />
-          )}
-        />
+      <View style={styles.contentContainer}>
+        <View style={styles.registerableTasksContainer}>
+          <Text style={styles.taskHeader}> Registerable Tasks</Text>
+        </View>
+        <View style={styles.MyTaskContainer}>
+          <Text style={styles.taskHeader}> Registerable Tasks</Text>
+        </View>
       </View>
-      {/** My Tasks */}
-      <View style={{ flex: 2 }}>
-        <Text style={{ alignSelf: "flex-start", marginLeft: 5 }}>My Tasks</Text>
-        <FlatList
-          keyExtractor={(item) => item.id}
-          horizontal
-          data={toDoList}
-          contentContainerStyle={styles.list_container}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <GroupsTask
-              color={getColor(item.gid)}
-              groupName={item.groupName}
-              title={item.title}
-              text={item.text}
-              createdAt={item.createdAt}
-              dueDate={item.dueDate}
-            />
-          )}
-        />
-      </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  pageContainer: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
-
-  header: {
-    flex: 0.5,
-    alignItems: "center",
-    justifyContent: "center",
+  headerbackground: {
+    flex: 0.8,
     width: "100%",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    backgroundColor: "#FFCB2D",
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
+  header: {
+    position: "relative",
+    top: -30,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+    width: "65%",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  contentContainer: {
+    flex: 7,
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+    borderWidth: 1,
   },
 
-  list_container: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 5,
+  hederTxt: {
+    margin: 15,
+    color: "#686868",
+    fontSize: 18,
+    fontWeight: "600",
   },
 });
 

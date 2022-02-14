@@ -1,112 +1,133 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Icon } from "react-native-elements";
 
 const GroupTask = (props) => {
   let COLOR = props.color;
+  //set date format to print
+  let createdAtDate = props.createdAt.toDateString();
+  let doToDateMinutes =
+    props.dueDate.getMinutes() < 10
+      ? "0" + props.dueDate.getMinutes().toString()
+      : props.dueDate.getMinutes().toString();
+  let dotoDate =
+    props.dueDate.getHours().toString() +
+    ":" +
+    doToDateMinutes +
+    " " +
+    props.dueDate.toDateString();
+
   return (
-    <View style={[styles.grouplist_item, { backgroundColor: COLOR }]}>
-      {/** The task body */}
-      <View style={[styles.list_item, { backgroundColor: COLOR }]}>
-        <View style={styles.list_item_title}>
-          <Text style={styles.list_item_title_Text}>{props.title}</Text>
+    <View style={[styles.cardContainer, { backgroundColor: COLOR }]}>
+      <View style={styles.topContainer}>
+        <View style={{ flex: 2 }}>
+          <Text style={styles.titleTxt}>{props.title}</Text>
+          <Text style={styles.textTxt}>{props.text}</Text>
         </View>
-        <View style={styles.list_item_text}>
-          <Text>{props.text}</Text>
-        </View>
-        <View style={styles.list_item_date}>
-          <Text style={styles.list_item_date_Text}>
-            {props.createdAt.toString()}
-          </Text>
-          <Text style={styles.list_item_dueDate_Text}>
-            <Text style={{ color: "black", fontSize: 8 }}>Due to: </Text>
-            {props.dueDate.toString()}
-          </Text>
+        <View style={{ flex: 1.5, width: "100%" }}>
+          <View style={styles.dateRow}>
+            <View style={styles.leftDateRow}>
+              <Icon
+                name="time-outline"
+                type="ionicon"
+                color="#686868"
+                iconStyle={{
+                  fontWeight: "1600",
+                  fontSize: 18,
+                  padding: 0,
+                }}
+              />
+            </View>
+            <View style={styles.rightLeftRow}>
+              <Text style={{ fontWeight: "600", fontSize: 10 }}>
+                Created at:
+              </Text>
+              <Text style={styles.dateTxt}>{dotoDate}</Text>
+            </View>
+          </View>
+          <View style={styles.dateRow}>
+            <View style={styles.leftDateRow}>
+              <Icon
+                name="time-outline"
+                type="ionicon"
+                color="#686868"
+                iconStyle={{
+                  fontWeight: "1600",
+                  fontSize: 18,
+                  padding: 0,
+                }}
+              />
+            </View>
+            <View style={styles.rightLeftRow}>
+              <Text style={{ fontWeight: "600", fontSize: 10 }}>Due to:</Text>
+              <Text style={styles.dateTxt}>{dotoDate}</Text>
+            </View>
+          </View>
         </View>
       </View>
-      {/** The task footer */}
-      <View style={[styles.grouplist_footer, { backgroundColor: COLOR }]}>
-        <View style={styles.registeredTo}>
-          <Text>Registered to: </Text>
-          <Image
-            style={styles.avatar}
-            source={require("../../Images/avatar.png")}
-          />
-          <Image
-            style={styles.avatar}
-            source={require("../../Images/avatar.png")}
-          />
-          <Image
-            style={styles.avatar}
-            source={require("../../Images/avatar.png")}
-          />
-        </View>
-        <View style={{ position: "absolute", bottom: 10, right: 10 }}>
-          <Ionicons
-            style={{ color: "gray" }}
-            name="help-buoy-outline"
-          ></Ionicons>
-        </View>
+      <View style={styles.bottomContainer}>
+        <Text>Registered:</Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  grouplist_item: {
-    margin: 5,
-    width: 220,
-    maxWidth: 220,
-    maxHeight: 230,
-    height: 230,
+  cardContainer: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "100%",
+    padding: 10,
     borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-
-  grouplist_footer: {
-    borderBottomRightRadius: 20,
-    borderBottomLeftRadius: 20,
-    padding: 5,
+  topContainer: {
+    flex: 3,
+    flexDirection: "row",
+    justifyContent: "center",
+    padding: 10,
+  },
+  bottomContainer: {
     borderTopWidth: 1,
+    flex: 1,
+    padding: 10,
+  },
+  dateRow: {
+    flex: 1,
+    width: "100%",
     flexDirection: "row",
-    alignItems: "flex-start",
+    padding: 3,
+  },
+  leftDateRow: {
+    justifyContent: "center",
+    flex: 1,
+    justifyContent: "flex-start",
+
+    width: "100%",
+  },
+  rightLeftRow: {
+    flex: 3,
+    width: "100%",
   },
 
-  registeredTo: {
-    flexDirection: "row",
-    alignItems: "center",
+  titleTxt: {
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: "600",
   },
-
-  avatar: {
-    margin: 2,
-    width: 15,
-    height: 15,
-    borderRadius: 20,
+  textTxt: {
+    fontSize: 14,
   },
-
-  list_item: {
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    height: 200,
-    maxHeight: 200,
+  dateTxt: {
+    fontSize: 9,
   },
-
-  list_item_title: {
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
-    padding: 5,
-  },
-
-  list_item_title_Text: { fontSize: 16, padding: 5, fontWeight: "bold" },
-
-  list_item_text: { marginTop: "10%", padding: 5 },
-
-  list_item_text_Text: { fontSize: 14, padding: 5 },
-
-  list_item_date: { position: "absolute", right: 8, bottom: 8 },
-
-  list_item_date_Text: { fontSize: 7, color: "gray" },
-
-  list_item_dueDate_Text: { fontSize: 7, color: "red" },
 });
 
 export default GroupTask;
