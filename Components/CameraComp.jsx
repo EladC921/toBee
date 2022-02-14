@@ -103,11 +103,9 @@ export default function CameraComp({ navigation: { goBack } }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.approveBtn}
-              onPress={() => setModal(false)}
+              onPress={() => goBack()}
             >
-              <Text style={styles.text} onPress={() => goBack()}>
-                Approve
-              </Text>
+              <Text style={styles.text}>Approve</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
