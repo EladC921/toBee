@@ -105,7 +105,9 @@ export default function CameraComp({ navigation: { goBack } }) {
               style={styles.approveBtn}
               onPress={() => setModal(false)}
             >
-              <Text style={styles.text}>Approve</Text>
+              <Text style={styles.text} onPress={() => goBack()}>
+                Approve
+              </Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   redSquare: {
     width: "80%",
     height: "40%",
-    borderRadius: 50,
+    borderRadius: 150,
     borderWidth: 1,
     borderColor: "red",
     margin: 10,
@@ -150,7 +152,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "transparent",
     flexDirection: "row",
-    margin: 30,
+    marginBottom: 50,
+    marginLeft: "5%",
+    marginRight: "5%",
   },
 
   button: {
@@ -161,17 +165,17 @@ const styles = StyleSheet.create({
   flipBtn: {
     flex: 0.2,
     backgroundColor: "rgba(0,0,0,0.5)",
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 30,
+    padding: 20,
   },
 
   captureBtn: {
     position: "absolute",
-    bottom: 30,
-    width: 50,
-    height: 50,
+    bottom: 50,
+    width: 80,
+    height: 80,
     borderRadius: 50,
-    backgroundColor: "rgba(255,255,255, 0.7)",
+    backgroundColor: "rgba(255,255,255, 0.9)",
   },
 
   text: {

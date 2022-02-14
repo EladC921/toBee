@@ -8,6 +8,7 @@ import Tabs from "./Components/Tabs";
 import Login from "./Components/Login";
 import Group from "./Components/Group";
 import CameraComp from "./Components/CameraComp";
+import GalleryComp from "./Components/GalleryComp";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,14 @@ export default function App() {
           component={CameraComp}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="GalleryComp"
+          component={GalleryComp}
+          options={{
+            headerShown: true,
+            title: "Gallery",
           }}
         />
       </Stack.Navigator>

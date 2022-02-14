@@ -13,6 +13,7 @@ import React from "react";
 import { useState } from "react";
 import ProfileToDo from "./ProfileToDo";
 import { Ionicons } from "@expo/vector-icons";
+import ChangeProfilePic from "./ChangeProfilePic";
 
 let user = {
   id: 1,
@@ -23,6 +24,7 @@ let user = {
 
 const Profile = ({ navigation }) => {
   const [modal, setModal] = useState(false);
+  const [modalPic, setModalPic] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
   const [nicknameEdit, setNicknameEdit] = useState(false);
   const [name, setName] = useState(user.name);
@@ -43,7 +45,7 @@ const Profile = ({ navigation }) => {
             style={styles.profilePic}
           />
           <View style={styles.cameraBtn}>
-            <TouchableOpacity onPress={() => navigation.navigate("CameraComp")}>
+            <TouchableOpacity onPress={() => setModalPic(true)}>
               <Ionicons name="camera" />
             </TouchableOpacity>
           </View>
@@ -154,6 +156,12 @@ const Profile = ({ navigation }) => {
           </View>
         </SafeAreaView>
       </Modal>
+      <ChangeProfilePic
+        modalPic={modalPic}
+        setModalPic={setModalPic}
+        goToCamera={() => navigation.navigate("CameraComp")}
+        goToGallery={() => navigation.navigate("GalleryComp")}
+      />
     </View>
   );
 };
