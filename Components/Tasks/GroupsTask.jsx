@@ -4,39 +4,40 @@ import GroupTask from "./GroupTask";
 
 const GroupsTask = (props) => {
   return (
-    <View style={[styles.groupsContainer, { backgroundColor: props.color }]}>
+    <View style={[styles.groupTaskContainer, { backgroundColor: props.color }]}>
       {/** The task header */}
-      <View style={styles.grouplist_title}>
+      <View style={styles.groupTitle}>
         <Text>{props.groupName}</Text>
       </View>
-      <GroupTask
-        color={props.color}
-        groupName={props.groupName}
-        title={props.title}
-        text={props.text}
-        createdAt={props.createdAt}
-        dueDate={props.dueDate}
-      />
+      <View style={styles.groupTask}>
+        <GroupTask
+          color={props.color}
+          groupName={props.groupName}
+          title={props.title}
+          text={props.text}
+          createdAt={props.createdAt}
+          dueDate={props.dueDate}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  groupsContainer: {
-    marginTop: 20,
-    margin: 5,
-    borderRadius: 20,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-  },
-  grouplist_title: {
-    padding: 5,
+  groupTaskContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
+  },
+  groupTitle: {
+    flex: 1,
+    width: "100%",
+  },
+  groupTask: {
+    flex: 4,
+    width: "100%",
   },
 });
 

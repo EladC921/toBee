@@ -74,14 +74,16 @@ const Group = () => {
   ];
 
   const renderItem = ({ item: t }) => (
-    <GroupTask
-      color="#E5E5E5"
-      groupName={t.groupName}
-      title={t.title}
-      text={t.text}
-      createdAt={t.createdAt}
-      dueDate={t.dueDate}
-    />
+    <View style={{ margin: 5 }}>
+      <GroupTask
+        color="#E5E5E5"
+        groupName={t.groupName}
+        title={t.title}
+        text={t.text}
+        createdAt={t.createdAt}
+        dueDate={t.dueDate}
+      />
+    </View>
   );
   return (
     <View style={styles.groupsPageContainer}>
@@ -144,7 +146,6 @@ const Group = () => {
           <FlatList
             keyExtractor={(t) => t.id}
             data={tasksList}
-            horizontal
             renderItem={renderItem}
           />
         </View>
