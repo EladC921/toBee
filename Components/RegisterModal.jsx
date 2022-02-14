@@ -130,10 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFE889',
         alignItems: 'center',
         marginTop: 22,
-
         width: '100%',
-
-
     },
 
     safeAreaView: {
