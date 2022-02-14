@@ -16,29 +16,6 @@ import Message from "./Message";
 const PopupChat = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setinputText] = useState("");
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const [chatTopMargin, setchatTopMargin] = useState("30%");
-
-  // useEffect(() => {
-  //   const keyboardDidShowListener = Keyboard.addListener(
-  //     "keyboardDidShow",
-  //     () => {
-  //       setKeyboardVisible(true);
-  //       setchatTopMargin("5%");
-  //     }
-  //   );
-  //   const keyboardDidHideListener = Keyboard.addListener(
-  //     "keyboardDidHide",
-  //     () => {
-  //       setKeyboardVisible(false);
-  //       setchatTopMargin("30%");
-  //     }
-  //   );
-  //   return () => {
-  //     keyboardDidHideListener.remove();
-  //     keyboardDidShowListener.remove();
-  //   };
-  // }, []);
 
   const sendMsg = () => {};
 

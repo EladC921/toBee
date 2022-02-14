@@ -7,7 +7,9 @@ const GroupsTask = (props) => {
     <View style={[styles.groupTaskContainer, { backgroundColor: props.color }]}>
       {/** The task header */}
       <View style={styles.groupTitle}>
-        <Text>{props.groupName}</Text>
+        <Text style={{ fontSize: 15, fontWeight: "600" }}>
+          {props.groupName}
+        </Text>
       </View>
       <View style={styles.groupTask}>
         <GroupTask
@@ -30,10 +32,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 20,
   },
   groupTitle: {
     flex: 1,
     width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   groupTask: {
     flex: 4,

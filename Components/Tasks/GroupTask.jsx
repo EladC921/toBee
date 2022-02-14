@@ -3,19 +3,19 @@ import React from "react";
 import { Icon } from "react-native-elements";
 
 const GroupTask = (props) => {
-  let COLOR = props.color;
+  let COLOR = "grey";
   //set date format to print
-  let createdAtDate = props.createdAt.toDateString();
-  let doToDateMinutes =
-    props.dueDate.getMinutes() < 10
-      ? "0" + props.dueDate.getMinutes().toString()
-      : props.dueDate.getMinutes().toString();
-  let dotoDate =
-    props.dueDate.getHours().toString() +
-    ":" +
-    doToDateMinutes +
-    " " +
-    props.dueDate.toDateString();
+  let createdAtDate = props.createdAt;
+  let doToDateMinutes = "hh";
+  // props.dueDate.getMinutes() < 10
+  //   ? "0" + props.dueDate.getMinutes().toString()
+  //   : props.dueDate.getMinutes().toString();
+  let dotoDate = "jjj";
+  // props.dueDate.getHours().toString() +
+  // ":" +
+  // doToDateMinutes +
+  // " " +
+  // props.dueDate.toDateString();
 
   return (
     <View style={[styles.cardContainer, { backgroundColor: COLOR }]}>
@@ -42,7 +42,7 @@ const GroupTask = (props) => {
               <Text style={{ fontWeight: "600", fontSize: 10 }}>
                 Created at:
               </Text>
-              <Text style={styles.dateTxt}>{dotoDate}</Text>
+              <Text style={styles.dateTxt}>{createdAtDate}</Text>
             </View>
           </View>
           <View style={styles.dateRow}>
