@@ -1,12 +1,13 @@
 import {
   View,
+  Text,
   Pressable,
   Modal,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { Icon } from "react-native-elements";
@@ -18,29 +19,28 @@ const PopupChat = (props) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [chatTopMargin, setchatTopMargin] = useState("30%");
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardVisible(true);
-        setchatTopMargin("5%");
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardVisible(false);
-        setchatTopMargin("30%");
-      }
-    );
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const keyboardDidShowListener = Keyboard.addListener(
+  //     "keyboardDidShow",
+  //     () => {
+  //       setKeyboardVisible(true);
+  //       setchatTopMargin("5%");
+  //     }
+  //   );
+  //   const keyboardDidHideListener = Keyboard.addListener(
+  //     "keyboardDidHide",
+  //     () => {
+  //       setKeyboardVisible(false);
+  //       setchatTopMargin("30%");
+  //     }
+  //   );
+  //   return () => {
+  //     keyboardDidHideListener.remove();
+  //     keyboardDidShowListener.remove();
+  //   };
+  // }, []);
 
   const sendMsg = () => {};
-
 
   return (
     <View style={styles.btnContainer}>
@@ -48,7 +48,7 @@ const PopupChat = (props) => {
         <Icon
           name="chatbubble-outline"
           type="ionicon"
-          color="#000000"
+          color="#676767"
           iconStyle={{ fontWeight: "1600" }}
           onPress={() => setModalVisible(true)}
         />
@@ -63,59 +63,58 @@ const PopupChat = (props) => {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={[styles.modalView, { top: chatTopMargin }]}>
-
-          <View style={styles.chatHeader}>
-            <Pressable
-              style={[styles.button]}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                setinputText("");
-
-              }}
-            >
-              <Icon
-                name="close-outline"
-                type="ionicon"
-                color="#000000"
-                iconStyle={{ fontWeight: "1600" }}
-              />
-            </Pressable>
-          </View>
-          <View style={styles.chatContent}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-              <View style={{ flex: 1 }}>
-                <Message
-                  isReader={true}
-                  userName={"nofar"}
-                  text={"hayy bb bjbcjb bb bcjvj"}
-                  dateTime={"02/02/22 15:26"}
-                ></Message>
-              </View>
-            </ScrollView>
-          </View>
-          <View style={styles.chatfooter}>
-            <View style={{ flex: 4 }}>
-              <TextInput
-                multiline
-                style={styles.input}
-                onChangeText={(t) => setinputText(t)}
-                value={inputText}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Pressable style={[styles.button]} onPress={sendMsg}>
+        <KeyboardAvoidingView behavior="position" style={styles.container}>
+          <View style={[styles.modalView]}>
+            <View style={styles.chatHeader}>
+              <Pressable
+                style={[styles.button]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setinputText("");
+                }}
+              >
                 <Icon
-                  name="send-outline"
+                  name="close-outline"
                   type="ionicon"
-                  color="#000000"
+                  color="#686868"
                   iconStyle={{ fontWeight: "1600" }}
                 />
               </Pressable>
             </View>
-
+            <View style={styles.chatContent}>
+              <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={{ flex: 13 }}>
+                  <Message
+                    isReader={true}
+                    userName={"nofar"}
+                    text={"hayy bb bjbcjb bb bcjvj"}
+                    dateTime={"02/02/22 15:26"}
+                  ></Message>
+                </View>
+              </ScrollView>
+            </View>
+            <View style={styles.chatfooter}>
+              <View style={{ flex: 4 }}>
+                <TextInput
+                  multiline
+                  style={styles.input}
+                  onChangeText={(t) => setinputText(t)}
+                  value={inputText}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Pressable style={[styles.button]} onPress={sendMsg}>
+                  <Icon
+                    name="send-outline"
+                    type="ionicon"
+                    color="#686868"
+                    iconStyle={{ fontWeight: "1600" }}
+                  />
+                </Pressable>
+              </View>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
   btnContainer: {
-    backgroundColor: "#FCA311",
+    backgroundColor: "#FFCB2D",
     position: "absolute",
     left: "7%",
     top: "90%",
@@ -144,20 +143,28 @@ const styles = StyleSheet.create({
   },
   chatHeader: {
     flex: 1,
-    backgroundColor: "#FCA311",
+    backgroundColor: "#E3E3E3",
     width: "100%",
-    alignItems: "flex-end",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    minWidth: "100%",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   chatContent: {
-    flex: 9,
+    flex: 7,
     backgroundColor: "#FFFFFF",
     width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   chatfooter: {
-    flex: 2,
-    backgroundColor: "#FCA311",
+    flex: 1,
+    backgroundColor: "#E3E3E3",
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
@@ -165,14 +172,18 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
-  centeredView: {
-    flexDirection: "column",
-    justifyContent: "center",
+
+  container: {
+    flex: 0.55,
+    borderRadius: 20,
     alignItems: "center",
+    top: "20%",
+    bottom: "10%",
+    width: "100%",
   },
   modalView: {
-    flex: 0.6,
-
+    flex: 1,
+    width: "100%",
     backgroundColor: "white",
     borderRadius: 20,
     flexDirection: "column",
@@ -200,14 +211,12 @@ const styles = StyleSheet.create({
   },
   input: {
     maxHeight: 300,
+    fontSize: 18,
     width: "100%",
     margin: 12,
-    borderWidth: 1,
     padding: 10,
-    borderColor: "#000000",
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
   },
-
 });
 export default PopupChat;

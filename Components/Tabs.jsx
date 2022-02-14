@@ -9,12 +9,37 @@ import Calendaric from "./Calendaric";
 import Settings from "./Settings";
 // External
 import { Ionicons } from "@expo/vector-icons";
+import { Icon } from "react-native-elements";
+import { TouchableOpacity, StyleSheet, View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
+const CoustomTabBTN = ({ children, onPress }) => (
+  <TouchableOpacity
+    style={{ top: -10, justifyContent: "center", alignItems: "center" }}
+    onPress={onPress}
+  >
+    <View
+      style={{
+        width: 65,
+        height: 65,
+        borderRadius: 50,
+        backgroundColor: "#FFFFFF",
+        ...styles.shaddow,
+      }}
+    >
+      {children}
+    </View>
+  </TouchableOpacity>
+);
+
 const Tabs = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        showLabel: false,
+      }}
+    >
       <Tab.Screen
         name="Profile"
         component={Profile}
@@ -22,9 +47,17 @@ const Tabs = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Ionicons name="person" size={32} />
+              <Icon
+                name="person"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ) : (
-              <Ionicons name="person-outline" size={32} />
+              <Icon
+                name="person-outline"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ),
         }}
       />
@@ -35,9 +68,17 @@ const Tabs = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Ionicons name="people" size={32} />
+              <Icon
+                name="people"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ) : (
-              <Ionicons name="people-outline" size={32} />
+              <Icon
+                name="people-outline"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ),
         }}
       />
@@ -48,10 +89,19 @@ const Tabs = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Ionicons name="home" size={32} />
+              <Icon
+                name="home"
+                type="ionicon"
+                iconStyle={styles.homeIconStyle}
+              />
             ) : (
-              <Ionicons name="home-outline" size={32} />
+              <Icon
+                name="home-outline"
+                type="ionicon"
+                iconStyle={styles.homeIconStyle}
+              />
             ),
+          tabBarButton: (props) => <CoustomTabBTN {...props} />,
         }}
       />
       <Tab.Screen
@@ -61,9 +111,17 @@ const Tabs = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Ionicons name="calendar" size={32} />
+              <Icon
+                name="calendar"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ) : (
-              <Ionicons name="calendar-outline" size={32} />
+              <Icon
+                name="calendar-outline"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ),
         }}
       />
@@ -74,14 +132,30 @@ const Tabs = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Ionicons name="cog" size={32} />
+              <Icon name="cog" type="ionicon" iconStyle={styles.iconsStyle} />
             ) : (
-              <Ionicons name="cog-outline" size={32} />
+              <Icon
+                name="cog-outline"
+                type="ionicon"
+                iconStyle={styles.iconsStyle}
+              />
             ),
         }}
       />
     </Tab.Navigator>
   );
 };
-
+const styles = StyleSheet.create({
+  shaddow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  iconsStyle: { fontWeight: "900", fontSize: 30, color: "#686868" },
+  homeIconStyle: { fontWeight: "900", fontSize: 40, color: "#686868" },
+});
 export default Tabs;

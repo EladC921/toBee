@@ -21,7 +21,7 @@ let user = {
   email: "jimmy_jim@gmail.com",
 };
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const [modal, setModal] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
   const [nicknameEdit, setNicknameEdit] = useState(false);
@@ -32,40 +32,52 @@ const Profile = () => {
     useState("create-outline");
 
   return (
-    <>
-      <View style={styles.container}>
-        {/** Header */}
-        <View style={styles.header}>
-          <Text style={styles.header_Text}> @{user.nickname} </Text>
+    <View style={styles.container}>
+      {/** Header */}
+      <View style={styles.header}></View>
+      <View style={[styles.profile_data_container, styles.shaddow]}>
+        {/** Profile Picutre */}
+        <View style={styles.profilePic_container}>
+          <Image
+            source={require("../Images/bee.png")}
+            style={styles.profilePic}
+          />
+          <View style={styles.cameraBtn}>
+            <TouchableOpacity onPress={() => navigation.navigate("CameraComp")}>
+              <Ionicons name="camera" />
+            </TouchableOpacity>
+          </View>
         </View>
-        {/** Body */}
-        <View style={styles.body_container}>
-          {/** Profile Data */}
-          <View style={styles.profile_data_container}>
-            {/** Profile Picutre */}
-            <View style={styles.profilePic_container}>
-              <Image
-                source={require("../Images/bee.png")}
-                style={styles.profilePic}
-              />
-              <View style={styles.cameraBtn}>
-                <TouchableOpacity>
-                  <Ionicons name="camera" />
-                </TouchableOpacity>
-              </View>
-            </View>
-            {/** Profile Name */}
-            <View style={styles.profileName_container}>
-              <Text> {user.name} </Text>
-              <Button title="Edit Profile" onPress={() => setModal(true)} />
-            </View>
-          </View>
-          {/** My - ToDo */}
-          <View style={{ height: "70%", backgroundColor: "#fff" }}>
-            <ProfileToDo />
-          </View>
+        {/** Profile Name */}
+        <Text style={styles.nicknameTxt}> @{user.nickname} </Text>
+        <Text style={styles.nameTxt}> {user.name} </Text>
+        <TouchableOpacity
+          style={[styles.button]}
+          onPress={() => setModal(true)}
+        >
+          <Text style={{ fontSize: 16, fontWeight: "700", color: "#FFC30B" }}>
+            Edit Profile
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/** My - ToDo */}
+      <View style={styles.myTodoHeader}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "700",
+            color: "#676767",
+          }}
+        >
+          My to-do List
+        </Text>
+      </View>
+      <View style={styles.MyTodo_container}>
+        <View style={styles.listContainer}>
+          <ProfileToDo />
         </View>
       </View>
+
       {/** Modal - add new task */}
       <Modal
         animationType="slide"
@@ -83,12 +95,17 @@ const Profile = () => {
           }}
         >
           <View style={styles.modalView}>
-            <View style={{ position: "absolute", left: 5, top: 5 }}>
-              <Button
-                style={[styles.button, styles.buttonClose]}
+            <View style={{ position: "absolute", left: 10, top: 7 }}>
+              <TouchableOpacity
+                style={[styles.button]}
                 onPress={() => setModal(!modal)}
-                title="Back to Profile"
-              />
+              >
+                <Text
+                  style={{ fontSize: 16, fontWeight: "700", color: "#FFC30B" }}
+                >
+                  Back to Profile
+                </Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.modalInputArea}>
               <Text style={styles.modalText}>Name: </Text>
@@ -137,44 +154,66 @@ const Profile = () => {
           </View>
         </SafeAreaView>
       </Modal>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  shaddow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
   container: {
-    height: "100%",
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   header: {
-    backgroundColor: "black",
-    height: "15%",
+    flex: 2.2,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    backgroundColor: "#FFCB2D",
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
+  profile_data_container: {
+    flex: 1,
+    position: "relative",
+    top: -30,
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
+    padding: 50,
+    backgroundColor: "#FFFFFF",
+    width: "85%",
+    borderRadius: 20,
   },
-
-  header_Text: {
-    top: "10%",
-    color: "white",
-    fontSize: 20,
-  },
-
-  body_container: {
-    flex: 1,
+  MyTodo_container: {
+    flex: 6.5,
+    marginBottom: 15,
+    borderRadius: 20,
+    width: "95%",
     flexDirection: "column",
-    backgroundColor: "#fff",
-  },
-
-  profile_data_container: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
     alignItems: "center",
-    height: "25%",
-    backgroundColor: "rgba(52, 52, 52, 0.2)",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+  },
+  myTodoHeader: {
+    flex: 0.5,
+    top: -15,
+    marginLeft: 15,
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
 
   profilePic: {
@@ -199,18 +238,34 @@ const styles = StyleSheet.create({
   },
 
   profilePic_container: {
-    margin: 10,
+    position: "relative",
+    top: -30,
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 5,
     shadowOpacity: 0.2,
   },
-
-  profileName_container: {
-    height: 100,
-    justifyContent: "center",
-    margin: 20,
+  listContainer: {
+    flex: 10,
+    width: "100%",
+    padding: 5,
+    paddingTop: 0,
+    borderRadius: 20,
   },
 
+  nicknameTxt: {
+    position: "relative",
+    top: -20,
+    fontSize: 10,
+  },
+
+  nameTxt: {
+    position: "relative",
+    top: -10,
+    color: "#676767",
+    marginBottom: 5,
+    fontSize: 22,
+    fontWeight: "600",
+  },
   // Modal
   modalView: {
     flex: 1,

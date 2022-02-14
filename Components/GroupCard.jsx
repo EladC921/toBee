@@ -5,50 +5,34 @@ const GroupCard = (props) => {
   const tempMembersList = props.memberList.slice(0, 5);
   return (
     <View style={[styles.cardContainer]}>
-      <View style={[styles.headerContainer, styles.fullWidthCentred]}>
-        <Text>{props.groupName}</Text>
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <Image
+          style={{ width: 70, height: 70, borderRadius: 50 }}
+          source={{
+            uri: props.imgUrl,
+          }}
+        />
       </View>
-      <View style={[styles.groupContentContainer, styles.fullWidthCentred]}>
-        <View style={[styles.fullWidthCentred, { flex: 1 }]}>
-          <Image
-            style={{ width: 65, height: 65 }}
-            source={{
-              uri: props.imgUrl,
-            }}
-          />
-        </View>
-        <View
-          style={[
-            styles.fullWidthCentred,
-            { flex: 2, flexDirection: "column" },
-          ]}
-        >
-          <View style={[styles.fullWidthCentred, { flex: 4 }]}>
-            <Text>{props.description}</Text>
-          </View>
-          <View style={{ flex: "1" }}>
-            <Text>{tempMembersList}</Text>
-          </View>
-        </View>
+      <View style={{ flex: 2.5 }}>
+        <Text style={styles.groupNameTxt}>{props.groupName}</Text>
+        <Text style={styles.descriptionTxt}>{props.description}</Text>
+        <Text style={styles.membersListTxt}>
+          <Text style={{ fontWeight: "600" }}>Members:</Text>{" "}
+          {tempMembersList.map((i) => i + ", ")}...
+        </Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  fullWidthCentred: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
-  },
   cardContainer: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     width: "95%",
-    backgroundColor: "lightgray",
+    backgroundColor: "#FFFFFF",
     minWidth: 350,
     maxHeight: 120,
     height: 120,
@@ -62,18 +46,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
-  headerContainer: {
-    flex: 1,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: "lightgray",
+  groupNameTxt: {
+    fontSize: 22,
+    padding: 10,
+    fontWeight: "600",
+    color: "#333333",
   },
-  groupContentContainer: {
-    flex: 4,
-    backgroundColor: "white",
-    flexDirection: "row",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+  descriptionTxt: {
+    fontSize: 15,
+    padding: 10,
+    paddingTop: 0,
+    color: "#686868",
+  },
+  membersListTxt: {
+    fontSize: 12,
+    padding: 10,
+    paddingTop: 0,
+    color: "#686868",
   },
 });
 
