@@ -16,6 +16,7 @@
     "@react-navigation/native-stack": "^6.4.1",
     "css-tree": "1.0.0-alpha.39",
     "expo": "~44.0.0",
+    "expo-camera": "~12.1.2",
     "expo-status-bar": "~1.2.0",
     "firebase": "^8.2.3",
     "material-icons-react": "^1.0.4",
@@ -28,12 +29,13 @@
     "react-native-calendars": "^1.1277.0",
     "react-native-element-dropdown": "^1.6.1",
     "react-native-elements": "^3.4.2",
+    "react-native-events-calendar": "^1.0.8",
     "react-native-flash-message": "^0.2.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-settings-list": "^1.8.0",
     "react-native-vector-icons": "^9.0.0",
-    "react-native-web": "0.17.1",
-    "expo-camera": "~12.1.2"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
