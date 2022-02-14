@@ -1,27 +1,54 @@
 import {
   StyleSheet,
-  ImageBackground,
-  Pressable,
-  Alert,
   SafeAreaView,
   KeyboardAvoidingView,
   View,
   Text,
   TextInput,
-  Modal,
   Image,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import { auth } from "../db/firebaseSDK";
 import RegisterModal from "./RegisterModal";
 
 const Login = ({ navigation }) => {
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+
+  const getUserRequest = (mail) => {
+    let api_getUser =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users?mail='" +
+      mail +
+      "'";
+    fetch(api_getUser, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log(api_getUser);
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getUser= ", result);
+          console.log(result.Uid);
+          navigation.navigate("Main", { user: result });
+        },
+        (error) => {
+          console.log("err GET=", error);
+        }
+      );
+  };
+
   auth.onAuthStateChanged(function (user) {
-    if (user) {
-      navigation.navigate("Main", { userEmail: user.email });
-    }
+    if (user) getUserRequest(user.email);
   });
 
   const handleLogin = () => {
@@ -30,7 +57,7 @@ const Login = ({ navigation }) => {
         auth
           .signInWithEmailAndPassword(email, password)
           .then((userCredentials) => {
-            navigation.navigate("Main", { userEmail: email });
+            getUserRequest(email);
           })
           .catch((error) => alert(error.message));
       } catch (error) {
@@ -38,10 +65,6 @@ const Login = ({ navigation }) => {
       }
     } else alert("You have to enter both email and password");
   };
-
-  const [password, setPassword] = useState();
-  const [email, setEmail] = useState();
-  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
@@ -78,7 +101,6 @@ const Login = ({ navigation }) => {
                   onChangeText={(text) => setPassword(text)}
                 />
               </View>
-
               <TouchableOpacity
                 onPress={() => {
                   handleLogin();
