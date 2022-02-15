@@ -1,14 +1,83 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Alert, Pressable } from "react-native";
 import React from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "react-native-elements";
 import Moment from "moment";
 
 const GroupTask = (props) => {
+  const [taskStatus, setTaskStatus] = useState(props.status);
+  const [btnVisableStatus, setBtnVisableStatus] = useState({
+    regToBTN: false,
+    notifyBtn: false,
+    completedBtn: false,
+  });
+
   let COLOR = "white";
   //set date format to print
   let createdAtDate = Moment(props.createdAt).format("YYYY-MM-DD, h:mm");
   let dotoDate = Moment(props.dueDate).format("YYYY-MM-DD, h:mm");
   let timeLeft = Moment(props.dueDate).endOf("day").fromNow();
+
+  useEffect(() => {
+    setBtnStatFunction();
+  }, []);
+
+  const setBtnStatFunction = () => {
+    if (taskStatus === "regAble") {
+      setBtnVisableStatus((prev) => ({
+        ...prev,
+        regToBTN: true,
+        notifyBtn: false,
+        completedBtn: false,
+      }));
+    }
+    if (taskStatus === "registered") {
+      setBtnVisableStatus((prev) => ({
+        ...prev,
+        regToBTN: false,
+        notifyBtn: false,
+        completedBtn: true,
+      }));
+    }
+    if (taskStatus === "creator") {
+      setBtnVisableStatus((prev) => ({
+        ...prev,
+        regToBTN: false,
+        notifyBtn: true,
+        completedBtn: false,
+      }));
+    }
+  };
+  const regToTask = () => {
+    Alert.alert("Are you sure you want to do this task?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Yes" },
+    ]);
+  };
+  const notify = () => {
+    Alert.alert("Are you sure you want to do this task?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Yes" },
+    ]);
+  };
+  const completedTask = () => {
+    Alert.alert("Are you sure you want to do this task?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Yes" },
+    ]);
+  };
   return (
     <View style={[styles.cardContainer, { backgroundColor: COLOR }]}>
       <View style={styles.topContainer}>
@@ -82,14 +151,57 @@ const GroupTask = (props) => {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <Text style={{ fontSize: 12, marginBottom: 7 }}>
-          <Text style={{ fontWeight: "600" }}>Create by: </Text>
-          {props.creator}
-        </Text>
-        <Text style={{ fontSize: 12, marginBottom: 7 }}>
-          <Text style={{ fontWeight: "600" }}>Registered: </Text>
-          {props.registered}
-        </Text>
+        <View style={styles.bottomLeft}>
+          <Text style={{ fontSize: 12, marginBottom: 7 }}>
+            <Text style={{ fontWeight: "600" }}>Create by: </Text>
+            {props.creator}
+          </Text>
+          <Text style={{ fontSize: 12, marginBottom: 7 }}>
+            <Text style={{ fontWeight: "600" }}>Registered: </Text>
+            {props.regTo}
+          </Text>
+        </View>
+        <View style={styles.bottomright}>
+          {btnVisableStatus.regToBTN && (
+            <Pressable onPress={regToTask}>
+              <Icon
+                name="hand-right-outline"
+                type="ionicon"
+                color="#023047"
+                iconStyle={{
+                  fontSize: 30,
+                  padding: 0,
+                }}
+              />
+            </Pressable>
+          )}
+          {btnVisableStatus.notifyBtn && (
+            <Pressable onPress={notify}>
+              <Icon
+                name="notifications-outline"
+                type="ionicon"
+                color="#023047"
+                iconStyle={{
+                  fontSize: 30,
+                  padding: 0,
+                }}
+              />
+            </Pressable>
+          )}
+          {btnVisableStatus.completedBtn && (
+            <Pressable onPress={completedTask}>
+              <Icon
+                name="checkmark-done-outline"
+                type="ionicon"
+                color="#023047"
+                iconStyle={{
+                  fontSize: 30,
+                  padding: 0,
+                }}
+              />
+            </Pressable>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -120,6 +232,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     flex: 1,
     padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  bottomright: {
+    flexDirection: "row",
   },
   taskContentContainer: {
     flex: 2,

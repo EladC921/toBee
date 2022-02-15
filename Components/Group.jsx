@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Icon } from "react-native-elements";
@@ -18,18 +19,18 @@ import MembersModal from "./MembersModal";
 
 const Group = ({ route }) => {
   const { gid, currentUser } = route.params;
-  const [taskPickerVal, settaskPickerVal] = useState("All tasks");
+  const [taskPickerVal, settaskPickerVal] = useState("select");
   const [tasksList, settasksList] = useState([]);
   const [myTasksList, setmyTasksList] = useState([]);
   const [regiterabletasksList, setRegiterabletasksList] = useState([]);
   const [pickerTasksList, setPickerTasksList] = useState([]);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const [membersList, setmembersList] = useState([]);
   const [groupData, setGroupData] = useState({
     name: "",
     description: "",
-    imgUrl: "",
+    imgUrl:
+      "https://4.bp.blogspot.com/-OCutvC4wPps/XfNnRz5PvhI/AAAAAAAAEfo/qJ8P1sqLWesMdOSiEoUH85s3hs_vn97HACLcBGAsYHQ/s1600/no-image-found-360x260.png",
     members: [],
   });
 
@@ -43,9 +44,17 @@ const Group = ({ route }) => {
   const api_GetTasksOfGroup = apiUrl + "Tasks/GetTasksOfGroup?gid=2";
   const api_GetGroup = apiUrl + "Groups?gid=2";
 
+  const setTasksStates = () => {
+    if (value === "Mytasks") {
+      setPickerTasksList(myTasksList);
+    } else if (value === "Regiterabletasks") {
+      setPickerTasksList(regiterabletasksList);
+    } else setPickerTasksList(tasksList);
+  };
+
   useEffect(() => {
     tasksList.map((t) => {
-      if (t.RegTo.some((i) => i === currentUser.Uid)) {
+      if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
         setmyTasksList([...myTasksList, t]);
       }
       if (t.RegTo.length === 0) {
@@ -55,11 +64,7 @@ const Group = ({ route }) => {
   }, [tasksList]);
 
   useEffect(() => {
-    if (value === "Mytasks") {
-      setPickerTasksList(myTasksList);
-    } else if (value === "Regiterabletasks") {
-      setPickerTasksList(regiterabletasksList);
-    } else setPickerTasksList(tasksList);
+    setTasksStates();
   }, [value]);
 
   useEffect(() => {
@@ -80,6 +85,7 @@ const Group = ({ route }) => {
         (result) => {
           console.log("fetch getTasks= ", result);
           settasksList(result);
+          setTasksStates();
           result.map((r) => console.log(r.Tid));
         },
         (error) => {
@@ -115,22 +121,44 @@ const Group = ({ route }) => {
       );
   }, []);
 
-  const renderItem = ({ item: t }) => (
-    <View style={{ margin: 5 }}>
-      <GroupTask
-        color="#E5E5E5"
-        groupName={t.GName}
-        title={t.Title}
-        text={t.Txt}
-        createdAt={t.CreatedAt}
-        dueDate={t.DueDate}
-      />
-    </View>
-  );
+  const renderItem = ({ item: t }) => {
+    let status = "regAble";
+    if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
+      status = "registered";
+    }
+    if (t.Creator.Uid === currentUser.Uid) {
+      status = "creator";
+    }
+    return (
+      <View style={{ margin: 5 }}>
+        <GroupTask
+          color="#E5E5E5"
+          groupName={t.GName}
+          title={t.Title}
+          text={t.Txt}
+          createdAt={t.CreatedAt}
+          dueDate={t.DueDate}
+          creator={t.Creator.FirstName + " " + t.Creator.LastName}
+          creatorId={t.Creator.Uid}
+          regTo={t.RegTo[0].FirstName + " " + t.RegTo[0].LastName}
+          status={status}
+        />
+      </View>
+    );
+  };
 
   const leaveGroup = () => {
-    alert("bye");
+    Alert.alert("Are you sure you want to leave this group?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Yes", onPress: removeUserFromGroup() },
+    ]);
   };
+
+  const removeUserFromGroup = () => {};
 
   return (
     <View style={styles.groupsPageContainer}>
@@ -140,7 +168,9 @@ const Group = ({ route }) => {
             activeOpacity={0.5}
             style={styles.leaveGroupBtn}
             onPress={leaveGroup}
-          ></TouchableOpacity>
+          >
+            <Text style={styles.leaveGroupTxt}>Leave group</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.rightHeader}>
           <MembersModal members={groupData.members} />
@@ -197,6 +227,14 @@ const Group = ({ route }) => {
           />
         </View>
       </SafeAreaView>
+      <TouchableOpacity
+        style={styles.NewTaskBTN}
+        onPress={() => {
+          setModal(true);
+        }}
+      >
+        <Text>New Task</Text>
+      </TouchableOpacity>
       <PopupChat gid={gid} user={currentUser} />
     </View>
   );
@@ -321,6 +359,34 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     color: "#676767",
     fontWeight: "600",
+  },
+  leaveGroupBtn: {
+    backgroundColor: "red",
+    width: 100,
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  leaveGroupTxt: {
+    padding: 5,
+    fontWeight: "600",
+    color: "#FFFFFF",
+  },
+  NewTaskBTN: {
+    backgroundColor: "#FFCB2D",
+    padding: 8,
+    width: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    position: "absolute",
+    bottom: 80,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 });
 export default Group;
