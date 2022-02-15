@@ -32,47 +32,49 @@ const getRandomColor = () => {
   return colors[random];
 };
 
-let toDoListGids = [...new Set(toDoList.map((item) => item.gid))];
-toDoListGids = toDoListGids.map((item) => {
-  let color = getRandomColor();
-  colors = colors.filter((c) => c !== color);
-  return { gid: item, color: color };
-});
-
-const getColor = (gid) => {
-  let color = "";
-  toDoListGids.map((item) => {
-    if (item.gid === gid) {
-      color = item.color;
-    }
-  });
-  return color;
-};
-
-const renderItem = ({ item: t }) => {
-  let regToList =
-    t.RegTo === null ? "Nobody" : t.RegTo.map((i) => i.FirstName + ", ");
-  return (
-    <View style={{ margin: 10, marginTop: 30, marginBottom: 30, width: 300 }}>
-      <GroupsTask
-        color={getColor(t.Gid)}
-        groupName={t.GName}
-        title={t.Title}
-        text={t.Txt}
-        createdAt={t.CreatedAt}
-        dueDate={t.DueDate}
-        creator={t.Creator.FirstName}
-        registered={regToList}
-      />
-    </View>
-  );
-};
-
 const Home = (props) => {
   const currentUserEmail = props.userEmail;
 
   const [myTaskList, setMyTaskList] = useState([]);
   const [regableTasksList, setRegableTasksList] = useState([]);
+  let toDoListGids = [];
+
+  const setRandomColorToGroups = () => {
+    let tmpList = [...MyTaskList, ...regableTasksList];
+    toDoListGids = [...new Set(tmpList.map((item) => item.gid))];
+    toDoListGids = toDoListGids.map((item) => {
+      let color = getRandomColor();
+      colors = colors.filter((c) => c !== color);
+      return { gid: item, color: color };
+    });
+  };
+  const getColor = (gid) => {
+    let color = "";
+    toDoListGids.map((item) => {
+      if (item.gid === gid) {
+        color = item.color;
+      }
+    });
+    return color;
+  };
+  const renderItem = ({ item: t }) => {
+    let regToList =
+      t.RegTo === null ? "Nobody" : t.RegTo.map((i) => i.FirstName + ", ");
+    return (
+      <View style={{ margin: 10, marginTop: 30, marginBottom: 30, width: 300 }}>
+        <GroupsTask
+          color={getColor(t.Gid)}
+          groupName={t.GName}
+          title={t.Title}
+          text={t.Txt}
+          createdAt={t.CreatedAt}
+          dueDate={t.DueDate}
+          creator={t.Creator.FirstName}
+          registered={regToList}
+        />
+      </View>
+    );
+  };
 
   const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
   const api_getMyTasks = apiUrl + "Tasks/GetTasksOfRegUserInAllGroups?uid=9";
@@ -80,7 +82,6 @@ const Home = (props) => {
     apiUrl + "Tasks/GetAvailableTasksInAllGroups?uid=9";
   useEffect(() => {
     fetch(api_getMyTasks, {
-
       method: "GET",
       headers: new Headers({
         "Content-Type": "application/json; charset=UTF-8",
@@ -120,6 +121,7 @@ const Home = (props) => {
         (result) => {
           console.log("fetch getTasks= ", result);
           setRegableTasksList(result);
+          setRandomColorToGroups();
           result.map((r) => console.log(r.Tid));
         },
         (error) => {

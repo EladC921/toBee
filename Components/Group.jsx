@@ -7,65 +7,31 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { Icon } from "react-native-elements";
 import React from "react";
+import { useEffect, useState } from "react";
+
 import GroupTask from "./Tasks/GroupTask";
 import PopupChat from "./PopupChat";
+import MembersModal from "./MembersModal";
 
-const Group = () => {
-  const tempTasks = [
-    {
-      id: 3,
-      gid: 3,
-      tid: 4,
-      groupName: "Cohen Fam",
-      title: "Learn React Native 4",
-      completed: false,
-      text: "Learn React Native Now!!!",
-      createdAt: new Date(),
-      dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
-    },
-    {
-      id: 2,
-      gid: 2,
-      tid: 3,
-      groupName: "Future Factories",
-      title: "Learn React Native 3",
-      completed: false,
-      text: "Learn React Native Now!!",
-      createdAt: new Date(),
-      dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
-    },
-    {
-      id: 0,
-      gid: 4,
-      tid: 1,
-      groupName: "Shustermen!",
-      title: "Make a Modal",
-      completed: false,
-      text: "Make a modal on the Register Page.",
-      createdAt: new Date(),
-      dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-    },
-    {
-      id: 1,
-      gid: 1,
-      tid: 2,
-      groupName: "Ruppin Computer Science",
-      title: "Learn React Native 2",
-      completed: false,
-      text: "Learn React Native Now!",
-      createdAt: new Date(),
-      dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-    },
-  ];
-
+const Group = ({ route }) => {
+  const { gid } = route.params;
   const [taskPickerVal, settaskPickerVal] = useState("All tasks");
-  const [tasksList, settasksList] = useState(tempTasks);
+  const [tasksList, settasksList] = useState([]);
+  const [myTasksList, setmyTasksList] = useState([]);
+  const [regiterabletasksList, setRegiterabletasksList] = useState([]);
+  const [pickerTasksList, setPickerTasksList] = useState([]);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [membersList, setmembersList] = useState([]);
+  const [groupData, setGroupData] = useState({
+    name: "",
+    description: "",
+    imgUrl: "",
+    members: [],
+  });
 
   const taskType = [
     { label: "All tasks", value: "Alltasks" },
@@ -73,33 +39,111 @@ const Group = () => {
     { label: "Regiterable tasks", value: "Regiterabletasks" },
   ];
 
+  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
+  const api_GetTasksOfGroup = apiUrl + "Tasks/GetTasksOfGroup?gid=2";
+  const api_GetGroup = apiUrl + "Groups?gid=2";
+
+  useEffect(() => {
+    tasksList.map((t) => {
+      if (t.RegTo.some((i) => i === props.currentUser.Uid)) {
+        setmyTasksList([...myTasksList, t]);
+      }
+      if (t.RegTo.length === 0) {
+        setRegiterabletasksList([...regiterabletasksList, t]);
+      }
+    });
+  }, [tasksList]);
+
+  useEffect(() => {
+    if (value === "Mytasks") {
+      setPickerTasksList(myTasksList);
+    } else if (value === "Regiterabletasks") {
+      setPickerTasksList(regiterabletasksList);
+    } else setPickerTasksList(tasksList);
+  }, [value]);
+
+  useEffect(() => {
+    fetch(api_GetTasksOfGroup, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getTasks= ", result);
+          settasksList(result);
+          result.map((r) => console.log(r.Tid));
+        },
+        (error) => {
+          console.log("err GET=", error);
+        }
+      );
+    fetch(api_GetGroup, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          setGroupData((prev) => ({
+            ...prev,
+            name: result.Name,
+            description: result.Description,
+            imgUrl: result.ImgURL,
+            members: result.Members,
+          }));
+        },
+        (error) => {
+          console.log("err GET=", error);
+        }
+      );
+  }, []);
+
   const renderItem = ({ item: t }) => (
     <View style={{ margin: 5 }}>
       <GroupTask
         color="#E5E5E5"
-        groupName={t.groupName}
-        title={t.title}
-        text={t.text}
-        // createdAt={t.createdAt}
-        // dueDate={t.dueDate}
+        groupName={t.GName}
+        title={t.Title}
+        text={t.Txt}
+        createdAt={t.CreatedAt}
+        dueDate={t.DueDate}
       />
     </View>
   );
+
+  const leaveGroup = () => {
+    alert("bye");
+  };
+
   return (
     <View style={styles.groupsPageContainer}>
       <SafeAreaView style={styles.groupHeaderContainer}>
         <View style={styles.leftHeader}>
-          <Text style={styles.groupScreanNameTxt}>@groupScreenName</Text>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.leaveGroupBtn}
+            onPress={leaveGroup}
+          ></TouchableOpacity>
         </View>
         <View style={styles.rightHeader}>
-          <TouchableOpacity activeOpacity={0.5} style={styles.addMember}>
-            <Icon
-              name="person-add-outline"
-              type="ionicon"
-              color="#7D7C7A"
-              iconStyle={{ fontWeight: "1600" }}
-            />
-          </TouchableOpacity>
+          <MembersModal members={groupData.members} />
         </View>
       </SafeAreaView>
       <SafeAreaView style={[styles.groupInfoContainer, styles.shaddow]}>
@@ -107,15 +151,18 @@ const Group = () => {
           <Image
             style={styles.groupImg}
             source={{
-              uri: "https://reactnative.dev/img/tiny_logo.png",
+              uri: groupData.imgUrl,
             }}
           />
         </View>
         <View style={styles.infoRightContainer}>
-          <Text style={styles.groupNameTxt}>GroupName</Text>
+          <Text style={styles.groupNameTxt}>{groupData.name}</Text>
           <Text style={styles.groupDescriptionTxt}>
-            description description description description description
-            description description
+            {groupData.description}
+          </Text>
+          <Text style={[styles.groupDescriptionTxt, { marginTop: 9 }]}>
+            <Text style={{ fontWeight: "600" }}>Members: </Text>
+            {groupData.members.map((i) => i.FirstName + ", ")}
           </Text>
         </View>
       </SafeAreaView>
@@ -144,13 +191,13 @@ const Group = () => {
 
         <View style={styles.tasksContainer}>
           <FlatList
-            keyExtractor={(t) => t.id}
-            data={tasksList}
+            data={pickerTasksList}
+            keyExtractor={(t) => t.Tid}
             renderItem={renderItem}
           />
         </View>
       </SafeAreaView>
-      <PopupChat />
+      <PopupChat gid={gid} user={currentUser} />
     </View>
   );
 };
