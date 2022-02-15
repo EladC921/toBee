@@ -35,6 +35,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-events-calendar": "^1.0.8",
     "react-native-flash-message": "^0.2.1",
+    "react-native-logs": "^4.0.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-settings-list": "^1.8.0",
