@@ -1,16 +1,19 @@
 import { StyleSheet, View, Text } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
+import Moment from "moment";
 
 const Task = (props) => {
+  let createdAtDate = Moment(props.createdAt).format("YYYY-MM-DD, h:mm");
+  let dotoDate = Moment(props.dueDate).format("YYYY-MM-DD, h:mm");
+  let timeLeft = Moment(props.dueDate).endOf("day").fromNow();
+
   return (
     <View style={styles.list_item_container}>
       <View style={styles.left}>
         <Text style={styles.list_item_title_Text}>{props.title}</Text>
         <Text style={styles.list_item_text_Text}>{props.text}</Text>
-        <Text style={styles.list_item_date_Text}>
-          {props.createdAt.toString()}
-        </Text>
+        <Text style={styles.list_item_date_Text}>{createdAtDate}</Text>
       </View>
       <View style={styles.right}>
         <Icon
