@@ -85,11 +85,7 @@ const Calendaric = () => {
 
     return + (year + '-' + month + '-' + day).toString;//format: dd-mm-yyyy;
   }
-  const renderEmptyDate = () => {
-    return (
-      <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
-    );
-  }
+
   return (
     <View style={styles.page}>
 
