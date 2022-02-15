@@ -17,6 +17,9 @@ import { auth } from "../db/firebaseSDK";
 import SettingsList from "react-native-settings-list";
 
 const Settings = (props) => {
+  const [password, setPassword] = useState();
+  const [cpassword, setCPassword] = useState();
+  
   const [modal, setModal] = useState(false);
   const handleSignOut = () => {
     auth
@@ -52,15 +55,19 @@ const Settings = (props) => {
   }
   const changePass = () => {
     var user = auth.currentUser;
-    var newPassword = '1234567';
-    alert(user)
-
-    user.updatePassword(newPassword).then(function () {
-      alert("updates")
-      // Update successful.
-    }).catch(function (error) {
-      // An error happened.
-    });
+    var newPassword = cpassword;
+    
+    if(password===cpassword){
+      user.updatePassword(newPassword).then(function () {
+        alert("updates")
+        // Update successful.
+      }).catch(function (error) {
+        // An error happened.
+      });
+    }
+    else
+    alert("New password is the same as old one")
+  
   }
 
 
@@ -83,6 +90,13 @@ const Settings = (props) => {
             headerText="Different Grouping"
             headerStyle={{ color: "white", marginTop: 50 }}
           />
+          
+          <SettingsList.Item
+            onPress={renderEmptyDate}
+            titleInfo={auth.currentUser.email}
+            hasNavArrow={false}
+            title="Email:"
+          />
           <SettingsList.Item
             hasNavArrow={false}
             /*
@@ -94,27 +108,19 @@ const Settings = (props) => {
                 <Modal></Modal>);
             }}
             hasSwitch={true}
-            title="Switch Example"
+            title="Notifications"
           />
-          <SettingsList.Item
-            onPress={renderEmptyDate}
-            titleInfo="Some Information"
-            hasNavArrow={false}
-            title="Information Example"
-          />
-          <SettingsList.Item onPress={handleSignOut} title="Settings 1" />
-          <SettingsList.Item title="Settings 2" />
-        </SettingsList>
-        <TouchableOpacity onPress={() => {
+          <SettingsList.Item onPress={() => {
           setModal(true);
-        }} style={styles.btnLogout}>
-          <Text style={{ color: "#fff" }}>Logout</Text>
-        </TouchableOpacity>
+        }} title="Change Password" />
+         
+        </SettingsList>
+        
         <TouchableOpacity onPress={handleSignOut} style={styles.btnLogout}>
           <Text style={{ color: "#fff" }}>Logout</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ borderRadius: 20 }}>
+      <View style={{ borderRadius: 20}}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -123,38 +129,44 @@ const Settings = (props) => {
             <View style={styles.modalView}>
               <View style={styles.modalContent}>
                 <View style={styles.inputArea}>
-                  <Text style={styles.inputLabel}>Task:</Text>
+                  <Text style={styles.inputLabel}>Old Password:</Text>
                   <TextInput
+                    placeholder="Password..."
+                    onChangeText={(text) => setPassword(text)}
                     style={[styles.modalInput, { height: 30 }]}
+                    placeholderTextColor="black"
                     
                   />
 
                 </View>
                 <View style={styles.inputArea}>
-                  <Text style={styles.inputLabel}>Title:</Text>
+                  <Text style={styles.inputLabel}>New Password:</Text>
                   <TextInput
-                    style={[styles.modalInput, { height: 30 }]}
-                    value={""}
+                  placeholder="Password..."
+                    onChangeText={(text) => setCPassword(text)}
+                    style={[styles.modalInput, { height: 30,color:"black" }]}
+                    placeholderTextColor="black"
+                    
                   />
+                  
                 </View>
+            
               </View>
               <View style={styles.modalFooter}>
                 <TouchableOpacity
                   style={styles.addBtn}
-                  onPress={() => {
-                    //add new task
-                    setModal(false);
-                  }}
+                  onPress={() =>{changePass;setModal(false)}}
                 >
-                  <Text style={styles.addTask}>Add Task</Text>
+                  <Text style={styles.addTask}>Change Password</Text>
                 </TouchableOpacity>
               </View>
             </View></KeyboardAvoidingView>
 
-
+        
 
         </Modal>
       </View>
+      
     </View>
   );
 };
@@ -162,7 +174,7 @@ const Settings = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 0.55,
-    backgroundColor:"gray",
+    backgroundColor:"#E3E3E3",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -170,28 +182,33 @@ const styles = StyleSheet.create({
     bottom: "10%",
     width: "100%",
   },
-  emptyDate: {
-    height: 15,
-    flex: 1,
-    paddingTop: 30
-  },
+
 
   modalContent: {
-    flex: 5,
+    
+    
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:"gray",
+    backgroundColor:"#E3E3E3",
     width: "100%",
+    borderRadius:20,
     minWidth: "100%",
   },
   modalFooter: {
-    flex: 2,
-    backgroundColor:"gray",
+  
+    paddingTop:10,
+    backgroundColor:"white",
     width: "100%",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderRadius:20,
     justifyContent: "center",
     alignItems: "center",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   inputArea: {
     flexDirection: "column",
@@ -217,14 +234,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#4a4b4d",
+    paddingBottom:25,
     
   },
   modalView: {
-    flex: 1,
+    flex:1,
     width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#E3E3E3",
     borderRadius: 20,
-    
+    padding:20,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -237,6 +255,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+ 
+
   inputLabel: {
     fontSize: 16,
     fontWeight: "700",
@@ -245,13 +265,20 @@ const styles = StyleSheet.create({
   },
   modalInput: {
     borderColor: "black",
-    borderWidth: 1,
+    
     borderRadius: 10,
     width: "80%",
     minWidth: "80%",
 
     marginLeft: 10,
     padding: 5,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 
   btnLogout: {
