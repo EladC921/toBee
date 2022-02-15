@@ -187,7 +187,7 @@ const ProfileToDo = (props) => {
 
   return (
     <View style={{ flex: 1, width: "100%", borderRadius: 20 }}>
-      {props.toDoList > 0 ? (
+      {props.toDoList.length > 0 ? (
         <FlatList
           keyExtractor={(item) => item.Tid}
           data={props.toDoList}
