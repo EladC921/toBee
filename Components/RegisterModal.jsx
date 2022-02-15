@@ -12,17 +12,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-
 import { auth } from "../db/firebaseSDK";
 
 const RegisterModal = () => {
-  const [signnickname, setSignNickname] = useState();
-  const [signfirstname, setSignFirstName] = useState();
-  const [signlastname, setSignLastName] = useState();
-  const [signphone, setSignPhone] = useState();
-  const [signmail, setSignupmail] = useState();
-  const [csignpass, setcpass] = useState();
-  const [signpass, setsignpass] = useState();
+  const [signnickname, setSignNickname] = useState("Test");
+  const [signfirstname, setSignFirstName] = useState("test");
+  const [signlastname, setSignLastName] = useState("test");
+  const [signphone, setSignPhone] = useState("0541234567");
+  const [signmail, setSignupmail] = useState("test1@gmail.com");
+  const [csignpass, setcpass] = useState("123456");
+  const [signpass, setsignpass] = useState("123456");
   const [openModal, setOpenModal] = useState(false);
 
   // Form validation
@@ -31,24 +30,24 @@ const RegisterModal = () => {
       let num = signphone.replace(".", "");
       num = num.replace("-", "");
       if (isNaN(num)) {
-        alert("Invalid phone number"); // tmp
+        alert("Invalid phone number");
         return false;
       } else if (num.length < 10) {
-        alert("Phone number is too short"); // tmp
+        alert("Phone number is too short");
         return false;
-      }
+      } else setSignPhone(num);
     } else {
-      alert("Please insert phone number"); // tmp
+      alert("Please insert phone number");
       return false;
     }
 
     if (!signfirstname || !signlastname) {
-      alert("Your friends should know your name"); // tmp
+      alert("Your friends should know your name");
       return false;
     }
 
     if (!signnickname) {
-      alert("Please insert a nickname"); // tmp
+      alert("Please insert a nickname");
       return false;
     }
 
@@ -102,9 +101,10 @@ const RegisterModal = () => {
           .then((userCredentials) => {
 
             postUserRequest();
-            const user = userCredentials.user;
             setOpenModal(false);
-          })
+            const user = userCredentials.user;
+          }) // -->
+          // <--
           .catch((error) => alert(error.message));
       } else {
         alert("The passwords do not match");
