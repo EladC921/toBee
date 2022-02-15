@@ -4,33 +4,14 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
+  Linking,
 } from "react-native";
 import GroupCard from "./GroupCard";
 import { useEffect, useState } from "react";
 
-const renderItem = ({ item: t }) => {
-  let membersList = [];
-  t.Members === null
-    ? (membersList = ["Nobody"])
-    : t.Members.map((i) => {
-        membersList.append(i.FirstName);
-      });
-  return (
-    <TouchableOpacity
-      activeOpacity={0.5}
-      onPress={() => navigation.navigate("GroupPage")}
-    >
-      <GroupCard
-        memberList={membersList}
-        groupName={t.Name}
-        imgUrl={t.ImgURL}
-        description={t.Description}
-      />
-    </TouchableOpacity>
-  );
-};
-const MyGroups = ({ navigation }) => {
+const MyGroups = (props) => {
   const [groupsList, setGroupsList] = useState([]);
+  const currentUser = props.user;
 
   const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
   const api_getGroupsOfUser = apiUrl + "Groups/GetGroupsOfUser?uid=9";
@@ -60,6 +41,34 @@ const MyGroups = ({ navigation }) => {
         }
       );
   }, []);
+
+  const renderItem = ({ item: t }) => {
+    let membersList = [];
+    t.Members === null
+      ? (membersList = ["Nobody"])
+      : t.Members.map((i) => {
+          membersList.append(i.FirstName);
+        });
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() =>
+          props.navigation.navigate("GroupPage", {
+            gid: t.Gid,
+          })
+        }
+      >
+        <GroupCard
+          memberList={membersList}
+          groupName={t.Name}
+          imgUrl={t.ImgURL}
+          description={t.Description}
+          currentUser={currentUser}
+        />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.pageContainer}>
       <View style={styles.headerbackground}></View>
@@ -68,7 +77,7 @@ const MyGroups = ({ navigation }) => {
       </View>
       <View style={styles.groupsListContainer}>
         <FlatList
-          keyExtractor={(t) => t.id}
+          keyExtractor={(t) => t.Gid}
           data={groupsList}
           renderItem={renderItem}
         />
