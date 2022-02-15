@@ -13,16 +13,20 @@ import React from "react";
 import { useState } from "react";
 import ProfileToDo from "./ProfileToDo";
 import { Ionicons } from "@expo/vector-icons";
+import ChangeProfilePic from "./ChangeProfilePic";
 
-let user = {
-  id: 1,
-  name: "Jimmy Newton",
-  nickname: "JimmyNewton_012",
-  email: "jimmy_jim@gmail.com",
-};
+// let user = {
+//   id: 1,
+//   name: "Jimmy Newton",
+//   nickname: "JimmyNewton_012",
+//   email: "jimmy_jim@gmail.com",
+// };
 
-const Profile = ({ navigation }) => {
+const Profile = (props) => {
+  let user = props.user;
+  console.log(props.user);
   const [modal, setModal] = useState(false);
+  const [modalPic, setModalPic] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
   const [nicknameEdit, setNicknameEdit] = useState(false);
   const [name, setName] = useState(user.name);
@@ -38,24 +42,37 @@ const Profile = ({ navigation }) => {
       <View style={[styles.profile_data_container, styles.shaddow]}>
         {/** Profile Picutre */}
         <View style={styles.profilePic_container}>
-          <Image
-            source={require("../Images/bee.png")}
-            style={styles.profilePic}
-          />
+          {user.ImgURL ? (
+            <Image source={{ uri: user.ImgURL }} style={styles.profilePic} />
+          ) : (
+            <Image
+              source={require("../Images/bee.png")}
+              style={styles.profilePic}
+            />
+          )}
           <View style={styles.cameraBtn}>
-            <TouchableOpacity onPress={() => navigation.navigate("CameraComp")}>
+            <TouchableOpacity onPress={() => setModalPic(true)}>
               <Ionicons name="camera" />
             </TouchableOpacity>
           </View>
         </View>
         {/** Profile Name */}
-        <Text style={styles.nicknameTxt}> @{user.nickname} </Text>
-        <Text style={styles.nameTxt}> {user.name} </Text>
+        <Text style={styles.nicknameTxt}> @{user.Nickname} </Text>
+        <Text style={styles.nameTxt}>
+          {user.FirstName} {user.LastName}
+        </Text>
         <TouchableOpacity
           style={[styles.button]}
           onPress={() => setModal(true)}
         >
-          <Text style={{ fontSize: 16, fontWeight: "700", color: "#FFC30B" }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "700",
+              color: "#FFC30B",
+              top: -10,
+            }}
+          >
             Edit Profile
           </Text>
         </TouchableOpacity>
@@ -154,6 +171,12 @@ const Profile = ({ navigation }) => {
           </View>
         </SafeAreaView>
       </Modal>
+      <ChangeProfilePic
+        modalPic={modalPic}
+        setModalPic={setModalPic}
+        goToCamera={() => props.navigation.navigate("CameraComp")}
+        goToGallery={() => props.navigation.navigate("GalleryComp")}
+      />
     </View>
   );
 };
@@ -220,7 +243,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 100,
     width: 100,
-    borderWidth: 5,
+    borderWidth: 2,
     borderColor: "black",
     borderRadius: 50,
   },
