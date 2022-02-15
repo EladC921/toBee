@@ -80,6 +80,7 @@ const Home = (props) => {
     apiUrl + "Tasks/GetAvailableTasksInAllGroups?uid=9";
   useEffect(() => {
     fetch(api_getMyTasks, {
+
       method: "GET",
       headers: new Headers({
         "Content-Type": "application/json; charset=UTF-8",

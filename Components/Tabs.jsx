@@ -34,7 +34,8 @@ const CoustomTabBTN = ({ children, onPress }) => (
 );
 
 const Tabs = ({ navigation, route }) => {
-  const { userEmail } = route.params;
+
+  const { user } = route.params;
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -44,9 +45,7 @@ const Tabs = ({ navigation, route }) => {
     >
       <Tab.Screen
         name="Profile"
-        children={() => (
-          <Profile navigation={navigation} userEmail={userEmail} />
-        )}
+        children={() => <Profile navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -67,9 +66,7 @@ const Tabs = ({ navigation, route }) => {
       />
       <Tab.Screen
         name="Groups"
-        children={() => (
-          <MyGroups navigation={navigation} userEmail={userEmail} />
-        )}
+        children={() => <MyGroups navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -90,7 +87,7 @@ const Tabs = ({ navigation, route }) => {
       />
       <Tab.Screen
         name="Home"
-        children={() => <Home navigation={navigation} userEmail={userEmail} />}
+        children={() => <Home navigation={navigation} user={user} />}
         // component={Home}
         options={{
           headerShown: false,
@@ -113,9 +110,7 @@ const Tabs = ({ navigation, route }) => {
       />
       <Tab.Screen
         name="Calendar"
-        children={() => (
-          <Calendaric navigation={navigation} userEmail={userEmail} />
-        )}
+        children={() => <Calendaric navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -136,9 +131,7 @@ const Tabs = ({ navigation, route }) => {
       />
       <Tab.Screen
         name="Settings"
-        children={() => (
-          <Settings navigation={navigation} userEmail={userEmail} />
-        )}
+        children={() => <Settings navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
