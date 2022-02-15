@@ -7,17 +7,58 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  FlatList,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { Icon } from "react-native-elements";
 import Message from "./Message";
+import { db } from "../db/firebaseSDK";
+import Moment from "moment";
+
 
 const PopupChat = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setinputText] = useState("");
+  const [messageList, setMessageList] = useState([])
 
-  const sendMsg = () => {};
+  const groupId = "group" + props.gid
+  
+
+  useLayoutEffect(() => {
+    const unsubscribed =db.collection(groupId).
+    orderBy('createdAt', 'asc').onSnapshot
+    (snapshot => setMessageList(
+      snapshot.docs.map(doc =>({
+        _id: doc.data()._id,
+        createdAt: doc.data().createdAt,
+        text: doc.data().text,
+        user: doc.data().user
+      }))
+    ))
+  },[])
+  
+  const renderItem = ({ item: t }) => (
+    <View style={{ flex: 13 }}>
+      <Message
+        isReader={true}
+        userName={t.user}
+        text={t.text}
+        dateTime={t.createdAt}
+      ></Message>
+    </View>
+  );
+  const sendMsg = () => {
+    db.collection(groupId).add({
+      _id: props.user.Uid,
+      createdAt: Moment()
+      .utcOffset('+05:30')
+      .format('YYYY-MM-DD hh:mm:ss a'),
+      text: inputText,
+      user: props.user.FirstName
+    })
+
+  };
 
   return (
     <View style={styles.btnContainer}>
@@ -59,16 +100,11 @@ const PopupChat = (props) => {
               </Pressable>
             </View>
             <View style={styles.chatContent}>
-              <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={{ flex: 13 }}>
-                  <Message
-                    isReader={true}
-                    userName={"nofar"}
-                    text={"hayy bb bjbcjb bb bcjvj"}
-                    dateTime={"02/02/22 15:26"}
-                  ></Message>
-                </View>
-              </ScrollView>
+              <FlatList
+                keyExtractor={(t) => t.Mid}
+                data={messageList}
+                renderItem={renderItem}
+              />
             </View>
             <View style={styles.chatfooter}>
               <View style={{ flex: 4 }}>
