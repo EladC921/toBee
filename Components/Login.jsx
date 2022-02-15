@@ -47,8 +47,16 @@ const Login = ({ navigation }) => {
       );
   };
 
+  // login after register
   auth.onAuthStateChanged(function (user) {
-    if (user) getUserRequest(user.email);
+    if (user) {
+      console.log(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        user.email
+      );
+      // set timeout before doing get request
+      getUserRequest(user.email);
+    }
   });
 
   const handleLogin = () => {

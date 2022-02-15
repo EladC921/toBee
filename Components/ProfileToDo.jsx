@@ -8,123 +8,212 @@ import {
   Pressable,
   TextInput,
   KeyboardAvoidingView,
+  Button,
 } from "react-native";
 import React from "react";
 import Task from "./Tasks/Task";
 import { useState } from "react";
 import { Icon } from "react-native-elements";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-let toDoList = [
-  {
-    id: 11,
-    gid: -1,
-    tid: 4,
-    groupName: "",
-    title: "Learn React Native 4",
-    completed: false,
-    text: "Learn React Native Now!!!",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 10,
-    gid: -1,
-    tid: 3,
-    groupName: "",
-    title: "Learn React Native 3",
-    completed: false,
-    text: "Learn React Native Now!!",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 9,
-    gid: -1,
-    tid: 1,
-    groupName: "",
-    title: "Make a Modal",
-    completed: false,
-    text: "Make a modal on the Register Page.",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 6,
-    gid: -1,
-    tid: 2,
-    groupName: "",
-    title: "Learn React Native 2",
-    completed: false,
-    text: "Learn React Native Now!",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 3,
-    gid: -1,
-    tid: 4,
-    groupName: "",
-    title: "Learn React Native 4",
-    completed: false,
-    text: "Learn React Native Now!!!",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 2,
-    gid: -1,
-    tid: 3,
-    groupName: "",
-    title: "Learn React Native 3",
-    completed: false,
-    text: "Learn React Native Now!!",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 0,
-    gid: -1,
-    tid: 1,
-    groupName: "",
-    title: "Make a Modal",
-    completed: false,
-    text: "Make a modal on the Register Page.",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-  },
-  {
-    id: 1,
-    gid: -1,
-    tid: 2,
-    groupName: "",
-    title: "Learn React Native 2",
-    completed: false,
-    text: "Learn React Native Now!",
-    createdAt: new Date(),
-    dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-  },
-];
+// let toDoList = [
+//   {
+//     id: 11,
+//     gid: -1,
+//     tid: 4,
+//     groupName: "",
+//     title: "Learn React Native 4",
+//     completed: false,
+//     text: "Learn React Native Now!!!",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 10,
+//     gid: -1,
+//     tid: 3,
+//     groupName: "",
+//     title: "Learn React Native 3",
+//     completed: false,
+//     text: "Learn React Native Now!!",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 9,
+//     gid: -1,
+//     tid: 1,
+//     groupName: "",
+//     title: "Make a Modal",
+//     completed: false,
+//     text: "Make a modal on the Register Page.",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 6,
+//     gid: -1,
+//     tid: 2,
+//     groupName: "",
+//     title: "Learn React Native 2",
+//     completed: false,
+//     text: "Learn React Native Now!",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 3,
+//     gid: -1,
+//     tid: 4,
+//     groupName: "",
+//     title: "Learn React Native 4",
+//     completed: false,
+//     text: "Learn React Native Now!!!",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 2,
+//     gid: -1,
+//     tid: 3,
+//     groupName: "",
+//     title: "Learn React Native 3",
+//     completed: false,
+//     text: "Learn React Native Now!!",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 0,
+//     gid: -1,
+//     tid: 1,
+//     groupName: "",
+//     title: "Make a Modal",
+//     completed: false,
+//     text: "Make a modal on the Register Page.",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+//   },
+//   {
+//     id: 1,
+//     gid: -1,
+//     tid: 2,
+//     groupName: "",
+//     title: "Learn React Native 2",
+//     completed: false,
+//     text: "Learn React Native Now!",
+//     createdAt: new Date(),
+//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
+//   },
+// ];
 
-const ProfileToDo = () => {
+const ProfileToDo = (props) => {
   const [modal, setModal] = useState(false);
+  const [DueDate, setDueDate] = useState(new Date());
+  const [Txt, setTxt] = useState();
+  const [Title, setTitle] = useState();
+
+  // handle due date onchange
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDueDate(currentDate);
+  };
+
+  // form validation
+  const validate = () => {
+    if (!Txt || !Title) {
+      alert("Please fill all the fields");
+      return false;
+    }
+
+    if (Title.length > 30) {
+      alert("Title is too long");
+      return false;
+    }
+
+    let today = new Date();
+    if (today > DueDate) {
+      alert("Due date is in the future");
+      return false;
+    }
+
+    return true;
+  };
+
+  // post task to DB
+  const postTask = (newTask) => {
+    let apiUrl_PostProfileTask =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks";
+    fetch(apiUrl_PostProfileTask, {
+      method: "POST",
+      body: JSON.stringify(newTask),
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("POST User request:\n");
+        console.log("supposed to be=", newTask);
+        console.log("res=", res);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch POST= ", result);
+          props.setTasks(result);
+        },
+        (error) => {
+          console.log("err post=", error);
+        }
+      );
+  };
+
+  // add new profile task
+  const addTask = () => {
+    if (!validate()) return;
+    let task = {
+      Title,
+      Txt,
+      DueDate,
+      Creator: {
+        Uid: props.Uid,
+      },
+      Gid: -1,
+    };
+    postTask(task);
+    setModal(false);
+  };
 
   return (
     <View style={{ flex: 1, width: "100%", borderRadius: 20 }}>
-      <FlatList
-        keyExtractor={(item) => item.id}
-        data={toDoList}
-        renderItem={({ item }) => {
-          return (
-            <View style={{ width: "97%", padding: 5 }}>
-              <Task
-                title={item.title}
-                text={item.text}
-                createdAt={item.createdAt}
-              />
-            </View>
-          );
-        }}
-      />
+      {props.toDoList > 0 ? (
+        <FlatList
+          keyExtractor={(item) => item.Tid}
+          data={props.toDoList}
+          renderItem={({ item }) => {
+            return (
+              <View style={{ width: "97%", padding: 5 }}>
+                <Task
+                  title={item.Title}
+                  text={item.Txt}
+                  createdAt={item.CreatedAt}
+                />
+              </View>
+            );
+          }}
+        />
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 20 }}>There are no tasks yet</Text>
+        </View>
+      )}
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity
           style={styles.NewTaskBTN}
@@ -168,29 +257,51 @@ const ProfileToDo = () => {
                   Create New Task
                 </Text>
               </View>
+              {/** Inputs Area */}
               <View style={styles.modalContent}>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Title:</Text>
                   <TextInput
-                    style={[styles.modalInput, { height: 30 }]}
-                    value={""}
+                    style={[styles.modalInput, { height: 40 }]}
+                    value={Title}
+                    onChange={(e) => setTitle(e.nativeEvent.text)}
                   />
                 </View>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Task:</Text>
                   <TextInput
-                    style={[styles.modalInput, { height: 70 }]}
-                    multiline={true}
-                    numberOfLines={3}
+                    style={[styles.modalInput, { height: 40 }]}
+                    value={Txt}
+                    onChange={(e) => setTxt(e.nativeEvent.text)}
                   />
                 </View>
+                <View style={styles.inputArea}>
+                  <Text style={styles.inputLabel}>Due to:</Text>
+                  <View>
+                    <DateTimePicker
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        left: 10,
+                        backgroundColor: "#fff",
+                      }}
+                      testID="dateTimePicker"
+                      value={DueDate}
+                      mode={"datetime"}
+                      is24Hour={true}
+                      display="default"
+                      themeVariant="light"
+                      onChange={onChangeDate}
+                    />
+                  </View>
+                </View>
               </View>
+              {/** Buttons Area */}
               <View style={styles.modalFooter}>
                 <TouchableOpacity
                   style={styles.addBtn}
                   onPress={() => {
-                    //add new task
-                    setModal(false);
+                    addTask(); //add new task
                   }}
                 >
                   <Text style={styles.addTask}>Add Task</Text>
