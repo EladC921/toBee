@@ -55,6 +55,7 @@ const MyGroups = (props) => {
         onPress={() =>
           props.navigation.navigate("GroupPage", {
             gid: t.Gid,
+            currentUser: currentUser,
           })
         }
       >

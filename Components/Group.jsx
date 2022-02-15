@@ -17,7 +17,7 @@ import PopupChat from "./PopupChat";
 import MembersModal from "./MembersModal";
 
 const Group = ({ route }) => {
-  const { gid } = route.params;
+  const { gid, currentUser } = route.params;
   const [taskPickerVal, settaskPickerVal] = useState("All tasks");
   const [tasksList, settasksList] = useState([]);
   const [myTasksList, setmyTasksList] = useState([]);
@@ -45,7 +45,7 @@ const Group = ({ route }) => {
 
   useEffect(() => {
     tasksList.map((t) => {
-      if (t.RegTo.some((i) => i === props.currentUser.Uid)) {
+      if (t.RegTo.some((i) => i === currentUser.Uid)) {
         setmyTasksList([...myTasksList, t]);
       }
       if (t.RegTo.length === 0) {
