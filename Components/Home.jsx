@@ -25,7 +25,7 @@ let colors = [
   "#f3722c",
   "#f94144",
 ];
-
+let toDoList=[];
 // generate random color for list item
 const getRandomColor = () => {
   let random = Math.floor(Math.random() * colors.length);
