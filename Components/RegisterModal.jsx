@@ -99,6 +99,7 @@ const RegisterModal = () => {
         auth
           .createUserWithEmailAndPassword(signmail, csignpass)
           .then((userCredentials) => {
+
             postUserRequest();
             setOpenModal(false);
             const user = userCredentials.user;
@@ -110,7 +111,6 @@ const RegisterModal = () => {
       }
     } else alert("Please enter all required fields");
   };
-
   return (
     <View>
       <TouchableOpacity onPress={() => setOpenModal(true)}>
@@ -134,8 +134,7 @@ const RegisterModal = () => {
                   style={styles.inputText}
                   placeholder="Name"
                   placeholderTextColor="white"
-                  onChangeText={(text) => setSignFirstName(text)}
-                />
+                  onChangeText={(text) => setSignFirstName(text)}                />
               </View>
               <View style={styles.flview}>
                 <TextInput

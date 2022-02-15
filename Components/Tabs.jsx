@@ -34,6 +34,7 @@ const CoustomTabBTN = ({ children, onPress }) => (
 );
 
 const Tabs = ({ navigation, route }) => {
+
   const { user } = route.params;
   return (
     <Tab.Navigator

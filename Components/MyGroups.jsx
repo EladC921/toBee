@@ -5,24 +5,61 @@ import {
   Text,
   FlatList,
 } from "react-native";
-import { useState } from "react";
 import GroupCard from "./GroupCard";
+import { useEffect, useState } from "react";
 
-const MyGroups = ({ navigation }) => {
-  const renderItem = ({ item: t }) => (
+const renderItem = ({ item: t }) => {
+  let membersList = [];
+  t.Members === null
+    ? (membersList = ["Nobody"])
+    : t.Members.map((i) => {
+        membersList.append(i.FirstName);
+      });
+  return (
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={() => navigation.navigate("GroupPage")}
     >
       <GroupCard
-        memberList={["Chen", "Elad", "Nofar"]}
-        groupName={"tweetFluent"}
-        imgUrl={"https://reactnative.dev/img/tiny_logo.png"}
-        description={"nsknc csnjkjnc sbcjkbcsjk"}
+        memberList={membersList}
+        groupName={t.Name}
+        imgUrl={t.ImgURL}
+        description={t.Description}
       />
     </TouchableOpacity>
   );
-  const tempGroupList = [{ id: 1 }, { id: 2 }];
+};
+const MyGroups = ({ navigation }) => {
+  const [groupsList, setGroupsList] = useState([]);
+
+  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
+  const api_getGroupsOfUser = apiUrl + "Groups/GetGroupsOfUser?uid=9";
+
+  useEffect(() => {
+    fetch(api_getGroupsOfUser, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getTasks= ", result);
+          setGroupsList(result);
+          result.map((r) => console.log(r.Tid));
+        },
+        (error) => {
+          console.log("err GET=", error);
+        }
+      );
+  }, []);
   return (
     <View style={styles.pageContainer}>
       <View style={styles.headerbackground}></View>
@@ -32,7 +69,7 @@ const MyGroups = ({ navigation }) => {
       <View style={styles.groupsListContainer}>
         <FlatList
           keyExtractor={(t) => t.id}
-          data={tempGroupList}
+          data={groupsList}
           renderItem={renderItem}
         />
       </View>
