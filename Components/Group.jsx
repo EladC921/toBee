@@ -80,8 +80,8 @@ const Group = () => {
         groupName={t.groupName}
         title={t.title}
         text={t.text}
-        createdAt={t.createdAt}
-        dueDate={t.dueDate}
+        // createdAt={t.createdAt}
+        // dueDate={t.dueDate}
       />
     </View>
   );

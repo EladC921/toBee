@@ -1,30 +1,26 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
+import Moment from "moment";
 
 const GroupTask = (props) => {
-  let COLOR = "grey";
+  let COLOR = "white";
   //set date format to print
-  let createdAtDate = props.createdAt;
-  let doToDateMinutes = "hh";
-  // props.dueDate.getMinutes() < 10
-  //   ? "0" + props.dueDate.getMinutes().toString()
-  //   : props.dueDate.getMinutes().toString();
-  let dotoDate = "jjj";
-  // props.dueDate.getHours().toString() +
-  // ":" +
-  // doToDateMinutes +
-  // " " +
-  // props.dueDate.toDateString();
-
+  let createdAtDate = Moment(props.createdAt).format("YYYY-MM-DD, h:mm");
+  let dotoDate = Moment(props.dueDate).format("YYYY-MM-DD, h:mm");
+  let timeLeft = Moment(props.dueDate).endOf("day").fromNow();
   return (
     <View style={[styles.cardContainer, { backgroundColor: COLOR }]}>
       <View style={styles.topContainer}>
-        <View style={{ flex: 2 }}>
-          <Text style={styles.titleTxt}>{props.title}</Text>
-          <Text style={styles.textTxt}>{props.text}</Text>
+        <View style={styles.taskContentContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleTxt}>{props.title}</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.textTxt}>{props.text}</Text>
+          </View>
         </View>
-        <View style={{ flex: 1.5, width: "100%" }}>
+        <View style={{ flex: 1.1, width: "100%" }}>
           <View style={styles.dateRow}>
             <View style={styles.leftDateRow}>
               <Icon
@@ -63,10 +59,37 @@ const GroupTask = (props) => {
               <Text style={styles.dateTxt}>{dotoDate}</Text>
             </View>
           </View>
+          <View style={styles.dateRow}>
+            <View style={styles.leftDateRow}>
+              <Icon
+                name="hourglass-outline"
+                type="ionicon"
+                color="#686868"
+                iconStyle={{
+                  fontWeight: "1600",
+                  fontSize: 18,
+                  padding: 0,
+                }}
+              />
+            </View>
+            <View style={styles.rightLeftRow}>
+              <Text style={{ fontWeight: "600", fontSize: 10 }}>
+                Time left:
+              </Text>
+              <Text style={styles.dateTxt}>{timeLeft}</Text>
+            </View>
+          </View>
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <Text>Registered:</Text>
+        <Text style={{ fontSize: 12, marginBottom: 7 }}>
+          <Text style={{ fontWeight: "600" }}>Create by: </Text>
+          {props.creator}
+        </Text>
+        <Text style={{ fontSize: 12, marginBottom: 7 }}>
+          <Text style={{ fontWeight: "600" }}>Registered: </Text>
+          {props.registered}
+        </Text>
       </View>
     </View>
   );
@@ -92,12 +115,21 @@ const styles = StyleSheet.create({
     flex: 3,
     flexDirection: "row",
     justifyContent: "center",
-    padding: 10,
   },
   bottomContainer: {
     borderTopWidth: 1,
     flex: 1,
     padding: 10,
+  },
+  taskContentContainer: {
+    flex: 2,
+    width: "100%",
+  },
+  titleContainer: {
+    flex: 1,
+  },
+  textContainer: {
+    flex: 3,
   },
   dateRow: {
     flex: 1,
@@ -118,12 +150,12 @@ const styles = StyleSheet.create({
   },
 
   titleTxt: {
-    fontSize: 18,
+    fontSize: 14,
     marginBottom: 10,
     fontWeight: "600",
   },
   textTxt: {
-    fontSize: 14,
+    fontSize: 11,
   },
   dateTxt: {
     fontSize: 9,
