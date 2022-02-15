@@ -19,6 +19,8 @@ const GroupsTask = (props) => {
           text={props.text}
           createdAt={props.createdAt}
           dueDate={props.dueDate}
+          creator={props.creator}
+          registered={props.registered}
         />
       </View>
     </View>
