@@ -16,10 +16,6 @@ const GroupCard = (props) => {
       <View style={{ flex: 2.5 }}>
         <Text style={styles.groupNameTxt}>{props.groupName}</Text>
         <Text style={styles.descriptionTxt}>{props.description}</Text>
-        <Text style={styles.membersListTxt}>
-          <Text style={{ fontWeight: "600" }}>Members:</Text>{" "}
-          {tempMembersList.map((i) => i + ", ")}...
-        </Text>
       </View>
     </View>
   );
