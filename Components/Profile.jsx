@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfileToDo from "./ProfileToDo";
 import { Ionicons } from "@expo/vector-icons";
 import ChangeProfilePic from "./ChangeProfilePic";
@@ -25,6 +25,7 @@ import ChangeProfilePic from "./ChangeProfilePic";
 const Profile = (props) => {
   let user = props.user;
   console.log(props.user);
+  const [tasks, setTasks] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalPic, setModalPic] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
@@ -34,6 +35,36 @@ const Profile = (props) => {
   const [edit_apply_name, toggle_edit_apply_name] = useState("create-outline");
   const [edit_apply_nickname, toggle_edit_apply_nickname] =
     useState("create-outline");
+
+  useEffect(() => {
+    let api_getProfileTasks =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetProfileTasksOfUser?uid=" +
+      user.Uid;
+
+    fetch(api_getProfileTasks, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getTasks= ", result);
+          setTasks(result);
+          result.map((r) => console.log(r.Title));
+        },
+        (error) => {
+          alert("err GET=", error);
+        }
+      );
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -91,7 +122,7 @@ const Profile = (props) => {
       </View>
       <View style={styles.MyTodo_container}>
         <View style={styles.listContainer}>
-          <ProfileToDo />
+          <ProfileToDo toDoList={tasks} setTasks={setTasks} Uid={user.Uid} />
         </View>
       </View>
 
