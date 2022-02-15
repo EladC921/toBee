@@ -16,7 +16,7 @@ import { Icon } from "react-native-elements";
 
 let toDoList = [
   {
-    id: 3,
+    id: 11,
     gid: -1,
     tid: 4,
     groupName: "",
@@ -27,7 +27,7 @@ let toDoList = [
     dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
   },
   {
-    id: 2,
+    id: 10,
     gid: -1,
     tid: 3,
     groupName: "",
@@ -38,7 +38,7 @@ let toDoList = [
     dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
   },
   {
-    id: 0,
+    id: 9,
     gid: -1,
     tid: 1,
     groupName: "",
@@ -49,7 +49,7 @@ let toDoList = [
     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
   },
   {
-    id: 1,
+    id: 6,
     gid: -1,
     tid: 2,
     groupName: "",

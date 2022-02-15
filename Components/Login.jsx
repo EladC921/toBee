@@ -1,152 +1,210 @@
-import { StyleSheet,ImageBackground, Pressable, Alert, SafeAreaView, KeyboardAvoidingView, View, Text, TextInput, Modal, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  ImageBackground,
+  Pressable,
+  Alert,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  View,
+  Text,
+  TextInput,
+  Modal,
+
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
-import { auth } from '../db/firebaseSDK';
+
+import { auth } from "../db/firebaseSDK";
 import RegisterModal from "./RegisterModal";
 
-
-
 const Login = ({ navigation }) => {
- auth.onAuthStateChanged(function(user){
-   if (user){
-    navigation.navigate("Main");
-   } 
- })
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+
+  const getUserRequest = (mail) => {
+    let api_getUser =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users?mail='" +
+      mail +
+      "'";
+    fetch(api_getUser, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log(api_getUser);
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getUser= ", result);
+          console.log(result.Uid);
+          navigation.navigate("Main", { user: result });
+        },
+        (error) => {
+          console.log("err GET=", error);
+        }
+      );
+  };
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) getUserRequest(user.email);
+  });
 
   const handleLogin = () => {
-    if(email&&password){
-      try{ auth
-        .signInWithEmailAndPassword(email, password)
-        .then(userCredentials => {
-          navigation.navigate("Main");       
+    if (email && password) {
+      try {
+        auth
+          .signInWithEmailAndPassword(email, password)
+          .then((userCredentials) => {
+            getUserRequest(email);
         })
-        .catch(error =>  alert(error.message))
-      } 
-      catch(error){
-        alert(error.message)
+          .catch((error) => alert(error.message));
+      } catch (error) {
+        alert(error.message);
       }
-    }
-    else
-    alert("You have to enter both email and password")
-   
-     
-  }
-  
-  
-  const [password, setPassword] = useState()
-  const [email, setEmail] = useState()
-  const [openModal, setOpenModal] = useState(false)
+    } else alert("You have to enter both email and password");
+  };
 
   return (
-
     <>
-
-      <View style={styles.container}>
-      <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-        >
-        
-          <View style={styles.logophoto}>
-          <Image
-            source={require('../Images/bee.png')}
-            style={styles.images} />
-        </View>
-       
-          <Text style={styles.logo}>toBee</Text>
-          
-        <View style={styles.inputView} >
-            <TextInput
-              keyboardType="email-address"
-              autoCompleteType="email"
-              textContentType="emailAddress"
-              style={styles.inputText}
-              placeholder="Email..."
-              placeholderTextColor="white"
-              onChangeText={text => setEmail(text)} />
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <View style={styles.container}>
+            <View style={styles.imgContainer}>
+              <Image
+                source={require("../Images/bee.png")}
+                style={styles.images}
+              />
+            </View>
+            <View style={styles.logoContainer2}>
+              <Text style={styles.logo}>toBee</Text>
+            </View>
+            <View style={styles.formContainer}>
+              <View style={styles.inputView}>
+                <TextInput
+                  keyboardType="email-address"
+                  autoCompleteType="email"
+                  textContentType="emailAddress"
+                  style={styles.inputText}
+                  placeholder="Email..."
+                  placeholderTextColor="gray"
+                  onChangeText={(text) => setEmail(text)}
+                />
+              </View>
+              <View style={styles.inputView}>
+                <TextInput
+                  secureTextEntry
+                  style={styles.inputText}
+                  placeholder="Password..."
+                  placeholderTextColor="gray"
+                  onChangeText={(text) => setPassword(text)}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  handleLogin();
+                }}
+                style={styles.loginBtn}
+              >
+                <Text style={styles.loginText}>LOGIN</Text>
+              </TouchableOpacity>
+              <RegisterModal />
+            </View>
           </View>
-          <View style={styles.inputView} >
-            <TextInput
-              secureTextEntry
-              style={styles.inputText}
-              placeholder="Password..."
-              placeholderTextColor="white"
-              onChangeText={text => setPassword(text)} />
-          </View>
-
-          <TouchableOpacity onPress={() => { handleLogin() }} style={styles.loginBtn}>
-            <Text style={styles.loginText}>LOGIN</Text>
-          </TouchableOpacity>
-        
-       
-          <RegisterModal />
-        
-         
         </KeyboardAvoidingView>
-      </View>
-
+      </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
-    backgroundColor: '#FFE889',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    width: '100%',
-    height: '100%'
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  },
+  logoContainer: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  formContainer: {
+    flex: 2,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   images: {
-    marginBottom: 40,
-    width: 160,
-    height: 185
+    width: 100,
+    height: 70,
+    overflow: "visible",
+  },
+  imgContainer: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoContainer: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
   },
   logo: {
     fontWeight: "bold",
     fontSize: 50,
-    color: "#B35A3F",
-    marginBottom: 40
+    color: "#000000",
+
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   logo_reg: {
     fontWeight: "bold",
     fontSize: 50,
     color: "#B35A3F",
-    marginBottom: 10
+    marginBottom: 10,
   },
   inputView: {
     width: "80%",
-    backgroundColor: "#B35A3F",
-    borderRadius: 25,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
     height: 50,
     marginBottom: 20,
     justifyContent: "center",
     padding: 20,
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   inputText: {
     height: 50,
-    color: "white",
-    textAlign:"left"
+    color: "#0E0E0E",
+    textAlign: "left",
   },
 
-  forgot: {
-    color: "white",
-    fontSize: 11
-  },
   loginBtn: {
     width: "50%",
-    backgroundColor: "#B35A3F",
-    borderRadius: 25,
+    backgroundColor: "#FEC108",
+    borderRadius: 20,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
@@ -154,39 +212,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   loginText: {
-    color: "white"
+    color: "#000000",
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
-  },
- 
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
- 
-})
+});
 
 export default Login;

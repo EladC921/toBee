@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // Navigation
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Components
@@ -33,16 +33,19 @@ const CoustomTabBTN = ({ children, onPress }) => (
   </TouchableOpacity>
 );
 
-const Tabs = () => {
+const Tabs = ({ navigation, route }) => {
+
+  const { user } = route.params;
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       tabBarOptions={{
         showLabel: false,
       }}
     >
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        children={() => <Profile navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -63,7 +66,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Groups"
-        component={MyGroups}
+        children={() => <MyGroups navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -84,7 +87,8 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Home"
-        component={Home}
+        children={() => <Home navigation={navigation} user={user} />}
+        // component={Home}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -106,7 +110,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Calendar"
-        component={Calendaric}
+        children={() => <Calendaric navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
@@ -127,7 +131,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Settings"
-        component={Settings}
+        children={() => <Settings navigation={navigation} user={user} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
