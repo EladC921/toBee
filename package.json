@@ -14,7 +14,8 @@
     "@react-native-community/datetimepicker": "4.0.0",
     "@react-native-picker/picker": "2.2.1",
     "@react-navigation/bottom-tabs": "^6.2.0",
-    "@react-navigation/native": "^6.0.8",
+    "@react-navigation/core": "^6.1.1",
+    "@react-navigation/native": "^4.0.0-alpha.2",
     "@react-navigation/native-stack": "^6.4.1",
     "css-tree": "1.0.0-alpha.39",
     "expo": "~44.0.0",
@@ -36,14 +37,18 @@
     "react-native-elements": "^3.4.2",
     "react-native-events-calendar": "^1.0.8",
     "react-native-flash-message": "^0.2.1",
+    "react-native-gesture-handler": "^2.2.0",
     "react-native-logs": "^4.0.1",
+    "react-native-notifications": "^4.2.0",
+    "react-native-push-notification": "^8.1.1",
     "react-native-safe-area-context": "^3.3.2",
-    "react-native-screens": "~3.10.1",
+    "react-native-screens": "^3.10.2",
     "react-native-settings-list": "^1.8.0",
     "react-native-vector-icons": "^9.0.0",
     "react-native-web": "0.17.1",
     "expo-notifications": "~0.14.0",
     "expo-device": "~4.1.0"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

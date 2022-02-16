@@ -2,7 +2,6 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 
 const GroupCard = (props) => {
-  const tempMembersList = props.memberList.slice(0, 5);
   return (
     <View style={[styles.cardContainer]}>
       <View style={{ flex: 1, alignItems: "center" }}>
@@ -16,10 +15,6 @@ const GroupCard = (props) => {
       <View style={{ flex: 2.5 }}>
         <Text style={styles.groupNameTxt}>{props.groupName}</Text>
         <Text style={styles.descriptionTxt}>{props.description}</Text>
-        <Text style={styles.membersListTxt}>
-          <Text style={{ fontWeight: "600" }}>Members:</Text>{" "}
-          {tempMembersList.map((i) => i + ", ")}...
-        </Text>
       </View>
     </View>
   );

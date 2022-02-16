@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Icon } from "react-native-elements";
@@ -15,21 +16,22 @@ import { useEffect, useState } from "react";
 import GroupTask from "./Tasks/GroupTask";
 import PopupChat from "./PopupChat";
 import MembersModal from "./MembersModal";
+import NewTaskModal from "./NewTaskModal";
 
-const Group = ({ route }) => {
+const Group = ({ navigation, route }) => {
   const { gid, currentUser } = route.params;
-  const [taskPickerVal, settaskPickerVal] = useState("All tasks");
+  const [taskPickerVal, settaskPickerVal] = useState("select");
   const [tasksList, settasksList] = useState([]);
   const [myTasksList, setmyTasksList] = useState([]);
   const [regiterabletasksList, setRegiterabletasksList] = useState([]);
   const [pickerTasksList, setPickerTasksList] = useState([]);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const [membersList, setmembersList] = useState([]);
   const [groupData, setGroupData] = useState({
     name: "",
     description: "",
-    imgUrl: "",
+    imgUrl:
+      "https://4.bp.blogspot.com/-OCutvC4wPps/XfNnRz5PvhI/AAAAAAAAEfo/qJ8P1sqLWesMdOSiEoUH85s3hs_vn97HACLcBGAsYHQ/s1600/no-image-found-360x260.png",
     members: [],
   });
 
@@ -39,28 +41,39 @@ const Group = ({ route }) => {
     { label: "Regiterable tasks", value: "Regiterabletasks" },
   ];
 
-  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
-  const api_GetTasksOfGroup = apiUrl + "Tasks/GetTasksOfGroup?gid=2";
-  const api_GetGroup = apiUrl + "Groups?gid=2";
-
+  //render the tasks if select changes
   useEffect(() => {
-    tasksList.map((t) => {
-      if (t.RegTo.some((i) => i === currentUser.Uid)) {
-        setmyTasksList([...myTasksList, t]);
-      }
-      if (t.RegTo.length === 0) {
-        setRegiterabletasksList([...regiterabletasksList, t]);
-      }
-    });
-  }, [tasksList]);
+    setTasksStates();
+  }, [value]);
 
-  useEffect(() => {
+  const setTasksStates = () => {
     if (value === "Mytasks") {
       setPickerTasksList(myTasksList);
     } else if (value === "Regiterabletasks") {
       setPickerTasksList(regiterabletasksList);
     } else setPickerTasksList(tasksList);
-  }, [value]);
+  };
+
+  //when taskslist change update the other lists
+  useEffect(() => {
+    setmyTasksList([]);
+    setRegiterabletasksList([]);
+    tasksList.map((t) => {
+      if (t.RegTo != null) {
+        if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
+          setmyTasksList([...myTasksList, t]);
+        }
+        if (t.RegTo.length === 0) {
+          setRegiterabletasksList([...regiterabletasksList, t]);
+        }
+      }
+    });
+  }, [tasksList]);
+
+  //at first load get group info and tasks
+  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
+  const api_GetTasksOfGroup = apiUrl + "Tasks/GetTasksOfGroup?gid=" + gid;
+  const api_GetGroup = apiUrl + "Groups?gid=" + gid;
 
   useEffect(() => {
     fetch(api_GetTasksOfGroup, {
@@ -80,6 +93,7 @@ const Group = ({ route }) => {
         (result) => {
           console.log("fetch getTasks= ", result);
           settasksList(result);
+          setTasksStates();
           result.map((r) => console.log(r.Tid));
         },
         (error) => {
@@ -115,21 +129,81 @@ const Group = ({ route }) => {
       );
   }, []);
 
-  const renderItem = ({ item: t }) => (
-    <View style={{ margin: 5 }}>
-      <GroupTask
-        color="#E5E5E5"
-        groupName={t.GName}
-        title={t.Title}
-        text={t.Txt}
-        createdAt={t.CreatedAt}
-        dueDate={t.DueDate}
-      />
-    </View>
-  );
+  const renderItem = ({ item: t }) => {
+    let status = "regAble";
+    if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
+      status = "registered";
+    }
+    if (t.Creator.Uid === currentUser.Uid) {
+      status = "creator";
+    }
+    let regto =
+      t.RegTo.length === 0
+        ? "Nobody"
+        : t.RegTo[0].FirstName + " " + t.RegTo[0].LastName;
+    return (
+      <View style={{ margin: 5 }}>
+        <GroupTask
+          color="#E5E5E5"
+          groupName={t.GName}
+          title={t.Title}
+          text={t.Txt}
+          createdAt={t.CreatedAt}
+          dueDate={t.DueDate}
+          creator={t.Creator.FirstName + " " + t.Creator.LastName}
+          creatorId={t.Creator.Uid}
+          regTo={regto}
+          status={status}
+        />
+      </View>
+    );
+  };
 
   const leaveGroup = () => {
-    alert("bye");
+    Alert.alert("Are you sure you want to leave this group?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "Yes", onPress: removeUserFromGroup },
+    ]);
+  };
+
+  const removeUserFromGroup = () => {
+    let apiUrl_DeleteUserfromGroup =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups?gid=" +
+      gid +
+      "&uid=" +
+      currentUser.Uid;
+    fetch(apiUrl_DeleteUserfromGroup, {
+      method: "DELETE",
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("POST User request:\n");
+        alert("res=", res);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch POST= ", result);
+          props.setTasks(result);
+          alert("yas");
+          navigation.navigate("Login");
+        },
+        (error) => {
+          alert("err");
+          console.log("err post=", error);
+          navigation.navigate("Home", {
+            navigation: navigation,
+            currentUser: currentUser,
+          });
+        }
+      );
   };
 
   return (
@@ -140,10 +214,12 @@ const Group = ({ route }) => {
             activeOpacity={0.5}
             style={styles.leaveGroupBtn}
             onPress={leaveGroup}
-          ></TouchableOpacity>
+          >
+            <Text style={styles.leaveGroupTxt}>Leave group</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.rightHeader}>
-          <MembersModal members={groupData.members} />
+          <MembersModal members={groupData.members} gid={gid} />
         </View>
       </SafeAreaView>
       <SafeAreaView style={[styles.groupInfoContainer, styles.shaddow]}>
@@ -197,6 +273,7 @@ const Group = ({ route }) => {
           />
         </View>
       </SafeAreaView>
+      <NewTaskModal gid={gid} uid={currentUser.Uid} setTasks={settasksList} />
       <PopupChat gid={gid} user={currentUser} />
     </View>
   );
@@ -321,6 +398,17 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     color: "#676767",
     fontWeight: "600",
+  },
+  leaveGroupBtn: {
+    backgroundColor: "red",
+    width: 100,
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  leaveGroupTxt: {
+    padding: 5,
+    fontWeight: "600",
+    color: "#FFFFFF",
   },
 });
 export default Group;
