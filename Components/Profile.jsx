@@ -14,12 +14,24 @@ import { useState, useEffect } from "react";
 import ProfileToDo from "./ProfileToDo";
 import { Ionicons } from "@expo/vector-icons";
 import ChangeProfilePic from "./ChangeProfilePic";
+import { useIsFocused } from "@react-navigation/native";
 
 const Profile = (props) => {
   const [user, setUser] = useState(props.user);
   console.log(props.user);
   const [tasks, setTasks] = useState([]);
   const [modalPic, setModalPic] = useState(false);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getUser();
+    getTasks();
+  }, []);
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const filterTasksList = (result) => {
     setTasks([]);
@@ -30,35 +42,7 @@ const Profile = (props) => {
     });
   };
 
-  useEffect(() => {
-    let api_getProfileTasks =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetProfileTasksOfUser?uid=" +
-      user.Uid;
-
-    fetch(api_getProfileTasks, {
-      method: "GET",
-      headers: new Headers({
-        "Content-Type": "application/json; charset=UTF-8",
-        Accept: "application/json; charset=UTF-8",
-      }),
-    })
-      .then((res) => {
-        console.log("res=", res);
-        console.log("res.status", res.status);
-        console.log("res.ok", res.ok);
-        return res.json();
-      })
-      .then(
-        (result) => {
-          console.log("fetch getTasks= ", result);
-          result.map((r) => console.log(r.Title));
-          filterTasksList(result);
-        },
-        (error) => {
-          console.log("err GET=", error);
-        }
-      );
-
+  const getUser = () => {
     //update user
     let api_getUser =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users?uid=" + user.Uid;
@@ -86,7 +70,37 @@ const Profile = (props) => {
           console.log("err GET=", error);
         }
       );
-  }, []);
+  };
+  const getTasks = () => {
+    let api_getProfileTasks =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetProfileTasksOfUser?uid=" +
+      user.Uid;
+
+    fetch(api_getProfileTasks, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getTasks= ", result);
+          result.map((r) => console.log(r.Title));
+          filterTasksList(result);
+        },
+        (error) => {
+          console.log("err GET=", error);
+        }
+      );
+  };
+
   return (
     <View style={styles.container}>
       {/** Header */}

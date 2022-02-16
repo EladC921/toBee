@@ -34,8 +34,7 @@ export default function CameraComp({ route, navigation: { goBack } }) {
 
   // Upload Image to Server
   const imageUpload = (imgUri, uid) => {
-    let urlAPI =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/Uploadpictures";
+    let urlAPI = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/uploadpicture";
     let dataI = new FormData();
     dataI.append("picture", {
       uri: imgUri,
@@ -52,6 +51,7 @@ export default function CameraComp({ route, navigation: { goBack } }) {
       .then((res) => {
         console.log("~~~~~~~~~~~~~~~~~~~ DATA= ", dataI);
         console.log("status= ", res.status);
+        alert(res.status);
         if (res.status == 201) {
           return res.json();
         } else {
