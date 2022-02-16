@@ -9,12 +9,10 @@ import {
   Text,
   TextInput,
   Modal,
-
   Image,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 import { auth } from "../db/firebaseSDK";
 import RegisterModal from "./RegisterModal";
@@ -73,7 +71,7 @@ const Login = ({ navigation }) => {
           .signInWithEmailAndPassword(email, password)
           .then((userCredentials) => {
             getUserRequest(email);
-        })
+          })
           .catch((error) => alert(error.message));
       } catch (error) {
         alert(error.message);
