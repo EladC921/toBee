@@ -33,7 +33,7 @@ export default function CameraComp({ route, navigation: { goBack } }) {
   }
 
   const imageUpload = (imgUri, picName) => {
-    let urlAPI = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/uploadpicture";
+    let urlAPI = "http://localhost:50845/uploadpicture";
     let dataI = new FormData();
     dataI.append("picture", {
       uri: imgUri,

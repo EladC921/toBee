@@ -58,6 +58,7 @@ const Home = (props) => {
     return color;
   };
   const renderMyTasks = ({ item: t }) => {
+    setRandomColorToGroups();
     let regTo = "Nobody";
     if (t.RegTo !== null) {
       if (t.RegTo.length > 0) {
