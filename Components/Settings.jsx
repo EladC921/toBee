@@ -127,7 +127,7 @@ const Settings = (props) => {
           />
           <SettingsList.Item onPress={() => {
           setUModal(true);
-        }} title="Change username" />
+        }} title="Change Name" />
          
          <SettingsList.Item onPress={() => {
           setModal(true);
@@ -222,7 +222,7 @@ const Settings = (props) => {
                   style={styles.addBtn}
                   onPress={() =>{putUserName();setUModal(false)}}
                 >
-                  <Text style={styles.addTask}>Change UserName</Text>
+                  <Text style={styles.addTask}>Change Name</Text>
                 </TouchableOpacity>
               </View>
             </View></KeyboardAvoidingView>
