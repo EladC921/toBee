@@ -21,20 +21,27 @@ const Settings = (props) => {
   const [cpassword, setCPassword] = useState();
   const [modal, setModal] = useState(false);
   const [Umodal, setUModal] = useState(false);
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
+  const [FirstName, setFirstName] = useState(props.user.FirstName);
+  const [LastName, setLastName] = useState(props.user.LastName);
 
   let apiUrl_PutUser =
-  "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/EditUserProfile";
-  
+    "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/EditUserProfile";
+
   let u = props.user
-  
- 
 
   const putUserName = () => {
-    u.FirstName=FirstName
-    u.LastName=LastName
+    if (FirstName===''){
+      u.FirstName = props.user.FirstName
+    }
+    else
+    u.FirstName = FirstName
     
+    if (LastName===''){
+      u.LastName = props.user.LastName
+    }
+    else
+    u.LastName = LastName
+
     let apiUrl_PutUser =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/EditUserProfile";
     fetch(apiUrl_PutUser, {
@@ -46,12 +53,12 @@ const Settings = (props) => {
       }),
     })
       .then((res) => {
-        
+
         return res.json();
       })
       .then(
         (result) => {
-          
+
           console.log("fetch PUT= ", result);
         },
         (error) => {
@@ -67,12 +74,12 @@ const Settings = (props) => {
       })
       .catch((error) => alert(error.message));
   };
-  
+
   const changePass = () => {
     var user = auth.currentUser;
     var newPassword = cpassword;
-    
-    if(password===cpassword){
+
+    if (password === cpassword) {
       user.updatePassword(newPassword).then(function () {
         alert("updates")
         // Update successful.
@@ -81,8 +88,8 @@ const Settings = (props) => {
       });
     }
     else
-    alert("New password is the same as old one")
-  
+      alert("New password is the same as old one")
+
   }
 
 
@@ -105,9 +112,9 @@ const Settings = (props) => {
             headerText="Different Grouping"
             headerStyle={{ color: "white", marginTop: 50 }}
           />
-          
+
           <SettingsList.Item
-            
+
             titleInfo={auth.currentUser.email}
             hasNavArrow={false}
             title="Email:"
@@ -126,19 +133,19 @@ const Settings = (props) => {
             title="Notifications"
           />
           <SettingsList.Item onPress={() => {
-          setUModal(true);
-        }} title="Change Name" />
-         
-         <SettingsList.Item onPress={() => {
-          setModal(true);
-        }} title="Change Password" />
+            setUModal(true);
+          }} title="Change Name" />
+
+          <SettingsList.Item onPress={() => {
+            setModal(true);
+          }} title="Change Password" />
         </SettingsList>
-        
+
         <TouchableOpacity onPress={handleSignOut} style={styles.btnLogout}>
           <Text style={{ color: "#fff" }}>Logout</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ borderRadius: 20}}>
+      <View style={{ borderRadius: 20 }}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -153,39 +160,39 @@ const Settings = (props) => {
                     onChangeText={(text) => setPassword(text)}
                     style={[styles.modalInput, { height: 30 }]}
                     placeholderTextColor="black"
-                    
+
                   />
 
                 </View>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>New Password:</Text>
                   <TextInput
-                  placeholder="Password..."
+                    placeholder="Password..."
                     onChangeText={(text) => setCPassword(text)}
-                    style={[styles.modalInput, { height: 30,color:"black" }]}
+                    style={[styles.modalInput, { height: 30, color: "black" }]}
                     placeholderTextColor="black"
-                    
+
                   />
-                  
+
                 </View>
-            
+
               </View>
               <View style={styles.modalFooter}>
                 <TouchableOpacity
                   style={styles.addBtn}
-                  onPress={() =>{changePass;setModal(false)}}
+                  onPress={() => { changePass; setModal(false) }}
                 >
                   <Text style={styles.addTask}>Change Password</Text>
                 </TouchableOpacity>
               </View>
             </View></KeyboardAvoidingView>
 
-        
+
 
         </Modal>
       </View>
 
-      <View style={{ borderRadius: 20}}>
+      <View style={{ borderRadius: 20 }}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -200,38 +207,38 @@ const Settings = (props) => {
                     onChangeText={(text) => setFirstName(text)}
                     style={[styles.modalInput, { height: 30 }]}
                     placeholderTextColor="black"
-                    
+
                   />
 
                 </View>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Last Name:</Text>
                   <TextInput
-                  placeholder="Lastname.."
+                    placeholder="Lastname.."
                     onChangeText={(text) => setLastName(text)}
-                    style={[styles.modalInput, { height: 30,color:"black" }]}
+                    style={[styles.modalInput, { height: 30, color: "black" }]}
                     placeholderTextColor="black"
-                    
+
                   />
-                  
+
                 </View>
-            
+
               </View>
               <View style={styles.modalFooter}>
                 <TouchableOpacity
                   style={styles.addBtn}
-                  onPress={() =>{putUserName();setUModal(false)}}
+                  onPress={() => { putUserName(); setUModal(false) }}
                 >
                   <Text style={styles.addTask}>Change Name</Text>
                 </TouchableOpacity>
               </View>
             </View></KeyboardAvoidingView>
 
-        
+
 
         </Modal>
       </View>
-      
+
     </View>
   );
 };
@@ -239,7 +246,7 @@ const Settings = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 0.55,
-    backgroundColor:"#E3E3E3",
+    backgroundColor: "#E3E3E3",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -250,21 +257,21 @@ const styles = StyleSheet.create({
 
 
   modalContent: {
-    
-    
+
+
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:"#E3E3E3",
+    backgroundColor: "#E3E3E3",
     width: "100%",
-    borderRadius:20,
+    borderRadius: 20,
     minWidth: "100%",
   },
   modalFooter: {
-  
-    paddingTop:10,
-    backgroundColor:"white",
+
+    paddingTop: 10,
+    backgroundColor: "white",
     width: "100%",
-    borderRadius:20,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: {
@@ -277,15 +284,15 @@ const styles = StyleSheet.create({
   },
   inputArea: {
     flexDirection: "column",
-    backgroundColor:"white",
+    backgroundColor: "white",
     width: "100%",
-    borderRadius:20,
+    borderRadius: 20,
     minWidth: "100%",
     alignItems: "flex-start",
     justifyContent: "center",
     margin: 10,
     marginLeft: 20,
-    marginRight:20,
+    marginRight: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -299,15 +306,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#4a4b4d",
-    paddingBottom:25,
-    
+    paddingBottom: 25,
+
   },
   modalView: {
-    flex:1,
+    flex: 1,
     width: "100%",
     backgroundColor: "#E3E3E3",
     borderRadius: 20,
-    padding:20,
+    padding: 20,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -320,7 +327,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
- 
+
 
   inputLabel: {
     fontSize: 16,
@@ -330,7 +337,7 @@ const styles = StyleSheet.create({
   },
   modalInput: {
     borderColor: "black",
-    
+
     borderRadius: 10,
     width: "80%",
     minWidth: "80%",
