@@ -31,15 +31,13 @@ export default function GalleryComp({ route, navigation: { goBack } }) {
     }
   };
 
-  // Upload Image to Server
-  const imageUpload = (imgUri, uid) => {
-    let urlAPI =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/Uploadpicture";
-
+  // Upload image to server
+  const imageUpload = (imgUri, picName) => {
+    let urlAPI = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/uploadpicture";
     let dataI = new FormData();
     dataI.append("picture", {
       uri: imgUri,
-      name: uid,
+      name: picName,
       type: "image/jpg",
     });
 
@@ -50,15 +48,14 @@ export default function GalleryComp({ route, navigation: { goBack } }) {
 
     fetch(urlAPI, config)
       .then((res) => {
-        console.log("status= ", res.status);
         if (res.status == 201) {
           return res.json();
         } else {
-          return "err";
+          return "err = " + res.status;
         }
       })
       .then((responseData) => {
-        console.log(responseData);
+        setImage(responseData);
       })
       .catch((err) => {
         alert("err upload= " + err);

@@ -20,7 +20,12 @@ const GroupsTask = (props) => {
           createdAt={props.createdAt}
           dueDate={props.dueDate}
           creator={props.creator}
-          registered={props.registered}
+          regTo={props.regTo}
+          status={props.status}
+          tid={props.tid}
+          gid={props.gid}
+          uid={props.uid}
+          setTasks={props.setTasks}
         />
       </View>
     </View>

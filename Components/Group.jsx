@@ -54,6 +54,16 @@ const Group = ({ navigation, route }) => {
     } else setPickerTasksList(tasksList);
   };
 
+  const filterTasksList = (result) => {
+    settasksList([]);
+    result.map((t) => {
+      if (!t.Completed) {
+        settasksList((prev) => [...prev, t]);
+      }
+    });
+    setTasksStates();
+  };
+
   //when taskslist change update the other lists
   useEffect(() => {
     setmyTasksList([]);
@@ -61,10 +71,10 @@ const Group = ({ navigation, route }) => {
     tasksList.map((t) => {
       if (t.RegTo != null) {
         if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
-          setmyTasksList([...myTasksList, t]);
+          setmyTasksList((prev) => [...prev, t]);
         }
         if (t.RegTo.length === 0) {
-          setRegiterabletasksList([...regiterabletasksList, t]);
+          setRegiterabletasksList((prev) => [...prev, t]);
         }
       }
     });
@@ -92,9 +102,7 @@ const Group = ({ navigation, route }) => {
       .then(
         (result) => {
           console.log("fetch getTasks= ", result);
-          settasksList(result);
-          setTasksStates();
-          result.map((r) => console.log(r.Tid));
+          filterTasksList(result);
         },
         (error) => {
           console.log("err GET=", error);
@@ -134,9 +142,6 @@ const Group = ({ navigation, route }) => {
     if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
       status = "registered";
     }
-    if (t.Creator.Uid === currentUser.Uid) {
-      status = "creator";
-    }
     let regto =
       t.RegTo.length === 0
         ? "Nobody"
@@ -154,6 +159,10 @@ const Group = ({ navigation, route }) => {
           creatorId={t.Creator.Uid}
           regTo={regto}
           status={status}
+          tid={t.Tid}
+          gid={gid}
+          uid={currentUser.Uid}
+          setTasks={filterTasksList}
         />
       </View>
     );
@@ -184,16 +193,15 @@ const Group = ({ navigation, route }) => {
       }),
     })
       .then((res) => {
-        console.log("POST User request:\n");
-        alert("res=", res);
+        console.log("DELETE User request:\n");
+        console.log("res=", res);
         return res.json();
       })
       .then(
         (result) => {
           console.log("fetch POST= ", result);
           props.setTasks(result);
-          alert("yas");
-          navigation.navigate("Login");
+          alert("You left the group successfully");
         },
         (error) => {
           alert("err");
@@ -273,7 +281,11 @@ const Group = ({ navigation, route }) => {
           />
         </View>
       </SafeAreaView>
-      <NewTaskModal gid={gid} uid={currentUser.Uid} setTasks={settasksList} />
+      <NewTaskModal
+        gid={gid}
+        uid={currentUser.Uid}
+        setTasks={filterTasksList}
+      />
       <PopupChat gid={gid} user={currentUser} />
     </View>
   );

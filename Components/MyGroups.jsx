@@ -9,14 +9,20 @@ import {
 import GroupCard from "./GroupCard";
 import { useEffect, useState, useLayoutEffect } from "react";
 import NewGroupFormModal from "./NewGroupFormModal";
+import { useIsFocused } from "@react-navigation/native";
 
 const MyGroups = (props) => {
   const [groupsList, setGroupsList] = useState([]);
   const currentUser = props.user;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getGroupsList();
   }, []);
+
+  useEffect(() => {
+    getGroupsList();
+  }, [isFocused]);
 
   const getGroupsList = () => {
     const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
