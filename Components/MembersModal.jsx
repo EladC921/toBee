@@ -42,7 +42,6 @@ const MembersModal = (props) => {
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups/PostUserInGroup?gid=2&nickname=JimmyNewton_012" +
       fetch(apiUrl_PostUserInGroup, {
         method: "POST",
-        body: {},
         headers: new Headers({
           "Content-type": "application/json; charset=UTF-8",
           Accept: "application/json; charset=UTF-8",
