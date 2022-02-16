@@ -10,34 +10,86 @@ import {
   FlatList,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState, useEffect, useLayoutEffect } from "react";
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Icon } from "react-native-elements";
 import Message from "./Message";
 import { db } from "../db/firebaseSDK";
 import Moment from "moment";
 
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 const PopupChat = (props) => {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setinputText] = useState("");
   const [messageList, setMessageList] = useState([])
+  const [firstMessage, setFirstMessage] = useState(false);
+
+
+
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+
 
   const groupId = "group" + props.gid
-  
+
+ 
 
   useLayoutEffect(() => {
-    const unsubscribed =db.collection(groupId).
-    orderBy('createdAt', 'asc').onSnapshot
-    (snapshot => setMessageList(
-      snapshot.docs.map(doc =>({
-        _id: doc.data()._id,
-        createdAt: doc.data().createdAt,
-        text: doc.data().text,
-        user: doc.data().user
-      }))
-    ))
-  },[])
-  
+    const unsubscribed = db.collection(groupId).
+      orderBy('createdAt', 'desc').onSnapshot
+      (snapshot => setMessageList(
+        snapshot.docs.map(doc => ({
+          _id: doc.data()._id,
+          createdAt: doc.data().createdAt,
+          text: doc.data().text,
+          user: doc.data().user
+        }))
+
+      ))
+    setFirstMessage(true)
+  }, [])
+
+  useEffect(() => {
+    
+      if (firstMessage === true) {
+        let lastElement = messageList.slice(-1)
+
+        if (lastElement[0]._id !== props.user.Uid) {
+          schedulePushNotification()
+        }
+      }
+    
+  }, [messageList]);
+
   const renderItem = ({ item: t }) => (
     <View style={{ flex: 13 }}>
       <Message
@@ -48,17 +100,23 @@ const PopupChat = (props) => {
       ></Message>
     </View>
   );
+  
   const sendMsg = () => {
     db.collection(groupId).add({
       _id: props.user.Uid,
       createdAt: Moment()
-      .utcOffset('+05:30')
-      .format('YYYY-MM-DD hh:mm:ss a'),
+        .utcOffset('+05:30')
+        .format('YYYY-MM-DD hh:mm:ss a'),
       text: inputText,
-      user: props.user.FirstName
+      user: props.user.Nickname
+      
     })
-
+    setinputText("")
   };
+
+  const clearText= () =>{
+  
+  }
 
   return (
     <View style={styles.btnContainer}>
@@ -104,26 +162,34 @@ const PopupChat = (props) => {
                 keyExtractor={(t) => t.Mid}
                 data={messageList}
                 renderItem={renderItem}
+                inverted={true}
               />
             </View>
             <View style={styles.chatfooter}>
               <View style={{ flex: 4 }}>
                 <TextInput
-                  multiline
+                  multiline={true}
                   style={styles.input}
                   onChangeText={(t) => setinputText(t)}
                   value={inputText}
+                  
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Pressable style={[styles.button]} onPress={sendMsg}>
+                <TouchableOpacity
+                activeOpacity={0.5}
+                 style={[styles.button]} 
+                 onPress={sendMsg}
+                 
+                 >
                   <Icon
                     name="send-outline"
                     type="ionicon"
                     color="#686868"
                     iconStyle={{ fontWeight: "1600" }}
                   />
-                </Pressable>
+                </TouchableOpacity>
+
               </View>
             </View>
           </View>
@@ -132,7 +198,47 @@ const PopupChat = (props) => {
     </View>
   );
 };
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got a Message! 📬",
+      body: 'go and check the chat in the group page',
+      data: { data: 'goes here' },
+    },
+    trigger: { seconds: 2 },
+  });
+}
 
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
 const styles = StyleSheet.create({
   row: {
     borderRadius: 4,
@@ -224,6 +330,8 @@ const styles = StyleSheet.create({
   },
   input: {
     maxHeight: 300,
+    minHeight: 30,
+    
     fontSize: 18,
     width: "100%",
     margin: 12,

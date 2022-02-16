@@ -77,7 +77,7 @@ const NewTaskModal = (props) => {
 
   // add new profile task
   const addTask = () => {
-    alert(props.gid);
+    console.log(props.gid);
     if (!validate()) return;
     let task = {
       Title,

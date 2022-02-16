@@ -17,12 +17,14 @@ import Moment from "moment";
 
 /**test */
 const Calendaric = (props) => {
+
   const [userEvents, setUserEvents] = useState();
   useEffect(() => {
     console.log("laalalalallalalalal");
     const api_User =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetTasksOfRegUserInAllGroups?uid=" +
       props.user.Uid;
+
     fetch(api_User, {
       method: "GET",
       headers: new Headers({
