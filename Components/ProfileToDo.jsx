@@ -1,114 +1,13 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  Pressable,
-  TextInput,
-  KeyboardAvoidingView,
-  Button,
-} from "react-native";
+import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
 import Task from "./Tasks/Task";
-import { useState } from "react";
-import { Icon } from "react-native-elements";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import NewTaskModal from "./NewTaskModal";
 
-// let toDoList = [
-//   {
-//     id: 11,
-//     gid: -1,
-//     tid: 4,
-//     groupName: "",
-//     title: "Learn React Native 4",
-//     completed: false,
-//     text: "Learn React Native Now!!!",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 10,
-//     gid: -1,
-//     tid: 3,
-//     groupName: "",
-//     title: "Learn React Native 3",
-//     completed: false,
-//     text: "Learn React Native Now!!",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 9,
-//     gid: -1,
-//     tid: 1,
-//     groupName: "",
-//     title: "Make a Modal",
-//     completed: false,
-//     text: "Make a modal on the Register Page.",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 6,
-//     gid: -1,
-//     tid: 2,
-//     groupName: "",
-//     title: "Learn React Native 2",
-//     completed: false,
-//     text: "Learn React Native Now!",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 3,
-//     gid: -1,
-//     tid: 4,
-//     groupName: "",
-//     title: "Learn React Native 4",
-//     completed: false,
-//     text: "Learn React Native Now!!!",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 8, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 2,
-//     gid: -1,
-//     tid: 3,
-//     groupName: "",
-//     title: "Learn React Native 3",
-//     completed: false,
-//     text: "Learn React Native Now!!",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 5, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 0,
-//     gid: -1,
-//     tid: 1,
-//     groupName: "",
-//     title: "Make a Modal",
-//     completed: false,
-//     text: "Make a modal on the Register Page.",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-//   },
-//   {
-//     id: 1,
-//     gid: -1,
-//     tid: 2,
-//     groupName: "",
-//     title: "Learn React Native 2",
-//     completed: false,
-//     text: "Learn React Native Now!",
-//     createdAt: new Date(),
-//     dueDate: new Date(2022, 12, 30, 12, 0, 0, 0),
-//   },
-// ];
-
 const ProfileToDo = (props) => {
+  const completeTask = (tasks) => {
+    props.setTasks(tasks);
+  };
+
   return (
     <View style={{ flex: 1, width: "100%", borderRadius: 20 }}>
       {props.toDoList.length > 0 ? (
@@ -119,9 +18,12 @@ const ProfileToDo = (props) => {
             return (
               <View style={{ width: "97%", padding: 5 }}>
                 <Task
+                  tid={item.Tid}
                   title={item.Title}
                   text={item.Txt}
                   createdAt={item.CreatedAt}
+                  Uid={props.Uid}
+                  completeTask={completeTask}
                 />
               </View>
             );
