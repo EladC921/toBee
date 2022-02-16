@@ -65,7 +65,7 @@ const PopupChat = (props) => {
 
   useLayoutEffect(() => {
     const unsubscribed = db.collection(groupId).
-      orderBy('createdAt', 'asc').onSnapshot
+      orderBy('createdAt', 'desc').onSnapshot
       (snapshot => setMessageList(
         snapshot.docs.map(doc => ({
           _id: doc.data()._id,
@@ -109,9 +109,14 @@ const PopupChat = (props) => {
         .format('YYYY-MM-DD hh:mm:ss a'),
       text: inputText,
       user: props.user.Nickname
+      
     })
-
+    setinputText("")
   };
+
+  const clearText= () =>{
+  
+  }
 
   return (
     <View style={styles.btnContainer}>
@@ -157,26 +162,33 @@ const PopupChat = (props) => {
                 keyExtractor={(t) => t.Mid}
                 data={messageList}
                 renderItem={renderItem}
+                inverted={true}
               />
             </View>
             <View style={styles.chatfooter}>
               <View style={{ flex: 4 }}>
                 <TextInput
-                  multiline
+                  multiline={true}
                   style={styles.input}
                   onChangeText={(t) => setinputText(t)}
                   value={inputText}
+                  
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Pressable style={[styles.button]} onPress={sendMsg}>
+                <TouchableOpacity
+                activeOpacity={0.5}
+                 style={[styles.button]} 
+                 onPress={sendMsg}
+                 
+                 >
                   <Icon
                     name="send-outline"
                     type="ionicon"
                     color="#686868"
                     iconStyle={{ fontWeight: "1600" }}
                   />
-                </Pressable>
+                </TouchableOpacity>
 
               </View>
             </View>
@@ -318,6 +330,8 @@ const styles = StyleSheet.create({
   },
   input: {
     maxHeight: 300,
+    minHeight: 30,
+    
     fontSize: 18,
     width: "100%",
     margin: 12,
