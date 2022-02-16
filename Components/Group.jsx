@@ -16,9 +16,8 @@ import { useEffect, useState } from "react";
 import GroupTask from "./Tasks/GroupTask";
 import PopupChat from "./PopupChat";
 import MembersModal from "./MembersModal";
-import NewTaskModal from "./NewTaskModal";
 
-const Group = ({ navigation, route }) => {
+const Group = ({ route }) => {
   const { gid, currentUser } = route.params;
   const [taskPickerVal, settaskPickerVal] = useState("select");
   const [tasksList, settasksList] = useState([]);
@@ -41,10 +40,9 @@ const Group = ({ navigation, route }) => {
     { label: "Regiterable tasks", value: "Regiterabletasks" },
   ];
 
-  //render the tasks if select changes
-  useEffect(() => {
-    setTasksStates();
-  }, [value]);
+  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
+  const api_GetTasksOfGroup = apiUrl + "Tasks/GetTasksOfGroup?gid=2";
+  const api_GetGroup = apiUrl + "Groups?gid=2";
 
   const setTasksStates = () => {
     if (value === "Mytasks") {
@@ -54,26 +52,20 @@ const Group = ({ navigation, route }) => {
     } else setPickerTasksList(tasksList);
   };
 
-  //when taskslist change update the other lists
   useEffect(() => {
-    setmyTasksList([]);
-    setRegiterabletasksList([]);
     tasksList.map((t) => {
-      if (t.RegTo != null) {
-        if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
-          setmyTasksList([...myTasksList, t]);
-        }
-        if (t.RegTo.length === 0) {
-          setRegiterabletasksList([...regiterabletasksList, t]);
-        }
+      if (t.RegTo.some((i) => i.Uid === currentUser.Uid)) {
+        setmyTasksList([...myTasksList, t]);
+      }
+      if (t.RegTo.length === 0) {
+        setRegiterabletasksList([...regiterabletasksList, t]);
       }
     });
   }, [tasksList]);
 
-  //at first load get group info and tasks
-  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
-  const api_GetTasksOfGroup = apiUrl + "Tasks/GetTasksOfGroup?gid=" + gid;
-  const api_GetGroup = apiUrl + "Groups?gid=" + gid;
+  useEffect(() => {
+    setTasksStates();
+  }, [value]);
 
   useEffect(() => {
     fetch(api_GetTasksOfGroup, {
@@ -137,10 +129,6 @@ const Group = ({ navigation, route }) => {
     if (t.Creator.Uid === currentUser.Uid) {
       status = "creator";
     }
-    let regto =
-      t.RegTo.length === 0
-        ? "Nobody"
-        : t.RegTo[0].FirstName + " " + t.RegTo[0].LastName;
     return (
       <View style={{ margin: 5 }}>
         <GroupTask
@@ -152,7 +140,7 @@ const Group = ({ navigation, route }) => {
           dueDate={t.DueDate}
           creator={t.Creator.FirstName + " " + t.Creator.LastName}
           creatorId={t.Creator.Uid}
-          regTo={regto}
+          regTo={t.RegTo[0].FirstName + " " + t.RegTo[0].LastName}
           status={status}
         />
       </View>
@@ -166,48 +154,11 @@ const Group = ({ navigation, route }) => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "Yes", onPress: removeUserFromGroup },
+      { text: "Yes", onPress: removeUserFromGroup() },
     ]);
   };
 
-  const removeUserFromGroup = () => {
-    let apiUrl_DeleteUserfromGroup =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups?gid=" +
-      gid +
-      "&uid=" +
-      currentUser.Uid;
-    fetch(apiUrl_DeleteUserfromGroup, {
-      method: "DELETE",
-      headers: new Headers({
-        "Content-type": "application/json; charset=UTF-8",
-        Accept: "application/json; charset=UTF-8",
-      }),
-    })
-      .then((res) => {
-        console.log("POST User request:\n");
-        alert("res=", res);
-        return res.json();
-      })
-      .then(
-        (result) => {
-          console.log("fetch POST= ", result);
-          props.setTasks(result);
-          alert("yas");
-          navigation.navigate("Home", {
-            navigation: navigation,
-            currentUser: currentUser,
-          });
-        },
-        (error) => {
-          alert("err");
-          console.log("err post=", error);
-          navigation.navigate("Home", {
-            navigation: navigation,
-            currentUser: currentUser,
-          });
-        }
-      );
-  };
+  const removeUserFromGroup = () => {};
 
   return (
     <View style={styles.groupsPageContainer}>
@@ -222,7 +173,7 @@ const Group = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.rightHeader}>
-          <MembersModal members={groupData.members} gid={gid} />
+          <MembersModal members={groupData.members} />
         </View>
       </SafeAreaView>
       <SafeAreaView style={[styles.groupInfoContainer, styles.shaddow]}>
@@ -276,7 +227,14 @@ const Group = ({ navigation, route }) => {
           />
         </View>
       </SafeAreaView>
-      <NewTaskModal gid={gid} uid={currentUser.Uid} setTasks={settasksList} />
+      <TouchableOpacity
+        style={styles.NewTaskBTN}
+        onPress={() => {
+          setModal(true);
+        }}
+      >
+        <Text>New Task</Text>
+      </TouchableOpacity>
       <PopupChat gid={gid} user={currentUser} />
     </View>
   );
@@ -412,6 +370,23 @@ const styles = StyleSheet.create({
     padding: 5,
     fontWeight: "600",
     color: "#FFFFFF",
+  },
+  NewTaskBTN: {
+    backgroundColor: "#FFCB2D",
+    padding: 8,
+    width: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    position: "absolute",
+    bottom: 80,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 });
 export default Group;

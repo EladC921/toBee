@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 
 const GroupCard = (props) => {
+  const tempMembersList = props.memberList.slice(0, 5);
   return (
     <View style={[styles.cardContainer]}>
       <View style={{ flex: 1, alignItems: "center" }}>

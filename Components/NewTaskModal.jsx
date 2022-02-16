@@ -77,7 +77,7 @@ const NewTaskModal = (props) => {
 
   // add new profile task
   const addTask = () => {
-    alert(props.gid);
+    alert(props.uid);
     if (!validate()) return;
     let task = {
       Title,
@@ -86,7 +86,7 @@ const NewTaskModal = (props) => {
       Creator: {
         Uid: props.uid,
       },
-      Gid: props.gid,
+      Gid: -1,
     };
     postTask(task);
     setModal(false);
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   NewTaskBTN: {
     backgroundColor: "#FFCB2D",
     padding: 8,
-    width: 120,
+    width: "60%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,

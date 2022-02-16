@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Alert, Pressable } from "react-native";
 import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "react-native-elements";
 import Moment from "moment";
 

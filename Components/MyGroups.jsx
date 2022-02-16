@@ -14,8 +14,7 @@ const MyGroups = (props) => {
   const currentUser = props.user;
 
   const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
-  const api_getGroupsOfUser =
-    apiUrl + "Groups/GetGroupsOfUser?uid=" + currentUser.Uid;
+  const api_getGroupsOfUser = apiUrl + "Groups/GetGroupsOfUser?uid=9";
 
   useEffect(() => {
     fetch(api_getGroupsOfUser, {
@@ -61,6 +60,7 @@ const MyGroups = (props) => {
         }
       >
         <GroupCard
+          memberList={membersList}
           groupName={t.Name}
           imgUrl={t.ImgURL}
           description={t.Description}
