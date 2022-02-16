@@ -30,6 +30,35 @@ export default function GalleryComp({ navigation: { goBack } }) {
     }
   };
 
+  setProfilePic = () => {
+    let apiUrl_EditProfilePic =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/EditProfilePic?imgURL=" +
+      image +
+      "&uid=" +
+      navigation.getParam("user").Uid;
+    fetch(apiUrl_EditProfilePic, {
+      method: "PUT",
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("res=", res);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch POST= ", result);
+        },
+        (error) => {
+          console.log("err post=", error);
+        }
+      );
+
+    goBack();
+  };
+
   return (
     <View style={styles.photoContainer}>
       {imagePicked ? (
@@ -46,10 +75,7 @@ export default function GalleryComp({ navigation: { goBack } }) {
             <TouchableOpacity style={styles.cancelBtn} onPress={() => goBack()}>
               <Text style={styles.txt}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.approveBtn}
-              onPress={() => goBack()}
-            >
+            <TouchableOpacity style={styles.approveBtn} onPress={setProfilePic}>
               <Text style={styles.txt}>Set Profile Picture</Text>
             </TouchableOpacity>
           </View>

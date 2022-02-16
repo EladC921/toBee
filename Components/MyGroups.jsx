@@ -7,16 +7,21 @@ import {
   Linking,
 } from "react-native";
 import GroupCard from "./GroupCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
+import NewGroupFormModal from "./NewGroupFormModal";
 
 const MyGroups = (props) => {
   const [groupsList, setGroupsList] = useState([]);
   const currentUser = props.user;
 
-  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
-  const api_getGroupsOfUser = apiUrl + "Groups/GetGroupsOfUser?uid=9";
-
   useEffect(() => {
+    getGroupsList();
+  }, []);
+
+  const getGroupsList = () => {
+    const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
+    const api_getGroupsOfUser =
+      apiUrl + "Groups/GetGroupsOfUser?uid=" + currentUser.Uid;
     fetch(api_getGroupsOfUser, {
       method: "GET",
       headers: new Headers({
@@ -40,7 +45,7 @@ const MyGroups = (props) => {
           console.log("err GET=", error);
         }
       );
-  }, []);
+  };
 
   const renderItem = ({ item: t }) => {
     let membersList = [];
@@ -60,7 +65,6 @@ const MyGroups = (props) => {
         }
       >
         <GroupCard
-          memberList={membersList}
           groupName={t.Name}
           imgUrl={t.ImgURL}
           description={t.Description}
@@ -84,9 +88,7 @@ const MyGroups = (props) => {
         />
       </View>
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <TouchableOpacity activeOpacity={0.5} style={styles.createBtn}>
-          <Text style={styles.createBtnTxt}>Create new group</Text>
-        </TouchableOpacity>
+        <NewGroupFormModal uid={currentUser.Uid} />
       </View>
     </View>
   );
