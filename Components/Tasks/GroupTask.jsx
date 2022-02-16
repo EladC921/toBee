@@ -8,9 +8,9 @@ const GroupTask = (props) => {
   const [taskStatus, setTaskStatus] = useState(props.status);
   const [btnVisableStatus, setBtnVisableStatus] = useState({
     regToBTN: false,
-    notifyBtn: false,
     completedBtn: false,
   });
+  const [regToState, setRegToState] = useState(props.regTo);
 
   let COLOR = "white";
   //set date format to print
@@ -22,32 +22,95 @@ const GroupTask = (props) => {
     setBtnStatFunction();
   }, []);
 
+  useEffect(() => {
+    setBtnStatFunction();
+  }, [taskStatus]);
+
   const setBtnStatFunction = () => {
-    if (taskStatus === "regAble") {
-      setBtnVisableStatus((prev) => ({
-        ...prev,
-        regToBTN: true,
-        notifyBtn: false,
-        completedBtn: false,
-      }));
-    }
     if (taskStatus === "registered") {
       setBtnVisableStatus((prev) => ({
         ...prev,
         regToBTN: false,
-        notifyBtn: false,
         completedBtn: true,
       }));
     }
-    if (taskStatus === "creator") {
+    if (taskStatus === "regAble") {
       setBtnVisableStatus((prev) => ({
         ...prev,
-        regToBTN: false,
-        notifyBtn: true,
+        regToBTN: true,
         completedBtn: false,
       }));
     }
   };
+
+  const postUserInTask = () => {
+    let apiUrl_AssignUserToTaskInGroup =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/AssignUserToTaskInGroup?gid=" +
+      props.gid +
+      "&uid=" +
+      props.uid +
+      "&tid=" +
+      props.tid;
+    fetch(apiUrl_AssignUserToTaskInGroup, {
+      method: "POST",
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("POST User request:\n");
+        console.log("res=", res);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          alert("You have successfully registered");
+          console.log("fetch POST= ", result);
+          props.setTasks(result);
+        },
+        (error) => {
+          alert("There was a problem try again");
+          setTaskStatus("registered");
+          console.log("err post=", error);
+        }
+      );
+  };
+
+  const TaskCompleted = () => {
+    let apiUrl_TaskCompleted =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/CompleteTask?gid=" +
+      props.gid +
+      "&uid=" +
+      props.uid +
+      "&tid=" +
+      props.tid;
+    fetch(apiUrl_TaskCompleted, {
+      method: "PUT",
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("POST User request:\n");
+        console.log("res=", res);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          alert("Task completed");
+          console.log("fetch POST= ", result);
+          props.setTasks(result);
+        },
+        (error) => {
+          alert("There was a problem try again");
+          setTaskStatus("registered");
+          console.log("err post=", error);
+        }
+      );
+  };
+
   const regToTask = () => {
     Alert.alert("Are you sure you want to do this task?", "", [
       {
@@ -55,28 +118,23 @@ const GroupTask = (props) => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "Yes" },
+      { text: "Yes", onPress: postUserInTask },
     ]);
   };
-  const notify = () => {
-    Alert.alert("Are you sure you want to do this task?", "", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "Yes" },
-    ]);
-  };
+
   const completedTask = () => {
-    Alert.alert("Are you sure you want to do this task?", "", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "Yes" },
-    ]);
+    Alert.alert(
+      "If you complete the task after approval it will be deleted",
+      "",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "OK", onPress: TaskCompleted },
+      ]
+    );
   };
   return (
     <View style={[styles.cardContainer, { backgroundColor: COLOR }]}>
@@ -166,19 +224,6 @@ const GroupTask = (props) => {
             <Pressable onPress={regToTask}>
               <Icon
                 name="hand-right-outline"
-                type="ionicon"
-                color="#023047"
-                iconStyle={{
-                  fontSize: 30,
-                  padding: 0,
-                }}
-              />
-            </Pressable>
-          )}
-          {btnVisableStatus.notifyBtn && (
-            <Pressable onPress={notify}>
-              <Icon
-                name="notifications-outline"
                 type="ionicon"
                 color="#023047"
                 iconStyle={{
