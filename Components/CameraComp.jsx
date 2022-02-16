@@ -32,13 +32,12 @@ export default function CameraComp({ route, navigation: { goBack } }) {
     return <Text>No access to camera</Text>;
   }
 
-  // Upload Image to Server
-  const imageUpload = (imgUri, uid) => {
+  const imageUpload = (imgUri, picName) => {
     let urlAPI = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/uploadpicture";
     let dataI = new FormData();
     dataI.append("picture", {
       uri: imgUri,
-      name: uid,
+      name: picName,
       type: "image/jpg",
     });
 
@@ -49,17 +48,16 @@ export default function CameraComp({ route, navigation: { goBack } }) {
 
     fetch(urlAPI, config)
       .then((res) => {
-        console.log("~~~~~~~~~~~~~~~~~~~ DATA= ", dataI);
-        console.log("status= ", res.status);
-        alert(res.status);
+        console.log(dataI);
         if (res.status == 201) {
           return res.json();
         } else {
-          return "err";
+          return "err = " + res.status;
         }
       })
       .then((responseData) => {
-        console.log(responseData);
+        console.log("responseData", responseData);
+        setPicUri(responseData);
       })
       .catch((err) => {
         alert("err upload= " + err);
