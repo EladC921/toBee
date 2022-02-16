@@ -11,48 +11,30 @@ import {
 import React from "react";
 import { useState } from "react";
 import { Icon } from "react-native-elements";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
-const NewTaskModal = (props) => {
+const NewGroupFormModal = (props) => {
   const [modal, setModal] = useState(false);
-  const [DueDate, setDueDate] = useState(new Date());
-  const [Txt, setTxt] = useState();
-  const [Title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [groupName, setGroupName] = useState();
 
-  // handle due date onchange
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDueDate(currentDate);
+  const createGroup = () => {
+    if (!validate()) return;
+    let group = {
+      Name: groupName,
+      Description: description,
+      ImgURL:
+        "https://he.cecollaboratory.com/public/layouts/images/group-default-logo.png",
+      CreatorID: props.uid,
+    };
+    postGroup(group);
   };
 
-  // form validation
-  const validate = () => {
-    if (!Txt || !Title) {
-      alert("Please fill all the fields");
-      return false;
-    }
-
-    if (Title.length > 30) {
-      alert("Title is too long");
-      return false;
-    }
-
-    let today = new Date();
-    if (today > DueDate) {
-      alert("Due date is in the future");
-      return false;
-    }
-
-    return true;
-  };
-
-  // post task to DB
-  const postTask = (newTask) => {
+  const postTask = (group) => {
     let apiUrl_PostProfileTask =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks";
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups";
     fetch(apiUrl_PostProfileTask, {
       method: "POST",
-      body: JSON.stringify(newTask),
+      body: JSON.stringify(group),
       headers: new Headers({
         "Content-type": "application/json; charset=UTF-8",
         Accept: "application/json; charset=UTF-8",
@@ -60,7 +42,7 @@ const NewTaskModal = (props) => {
     })
       .then((res) => {
         console.log("POST User request:\n");
-        console.log("supposed to be=", newTask);
+        console.log("supposed to be=", group);
         console.log("res=", res);
         return res.json();
       })
@@ -75,33 +57,31 @@ const NewTaskModal = (props) => {
       );
   };
 
-  // add new profile task
-  const addTask = () => {
-    alert(props.gid);
-    if (!validate()) return;
-    let task = {
-      Title,
-      Txt,
-      DueDate,
-      Creator: {
-        Uid: props.uid,
-      },
-      Gid: props.gid,
-    };
-    postTask(task);
-    setModal(false);
+  // form validation
+  const validate = () => {
+    if (!description || !groupName) {
+      alert("Please fill all the fields");
+      return false;
+    }
+
+    if (groupName.length > 30) {
+      alert("Title is too long");
+      return false;
+    }
+    return true;
   };
 
   return (
     <View>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity
-          style={styles.NewTaskBTN}
+          activeOpacity={0.5}
+          style={styles.createBtn}
           onPress={() => {
             setModal(true);
           }}
         >
-          <Text>New Task</Text>
+          <Text style={styles.createBtnTxt}>Create new group</Text>
         </TouchableOpacity>
       </View>
       <Modal
@@ -131,48 +111,26 @@ const NewTaskModal = (props) => {
               <Text
                 style={{ fontSize: 16, fontWeight: "800", color: "#4a4b4d" }}
               >
-                Create New Task
+                Create New group
               </Text>
             </View>
             {/** Inputs Area */}
             <View style={styles.modalContent}>
               <View style={styles.inputArea}>
-                <Text style={styles.inputLabel}>Title:</Text>
+                <Text style={styles.inputLabel}>Group Name:</Text>
                 <TextInput
                   style={[styles.modalInput, { height: 40 }]}
-                  value={Title}
-                  onChange={(e) => setTitle(e.nativeEvent.text)}
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.nativeEvent.text)}
                 />
               </View>
               <View style={styles.inputArea}>
-                <Text style={styles.inputLabel}>Task:</Text>
+                <Text style={styles.inputLabel}>Decription:</Text>
                 <TextInput
-                  style={[styles.modalInput, { height: 40 }]}
-                  value={Txt}
-                  onChange={(e) => setTxt(e.nativeEvent.text)}
+                  style={[styles.modalInput, { height: 100 }]}
+                  value={description}
+                  onChange={(e) => setDescription(e.nativeEvent.text)}
                 />
-              </View>
-              <View style={styles.dateArea}>
-                <Text style={styles.inputLabel}>Due to:</Text>
-                <View
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  <DateTimePicker
-                    style={{
-                      width: "100%",
-                      backgroundColor: "#fff",
-                    }}
-                    testID="dateTimePicker"
-                    value={DueDate}
-                    mode={"datetime"}
-                    is24Hour={true}
-                    display="default"
-                    themeVariant="light"
-                    onChange={onChangeDate}
-                  />
-                </View>
               </View>
             </View>
             {/** Buttons Area */}
@@ -180,10 +138,10 @@ const NewTaskModal = (props) => {
               <TouchableOpacity
                 style={styles.addBtn}
                 onPress={() => {
-                  addTask(); //add new task
+                  createGroup(); //add new task
                 }}
               >
-                <Text style={styles.addTask}>Add Task</Text>
+                <Text style={styles.addTask}>Create group</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -298,15 +256,14 @@ const styles = StyleSheet.create({
     color: "#4a4b4d",
   },
 
-  NewTaskBTN: {
+  createBtn: {
     backgroundColor: "#FFCB2D",
-    padding: 8,
-    width: 120,
-    justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
     borderRadius: 20,
-    position: "absolute",
-    bottom: 50,
+    paddingLeft: 50,
+    paddingRight: 50,
+    paddingTop: 12,
+    paddingBottom: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -328,4 +285,4 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 });
-export default NewTaskModal;
+export default NewGroupFormModal;
