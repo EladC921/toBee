@@ -193,10 +193,7 @@ const Group = ({ navigation, route }) => {
           console.log("fetch POST= ", result);
           props.setTasks(result);
           alert("yas");
-          navigation.navigate("Home", {
-            navigation: navigation,
-            currentUser: currentUser,
-          });
+          navigation.navigate("Login");
         },
         (error) => {
           alert("err");

@@ -8,8 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import Task from "./Tasks/Task";
-import GroupTask from "./Tasks/GroupTask";
 import GroupsTask from "./Tasks/GroupsTask";
 import { useEffect, useState } from "react";
 
