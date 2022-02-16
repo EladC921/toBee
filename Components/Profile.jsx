@@ -15,22 +15,15 @@ import ProfileToDo from "./ProfileToDo";
 import { Ionicons } from "@expo/vector-icons";
 import ChangeProfilePic from "./ChangeProfilePic";
 
-// let user = {
-//   id: 1,
-//   name: "Jimmy Newton",
-//   nickname: "JimmyNewton_012",
-//   email: "jimmy_jim@gmail.com",
-// };
-
 const Profile = (props) => {
-  let user = props.user;
+  const [user, setUser] = useState(props.user);
   console.log(props.user);
   const [tasks, setTasks] = useState([]);
   const [modal, setModal] = useState(false);
   const [modalPic, setModalPic] = useState(false);
-  const [nickname, setNickname] = useState(user.nickname);
+  const [nickname, setNickname] = useState(user.Nickname);
   const [nicknameEdit, setNicknameEdit] = useState(false);
-  const [name, setName] = useState(user.name);
+  const [name, setName] = useState(user.Name);
   const [nameEdit, setNameEdit] = useState(false);
   const [edit_apply_name, toggle_edit_apply_name] = useState("create-outline");
   const [edit_apply_nickname, toggle_edit_apply_nickname] =
@@ -62,6 +55,34 @@ const Profile = (props) => {
         },
         (error) => {
           alert("err GET=", error);
+        }
+      );
+
+    //update user
+    let api_getUser =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users?uid=" + user.Uid;
+    fetch(api_getUser, {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log(api_getUser);
+        console.log("res=", res);
+        console.log("res.status", res.status);
+        console.log("res.ok", res.ok);
+        return res.json();
+      })
+      .then(
+        (result) => {
+          console.log("fetch getUser= ", result);
+          console.log(result.Uid);
+          setUser(result);
+        },
+        (error) => {
+          console.log("err GET=", error);
         }
       );
   }, []);
@@ -205,8 +226,12 @@ const Profile = (props) => {
       <ChangeProfilePic
         modalPic={modalPic}
         setModalPic={setModalPic}
-        goToCamera={() => props.navigation.navigate("CameraComp")}
-        goToGallery={() => props.navigation.navigate("GalleryComp")}
+        goToCamera={() =>
+          props.navigation.navigate("CameraComp", { Uid: user.Uid })
+        }
+        goToGallery={() =>
+          props.navigation.navigate("GalleryComp", { Uid: user.Uid })
+        }
       />
     </View>
   );

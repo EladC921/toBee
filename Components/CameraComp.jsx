@@ -10,12 +10,13 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 
-export default function CameraComp({ navigation: { goBack } }) {
+export default function CameraComp({ route, navigation: { goBack } }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [camera, setCamera] = useState(null);
   const [picUri, setPicUri] = useState("https://reactjs.org/logo-og.png");
   const [modal, setModal] = useState(false);
+  const { Uid } = route.params;
 
   useEffect(() => {
     (async () => {
@@ -30,6 +31,42 @@ export default function CameraComp({ navigation: { goBack } }) {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+  // Upload Image to Server
+  const imageUpload = (imgUri, uid) => {
+    let urlAPI =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/Uploadpictures";
+    let dataI = new FormData();
+    dataI.append("picture", {
+      uri: imgUri,
+      name: uid,
+      type: "image/jpg",
+    });
+
+    const config = {
+      method: "POST",
+      body: dataI,
+    };
+
+    fetch(urlAPI, config)
+      .then((res) => {
+        console.log("~~~~~~~~~~~~~~~~~~~ DATA= ", dataI);
+        console.log("status= ", res.status);
+        if (res.status == 201) {
+          return res.json();
+        } else {
+          return "err";
+        }
+      })
+      .then((responseData) => {
+        console.log(responseData);
+      })
+      .catch((err) => {
+        alert("err upload= " + err);
+      });
+
+    goBack();
+  };
   return (
     <>
       <View style={styles.container}>
@@ -39,17 +76,6 @@ export default function CameraComp({ navigation: { goBack } }) {
               <Text style={styles.text}>Back to Profile</Text>
             </TouchableOpacity>
           </SafeAreaView>
-          {/* <View
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={styles.redSquare}></View>
-          </View> */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.flipBtn, styles.button]}
@@ -103,7 +129,9 @@ export default function CameraComp({ navigation: { goBack } }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.approveBtn}
-              onPress={() => goBack()}
+              onPress={() => {
+                imageUpload(picUri, Uid + ".jpg");
+              }}
             >
               <Text style={styles.text}>Approve</Text>
             </TouchableOpacity>
