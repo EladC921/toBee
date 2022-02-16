@@ -105,7 +105,6 @@ const GroupTask = (props) => {
         },
         (error) => {
           alert("There was a problem try again");
-          setTaskStatus("registered");
           console.log("err post=", error);
         }
       );

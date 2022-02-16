@@ -10,54 +10,60 @@ import {
 import React from "react";
 import GroupsTask from "./Tasks/GroupsTask";
 import { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 
-let colors = [
-  "#277da1",
-  "#577590",
-  "#4d908e",
-  "#43aa8b",
-  "#90be6d",
-  "#f9c74f",
-  "#f9844a",
-  "#f8961e",
-  "#f3722c",
-  "#f94144",
-];
 let toDoList = [];
 // generate random color for list item
-const getRandomColor = () => {
+const getRandomColor = (colors) => {
   let random = Math.floor(Math.random() * colors.length);
   return colors[random];
 };
 
 const Home = (props) => {
   const currentUser = props.user;
+  const isFocused = useIsFocused();
 
   const [myTaskList, setMyTaskList] = useState([]);
   const [regableTasksList, setRegableTasksList] = useState([]);
   let toDoListGids = [];
 
   const setRandomColorToGroups = () => {
-    let tmpList = [...MyTaskList, ...regableTasksList];
-    toDoListGids = [...new Set(tmpList.map((item) => item.gid))];
+    let colors = [
+      "#277da1",
+      "#577590",
+      "#4d908e",
+      "#43aa8b",
+      "#90be6d",
+      "#f9c74f",
+      "#f9844a",
+      "#f8961e",
+      "#f3722c",
+      "#f94144",
+    ];
+    let tmpList = [...myTaskList, ...regableTasksList];
+    toDoListGids = [...new Set(tmpList.map((item) => item.Gid))];
     toDoListGids = toDoListGids.map((item) => {
-      let color = getRandomColor();
-      colors = colors.filter((c) => c !== color);
-      return { gid: item, color: color };
+      let color = getRandomColor(colors);
+      // colors = colors.filter((c) => c !== color);
+      return { Gid: item, color: color };
     });
   };
   const getColor = (gid) => {
     let color = "";
     toDoListGids.map((item) => {
-      if (item.gid === gid) {
+      if (item.Gid === gid) {
         color = item.color;
       }
     });
     return color;
   };
-  const renderItem = ({ item: t }) => {
-    let regToList =
-      t.RegTo === null ? "Nobody" : t.RegTo.map((i) => i.FirstName + ", ");
+  const renderMyTasks = ({ item: t }) => {
+    let regTo = "Nobody";
+    if (t.RegTo !== null) {
+      if (t.RegTo.length > 0) {
+        regTo = t.RegTo[0].FirstName + " " + t.RegTo[0].LastName;
+      }
+    }
     return (
       <View style={{ margin: 10, marginTop: 30, marginBottom: 30, width: 300 }}>
         <GroupsTask
@@ -68,15 +74,69 @@ const Home = (props) => {
           createdAt={t.CreatedAt}
           dueDate={t.DueDate}
           creator={t.Creator.FirstName}
-          registered={regToList}
+          regTo={regTo}
+          status="no"
+          tid={t.Tid}
+          gid={t.Gid}
+          uid={currentUser.Uid}
+          setTasks={filterMyTasksList}
         />
       </View>
     );
   };
+  const renderregableTasks = ({ item: t }) => {
+    setRandomColorToGroups();
 
+    let regTo = "Nobody";
+    if (t.RegTo !== null) {
+      if (t.RegTo.length > 0) {
+        regTo = t.RegTo[0].FirstName + " " + t.RegTo[0].LastName;
+      }
+    }
+    return (
+      <View style={{ margin: 10, marginTop: 30, marginBottom: 30, width: 300 }}>
+        <GroupsTask
+          color={getColor(t.Gid)}
+          groupName={t.GName}
+          title={t.Title}
+          text={t.Txt}
+          createdAt={t.CreatedAt}
+          dueDate={t.DueDate}
+          creator={t.Creator.FirstName}
+          regTo={regTo}
+          status="no"
+          tid={t.Tid}
+          gid={t.Gid}
+          uid={currentUser.Uid}
+          setTasks={filterRegableTasksList}
+        />
+      </View>
+    );
+  };
   useEffect(() => {
     getTasksforHome();
   }, []);
+  useEffect(() => {
+    getTasksforHome();
+  }, [isFocused]);
+
+  const filterMyTasksList = (result) => {
+    setMyTaskList([]);
+    result.map((t) => {
+      if (!t.Completed) {
+        setMyTaskList((prev) => [...prev, t]);
+      }
+    });
+  };
+
+  const filterRegableTasksList = (result) => {
+    setRegableTasksList([]);
+    result.map((t) => {
+      if (!t.Completed) {
+        setRegableTasksList((prev) => [...prev, t]);
+      }
+    });
+  };
 
   const getTasksforHome = () => {
     const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
@@ -100,7 +160,7 @@ const Home = (props) => {
       .then(
         (result) => {
           console.log("fetch getTasks= ", result);
-          setMyTaskList(result);
+          filterMyTasksList(result);
           result.map((r) => console.log(r.Tid));
         },
         (error) => {
@@ -123,8 +183,8 @@ const Home = (props) => {
       .then(
         (result) => {
           console.log("fetch getTasks= ", result);
-          setRegableTasksList(result);
-          setRandomColorToGroups();
+          filterRegableTasksList(result);
+
           result.map((r) => console.log(r.Tid));
         },
         (error) => {
@@ -148,7 +208,7 @@ const Home = (props) => {
               data={myTaskList}
               contentContainerStyle={styles.list_container}
               showsHorizontalScrollIndicator={false}
-              renderItem={renderItem}
+              renderItem={renderMyTasks}
             />
           </View>
         </View>
@@ -161,7 +221,7 @@ const Home = (props) => {
               data={regableTasksList}
               contentContainerStyle={styles.list_container}
               showsHorizontalScrollIndicator={false}
-              renderItem={renderItem}
+              renderItem={renderregableTasks}
             />
           </View>
         </View>
