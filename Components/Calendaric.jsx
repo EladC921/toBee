@@ -4,12 +4,12 @@ import { Calendar, CalendarList, Agenda, calendarTheme } from "react-native-cale
 import Moment from "moment";
 
 /**test */
-const Calendaric = () => {
+const Calendaric = (props) => {
  
   const [userEvents,setUserEvents]= useState();
   useEffect(() => {
     console.log("laalalalallalalalal");
-    const api_User ="https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetTasksOfRegUserInAllGroups?uid=9"
+    const api_User ="https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetTasksOfRegUserInAllGroups?uid="+props.user.Uid
     fetch(api_User, {
       method: "GET",
       headers: new Headers({

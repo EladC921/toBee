@@ -19,8 +19,46 @@ import SettingsList from "react-native-settings-list";
 const Settings = (props) => {
   const [password, setPassword] = useState();
   const [cpassword, setCPassword] = useState();
-  
   const [modal, setModal] = useState(false);
+  const [Umodal, setUModal] = useState(false);
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+
+  let apiUrl_PutUser =
+  "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/EditUserProfile";
+  
+  let u = props.user
+  
+ 
+
+  const putUserName = () => {
+    u.FirstName=FirstName
+    u.LastName=LastName
+    
+    let apiUrl_PutUser =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/EditUserProfile";
+    fetch(apiUrl_PutUser, {
+      method: "PUT",
+      body: JSON.stringify(u),
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        
+        return res.json();
+      })
+      .then(
+        (result) => {
+          
+          console.log("fetch PUT= ", result);
+        },
+        (error) => {
+          console.log("err put=", error);
+        }
+      );
+  };
   const handleSignOut = () => {
     auth
       .signOut()
@@ -29,30 +67,7 @@ const Settings = (props) => {
       })
       .catch((error) => alert(error.message));
   };
-  const renderEmptyDate = () => {
-    return (
-      <View style={styles.container}>
-        <Modal
-          animationType={"fade"}
-          transparent={false}
-          visible={this.state.isVisible}
-          onRequestClose={() => { console.log("Modal has been closed.") }}>
-          {/All views of Modal/}
-          <View style={styles.modal}>
-            <Text style={styles.text}>Modal is open!</Text>
-            <Button title="Click To Close Modal" onPress={() => {
-              this.setState({ isVisible: !this.state.isVisible })
-            }} />
-          </View>
-        </Modal>
-        {/Button will change state to true and view will re-render/}
-        <Button
-          title="Click To Open Modal"
-          onPress={() => { this.setState({ isVisible: true }) }}
-        />
-      </View>
-    );
-  }
+  
   const changePass = () => {
     var user = auth.currentUser;
     var newPassword = cpassword;
@@ -92,7 +107,7 @@ const Settings = (props) => {
           />
           
           <SettingsList.Item
-            onPress={renderEmptyDate}
+            
             titleInfo={auth.currentUser.email}
             hasNavArrow={false}
             title="Email:"
@@ -111,9 +126,12 @@ const Settings = (props) => {
             title="Notifications"
           />
           <SettingsList.Item onPress={() => {
+          setUModal(true);
+        }} title="Change username" />
+         
+         <SettingsList.Item onPress={() => {
           setModal(true);
         }} title="Change Password" />
-         
         </SettingsList>
         
         <TouchableOpacity onPress={handleSignOut} style={styles.btnLogout}>
@@ -158,6 +176,53 @@ const Settings = (props) => {
                   onPress={() =>{changePass;setModal(false)}}
                 >
                   <Text style={styles.addTask}>Change Password</Text>
+                </TouchableOpacity>
+              </View>
+            </View></KeyboardAvoidingView>
+
+        
+
+        </Modal>
+      </View>
+
+      <View style={{ borderRadius: 20}}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={Umodal} >
+          <KeyboardAvoidingView behavior="position" style={styles.container}>
+            <View style={styles.modalView}>
+              <View style={styles.modalContent}>
+                <View style={styles.inputArea}>
+                  <Text style={styles.inputLabel}>Fisrt Name:</Text>
+                  <TextInput
+                    placeholder="Firstname.."
+                    onChangeText={(text) => setFirstName(text)}
+                    style={[styles.modalInput, { height: 30 }]}
+                    placeholderTextColor="black"
+                    
+                  />
+
+                </View>
+                <View style={styles.inputArea}>
+                  <Text style={styles.inputLabel}>Last Name:</Text>
+                  <TextInput
+                  placeholder="Lastname.."
+                    onChangeText={(text) => setLastName(text)}
+                    style={[styles.modalInput, { height: 30,color:"black" }]}
+                    placeholderTextColor="black"
+                    
+                  />
+                  
+                </View>
+            
+              </View>
+              <View style={styles.modalFooter}>
+                <TouchableOpacity
+                  style={styles.addBtn}
+                  onPress={() =>{putUserName();setUModal(false)}}
+                >
+                  <Text style={styles.addTask}>Change UserName</Text>
                 </TouchableOpacity>
               </View>
             </View></KeyboardAvoidingView>
