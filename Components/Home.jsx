@@ -25,7 +25,7 @@ let colors = [
   "#f3722c",
   "#f94144",
 ];
-let toDoList=[];
+let toDoList = [];
 // generate random color for list item
 const getRandomColor = () => {
   let random = Math.floor(Math.random() * colors.length);
@@ -33,7 +33,7 @@ const getRandomColor = () => {
 };
 
 const Home = (props) => {
-  const currentUserEmail = props.userEmail;
+  const currentUser = props.user;
 
   const [myTaskList, setMyTaskList] = useState([]);
   const [regableTasksList, setRegableTasksList] = useState([]);
@@ -76,11 +76,16 @@ const Home = (props) => {
     );
   };
 
-  const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
-  const api_getMyTasks = apiUrl + "Tasks/GetTasksOfRegUserInAllGroups?uid=9";
-  const api_getRegisterableTasks =
-    apiUrl + "Tasks/GetAvailableTasksInAllGroups?uid=9";
   useEffect(() => {
+    getTasksforHome();
+  }, []);
+
+  const getTasksforHome = () => {
+    const apiUrl = "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/";
+    const api_getMyTasks =
+      apiUrl + "Tasks/GetTasksOfRegUserInAllGroups?uid=" + currentUser.Uid;
+    const api_getRegisterableTasks =
+      apiUrl + "Tasks/GetAvailableTasksInAllGroups?uid=" + currentUser.Uid;
     fetch(api_getMyTasks, {
       method: "GET",
       headers: new Headers({
@@ -128,7 +133,7 @@ const Home = (props) => {
           console.log("err GET=", error);
         }
       );
-  }, []);
+  };
   return (
     <View style={styles.pageContainer}>
       <View style={styles.headerbackground}></View>

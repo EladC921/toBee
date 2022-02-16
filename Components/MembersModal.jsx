@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  Linking,
+  TextInput,
   Share,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -34,6 +34,37 @@ const renderItem = ({ item: t }) => (
 const MembersModal = (props) => {
   console.log(props);
   const [modalVisible, setModalVisible] = useState(false);
+  const [nickNameInput, setnickNameInput] = useState("");
+
+  const addMember = () => {
+    let nickname = nickNameInput;
+    let apiUrl_PostUserInGroup =
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups/PostUserInGroup?gid=2&nickname=JimmyNewton_012" +
+      fetch(apiUrl_PostUserInGroup, {
+        method: "POST",
+        body: {},
+        headers: new Headers({
+          "Content-type": "application/json; charset=UTF-8",
+          Accept: "application/json; charset=UTF-8",
+        }),
+      })
+        .then((res) => {
+          console.log("POST User request:\n");
+          console.log("supposed to be=", newTask);
+          alert("res=", res);
+          return res.json();
+        })
+        .then(
+          (result) => {
+            alert("jjj");
+            console.log("fetch POST= ", result);
+            props.setTasks(result);
+          },
+          (error) => {
+            console.log("err post=", error);
+          }
+        );
+  };
 
   return (
     <View style={styles.btnContainer}>
@@ -69,6 +100,7 @@ const MembersModal = (props) => {
                 style={[styles.button]}
                 onPress={() => {
                   setModalVisible(!modalVisible);
+                  setnickNameInput("");
                 }}
               >
                 <Icon
@@ -88,7 +120,37 @@ const MembersModal = (props) => {
             />
           </View>
           <View style={styles.modelFooter}>
-            <InviteToGroupBTN />
+            <View style={{ flex: 1 }}>
+              <Text>Add new member:</Text>
+            </View>
+            <View
+              style={{
+                flex: 2,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TextInput
+                style={[styles.modalInput, { height: 40 }]}
+                value={nickNameInput}
+                placeholderTextColor="gray"
+                placeholder="insert Nickname"
+                onChange={(e) => setnickNameInput(e.nativeEvent.text)}
+              />
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={[styles.button]}
+                onPress={addMember}
+              >
+                <Icon
+                  name="person-add-outline"
+                  type="ionicon"
+                  color="#686868"
+                  iconStyle={{ fontWeight: "1600" }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -125,7 +187,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  modelFooter: { flex: 1, width: "100%", alignItems: "center" },
+  modelFooter: { flex: 2, width: "100%", alignItems: "center" },
   button: {
     borderRadius: 10,
     padding: 10,
@@ -150,9 +212,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  modalInput: {
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 10,
+    width: "60%",
+    minWidth: "60%",
+    marginLeft: 10,
+    padding: 5,
   },
 });
 
