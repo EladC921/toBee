@@ -33,7 +33,7 @@ const PopupChat = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputText, setinputText] = useState("");
   const [messageList, setMessageList] = useState([])
-  const [firstMessage, setFirstMessage] = useState(false);
+ 
 
 
 
@@ -61,7 +61,7 @@ const PopupChat = (props) => {
 
   const groupId = "group" + props.gid
 
- 
+
 
   useLayoutEffect(() => {
     const unsubscribed = db.collection(groupId).
@@ -75,19 +75,16 @@ const PopupChat = (props) => {
         }))
 
       ))
-    setFirstMessage(true)
+      
+        
+     
+    
   }, [])
 
-  useEffect(() => {
-    
-      if (firstMessage === true) {
-        let lastElement = messageList.slice(-1)
 
-        if (lastElement[0]._id !== props.user.Uid) {
-          schedulePushNotification()
-        }
-      }
-    
+
+  useEffect(() => {
+    schedulePushNotification()
   }, [messageList]);
 
   const renderItem = ({ item: t }) => (
@@ -100,7 +97,7 @@ const PopupChat = (props) => {
       ></Message>
     </View>
   );
-  
+
   const sendMsg = () => {
     db.collection(groupId).add({
       _id: props.user.Uid,
@@ -109,14 +106,12 @@ const PopupChat = (props) => {
         .format('YYYY-MM-DD hh:mm:ss a'),
       text: inputText,
       user: props.user.Nickname
-      
+
     })
     setinputText("")
   };
 
-  const clearText= () =>{
-  
-  }
+
 
   return (
     <View style={styles.btnContainer}>
@@ -172,16 +167,16 @@ const PopupChat = (props) => {
                   style={styles.input}
                   onChangeText={(t) => setinputText(t)}
                   value={inputText}
-                  
+
                 />
               </View>
               <View style={{ flex: 1 }}>
                 <TouchableOpacity
-                activeOpacity={0.5}
-                 style={[styles.button]} 
-                 onPress={sendMsg}
-                 
-                 >
+                  activeOpacity={0.5}
+                  style={[styles.button]}
+                  onPress={sendMsg}
+
+                >
                   <Icon
                     name="send-outline"
                     type="ionicon"
@@ -331,7 +326,7 @@ const styles = StyleSheet.create({
   input: {
     maxHeight: 300,
     minHeight: 30,
-    
+
     fontSize: 18,
     width: "100%",
     margin: 12,
