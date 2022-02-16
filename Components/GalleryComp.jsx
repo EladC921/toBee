@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import * as ImagePicker from "expo-image-picker"; 
+import * as ImagePicker from "expo-image-picker";
 
 export default function GalleryComp({ route, navigation: { goBack } }) {
   const [imagePicked, setImagePicked] = useState(false);
@@ -35,6 +35,7 @@ export default function GalleryComp({ route, navigation: { goBack } }) {
   const imageUpload = (imgUri, uid) => {
     let urlAPI =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/Uploadpicture";
+
     let dataI = new FormData();
     dataI.append("picture", {
       uri: imgUri,
