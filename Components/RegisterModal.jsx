@@ -16,13 +16,13 @@ import { auth } from "../db/firebaseSDK";
 import { Icon } from "react-native-elements/dist/icons/Icon";
 
 const RegisterModal = () => {
-  const [signnickname, setSignNickname] = useState("Test");
-  const [signfirstname, setSignFirstName] = useState("test");
-  const [signlastname, setSignLastName] = useState("test");
-  const [signphone, setSignPhone] = useState("0541234567");
-  const [signmail, setSignupmail] = useState("test1@gmail.com");
-  const [csignpass, setcpass] = useState("123456");
-  const [signpass, setsignpass] = useState("123456");
+  const [signnickname, setSignNickname] = useState("");
+  const [signfirstname, setSignFirstName] = useState("");
+  const [signlastname, setSignLastName] = useState("");
+  const [signphone, setSignPhone] = useState("");
+  const [signmail, setSignupmail] = useState("");
+  const [csignpass, setcpass] = useState("");
+  const [signpass, setsignpass] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
   // Form validation
