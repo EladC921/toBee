@@ -201,10 +201,9 @@ const Group = ({ navigation, route }) => {
         (result) => {
           console.log("fetch POST= ", result);
           props.setTasks(result);
-          alert("You left the group successfully");
         },
         (error) => {
-          alert("err");
+          alert("You left the group successfully");
           console.log("err post=", error);
           navigation.navigate("Home", {
             navigation: navigation,

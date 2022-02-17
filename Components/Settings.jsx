@@ -10,11 +10,13 @@ import {
   Alert,
   KeyboardAvoidingView,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
 import { auth } from "../db/firebaseSDK";
 import SettingsList from "react-native-settings-list";
+import { Icon } from "react-native-elements/dist/icons/Icon";
 
 const Settings = (props) => {
   const [password, setPassword] = useState();
@@ -27,20 +29,16 @@ const Settings = (props) => {
   let apiUrl_PutUser =
     "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/EditUserProfile";
 
-  let u = props.user
+  let u = props.user;
 
   const putUserName = () => {
-    if (FirstName===''){
-      u.FirstName = props.user.FirstName
-    }
-    else
-    u.FirstName = FirstName
-    
-    if (LastName===''){
-      u.LastName = props.user.LastName
-    }
-    else
-    u.LastName = LastName
+    if (FirstName === "") {
+      u.FirstName = props.user.FirstName;
+    } else u.FirstName = FirstName;
+
+    if (LastName === "") {
+      u.LastName = props.user.LastName;
+    } else u.LastName = LastName;
 
     let apiUrl_PutUser =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Users/EditUserProfile";
@@ -53,12 +51,10 @@ const Settings = (props) => {
       }),
     })
       .then((res) => {
-
         return res.json();
       })
       .then(
         (result) => {
-
           console.log("fetch PUT= ", result);
         },
         (error) => {
@@ -80,22 +76,20 @@ const Settings = (props) => {
     var newPassword = cpassword;
 
     if (password === cpassword) {
-      user.updatePassword(newPassword).then(function () {
-        alert("updates")
-        // Update successful.
-      }).catch(function (error) {
-        // An error happened.
-      });
-    }
-    else
-      alert("New password is the same as old one")
-
-  }
-
+      user
+        .updatePassword(newPassword)
+        .then(function () {
+          alert("updates");
+          // Update successful.
+        })
+        .catch(function (error) {
+          // An error happened.
+        });
+    } else alert("New password is the same as old one");
+  };
 
   return (
     <View style={{ scrollEnabled: "flase", backgroundColor: "gray", flex: 1 }}>
-
       <View
         style={{
           paddingBottom: 10,
@@ -114,31 +108,24 @@ const Settings = (props) => {
           />
 
           <SettingsList.Item
-
             titleInfo={auth.currentUser.email}
             hasNavArrow={false}
             title="Email:"
           />
-          <SettingsList.Item
-            hasNavArrow={false}
-            /*
-            switchState={this.state.switchValue}
-            switchOnValueChange={this.onValueChange}
-            */
-            switchOnValueChange={() => {
-              return (
-                <Modal></Modal>);
-            }}
-            hasSwitch={true}
-            title="Notifications"
-          />
-          <SettingsList.Item onPress={() => {
-            setUModal(true);
-          }} title="Change Name" />
 
-          <SettingsList.Item onPress={() => {
-            setModal(true);
-          }} title="Change Password" />
+          <SettingsList.Item
+            onPress={() => {
+              setUModal(true);
+            }}
+            title="Change Name"
+          />
+
+          <SettingsList.Item
+            onPress={() => {
+              setModal(true);
+            }}
+            title="Change Password"
+          />
         </SettingsList>
 
         <TouchableOpacity onPress={handleSignOut} style={styles.btnLogout}>
@@ -146,12 +133,22 @@ const Settings = (props) => {
         </TouchableOpacity>
       </View>
       <View style={{ borderRadius: 20 }}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modal} >
+        <Modal animationType="slide" transparent={true} visible={modal}>
           <KeyboardAvoidingView behavior="position" style={styles.container}>
             <View style={styles.modalView}>
+              <Pressable
+                style={[styles.closeBtn, styles.btnContainer]}
+                onPress={() => {
+                  setModal(!modal);
+                }}
+              >
+                <Icon
+                  name="close-outline"
+                  type="ionicon"
+                  color="#000000"
+                  iconStyle={{ fontWeight: "1600" }}
+                />
+              </Pressable>
               <View style={styles.modalContent}>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Old Password:</Text>
@@ -160,9 +157,7 @@ const Settings = (props) => {
                     onChangeText={(text) => setPassword(text)}
                     style={[styles.modalInput, { height: 30 }]}
                     placeholderTextColor="black"
-
                   />
-
                 </View>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>New Password:</Text>
@@ -171,34 +166,42 @@ const Settings = (props) => {
                     onChangeText={(text) => setCPassword(text)}
                     style={[styles.modalInput, { height: 30, color: "black" }]}
                     placeholderTextColor="black"
-
                   />
-
                 </View>
-
               </View>
               <View style={styles.modalFooter}>
                 <TouchableOpacity
                   style={styles.addBtn}
-                  onPress={() => { changePass; setModal(false) }}
+                  onPress={() => {
+                    changePass;
+                    setModal(false);
+                  }}
                 >
                   <Text style={styles.addTask}>Change Password</Text>
                 </TouchableOpacity>
               </View>
-            </View></KeyboardAvoidingView>
-
-
-
+            </View>
+          </KeyboardAvoidingView>
         </Modal>
       </View>
 
       <View style={{ borderRadius: 20 }}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={Umodal} >
+        <Modal animationType="slide" transparent={true} visible={Umodal}>
           <KeyboardAvoidingView behavior="position" style={styles.container}>
             <View style={styles.modalView}>
+              <Pressable
+                style={[styles.closeBtn, styles.btnContainer]}
+                onPress={() => {
+                  setUModal(!Umodal);
+                }}
+              >
+                <Icon
+                  name="close-outline"
+                  type="ionicon"
+                  color="#000000"
+                  iconStyle={{ fontWeight: "1600" }}
+                />
+              </Pressable>
               <View style={styles.modalContent}>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Fisrt Name:</Text>
@@ -207,9 +210,7 @@ const Settings = (props) => {
                     onChangeText={(text) => setFirstName(text)}
                     style={[styles.modalInput, { height: 30 }]}
                     placeholderTextColor="black"
-
                   />
-
                 </View>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Last Name:</Text>
@@ -218,27 +219,24 @@ const Settings = (props) => {
                     onChangeText={(text) => setLastName(text)}
                     style={[styles.modalInput, { height: 30, color: "black" }]}
                     placeholderTextColor="black"
-
                   />
-
                 </View>
-
               </View>
               <View style={styles.modalFooter}>
                 <TouchableOpacity
                   style={styles.addBtn}
-                  onPress={() => { putUserName(); setUModal(false) }}
+                  onPress={() => {
+                    putUserName();
+                    setUModal(false);
+                  }}
                 >
                   <Text style={styles.addTask}>Change Name</Text>
                 </TouchableOpacity>
               </View>
-            </View></KeyboardAvoidingView>
-
-
-
+            </View>
+          </KeyboardAvoidingView>
         </Modal>
       </View>
-
     </View>
   );
 };
@@ -255,10 +253,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-
   modalContent: {
-
-
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#E3E3E3",
@@ -267,7 +262,6 @@ const styles = StyleSheet.create({
     minWidth: "100%",
   },
   modalFooter: {
-
     paddingTop: 10,
     backgroundColor: "white",
     width: "100%",
@@ -307,7 +301,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#4a4b4d",
     paddingBottom: 25,
-
   },
   modalView: {
     flex: 1,
@@ -327,7 +320,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-
 
   inputLabel: {
     fontSize: 16,
@@ -360,6 +352,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "40%",
     alignItems: "center",
+  },
+  btnContainer: {
+    position: "absolute",
+    right: "10%",
+    top: "5%",
+    alignItems: "center",
+    borderRadius: 800,
   },
 });
 
