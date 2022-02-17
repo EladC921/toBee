@@ -17,7 +17,6 @@ import Moment from "moment";
 
 /**test */
 const Calendaric = (props) => {
-
   const [userEvents, setUserEvents] = useState();
   useEffect(() => {
     console.log("laalalalallalalalal");
@@ -83,7 +82,8 @@ const Calendaric = (props) => {
   };
 
   const getCurrentDate = () => {
-    var date = new Date().getDate();
+
+    var day = new Date().getDay();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 

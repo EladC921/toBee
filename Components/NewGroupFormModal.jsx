@@ -29,7 +29,7 @@ const NewGroupFormModal = (props) => {
     postGroup(group);
   };
 
-  const postTask = (group) => {
+  const postGroup = (group) => {
     let apiUrl_PostProfileTask =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups";
     fetch(apiUrl_PostProfileTask, {
@@ -48,10 +48,11 @@ const NewGroupFormModal = (props) => {
       })
       .then(
         (result) => {
+          alert("yes");
           console.log("fetch POST= ", result);
-          props.setTasks(result);
         },
         (error) => {
+          alert("no");
           console.log("err post=", error);
         }
       );

@@ -35,34 +35,42 @@ const MembersModal = (props) => {
   console.log(props);
   const [modalVisible, setModalVisible] = useState(false);
   const [nickNameInput, setnickNameInput] = useState("");
+  const [membersList, setMembersList] = useState();
+
+  useEffect(() => {
+    setMembersList(props.members);
+  }, [modalVisible]);
 
   const addMember = () => {
     let nickname = nickNameInput;
     let apiUrl_PostUserInGroup =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups/PostUserInGroup?gid=2&nickname=JimmyNewton_012" +
-      fetch(apiUrl_PostUserInGroup, {
-        method: "POST",
-        headers: new Headers({
-          "Content-type": "application/json; charset=UTF-8",
-          Accept: "application/json; charset=UTF-8",
-        }),
+      "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Groups/PostUserInGroup?gid=" +
+      props.gid +
+      "&nickname=" +
+      nickname;
+    fetch(apiUrl_PostUserInGroup, {
+      method: "POST",
+      headers: new Headers({
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json; charset=UTF-8",
+      }),
+    })
+      .then((res) => {
+        console.log("POST User request:\n");
+        console.log("res=", res);
+        return res.json();
       })
-        .then((res) => {
-          console.log("POST User request:\n");
-          console.log("supposed to be=", newTask);
-          alert("res=", res);
-          return res.json();
-        })
-        .then(
-          (result) => {
-            alert("jjj");
-            console.log("fetch POST= ", result);
-            props.setTasks(result);
-          },
-          (error) => {
-            console.log("err post=", error);
-          }
-        );
+      .then(
+        (result) => {
+          alert("User added");
+          console.log("fetch POST= ", result);
+          setMembersList(result.Members);
+        },
+        (error) => {
+          alert("There was a problem try again");
+          console.log("err post=", error);
+        }
+      );
   };
 
   return (
@@ -114,7 +122,7 @@ const MembersModal = (props) => {
           <View style={styles.membersContainer}>
             <FlatList
               keyExtractor={(t) => t.Uid}
-              data={props.members}
+              data={membersList}
               renderItem={renderItem}
             />
           </View>
