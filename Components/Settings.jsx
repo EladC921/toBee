@@ -1,13 +1,9 @@
 import {
-  AppRegistry,
-  Component,
   StyleSheet,
   Text,
   View,
-  Image,
   Modal,
   TextInput,
-  Alert,
   KeyboardAvoidingView,
   TouchableOpacity,
   Pressable,
@@ -25,9 +21,6 @@ const Settings = (props) => {
   const [Umodal, setUModal] = useState(false);
   const [FirstName, setFirstName] = useState(props.user.FirstName);
   const [LastName, setLastName] = useState(props.user.LastName);
-
-  let apiUrl_PutUser =
-    "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/EditUserProfile";
 
   let u = props.user;
 
@@ -94,7 +87,6 @@ const Settings = (props) => {
         style={{
           paddingBottom: 10,
           flex: 1,
-
           backgroundColor: "white",
           borderTopEndRadius: 30,
           borderTopLeftRadius: 30,
@@ -106,7 +98,6 @@ const Settings = (props) => {
             headerText="Different Grouping"
             headerStyle={{ color: "white", marginTop: 50 }}
           />
-
           <SettingsList.Item
             titleInfo={auth.currentUser.email}
             hasNavArrow={false}
@@ -127,7 +118,6 @@ const Settings = (props) => {
             title="Change Password"
           />
         </SettingsList>
-
         <TouchableOpacity onPress={handleSignOut} style={styles.btnLogout}>
           <Text style={{ color: "#fff" }}>Logout</Text>
         </TouchableOpacity>
