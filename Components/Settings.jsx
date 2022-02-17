@@ -6,11 +6,13 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { useState } from "react";
 import { auth } from "../db/firebaseSDK";
 import SettingsList from "react-native-settings-list";
+import { Icon } from "react-native-elements/dist/icons/Icon";
 
 const Settings = (props) => {
   const [password, setPassword] = useState();
@@ -101,12 +103,14 @@ const Settings = (props) => {
             hasNavArrow={false}
             title="Email:"
           />
+
           <SettingsList.Item
             onPress={() => {
               setUModal(true);
             }}
             title="Change Name"
           />
+
           <SettingsList.Item
             onPress={() => {
               setModal(true);
@@ -122,6 +126,19 @@ const Settings = (props) => {
         <Modal animationType="slide" transparent={true} visible={modal}>
           <KeyboardAvoidingView behavior="position" style={styles.container}>
             <View style={styles.modalView}>
+              <Pressable
+                style={[styles.closeBtn, styles.btnContainer]}
+                onPress={() => {
+                  setModal(!modal);
+                }}
+              >
+                <Icon
+                  name="close-outline"
+                  type="ionicon"
+                  color="#000000"
+                  iconStyle={{ fontWeight: "1600" }}
+                />
+              </Pressable>
               <View style={styles.modalContent}>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Old Password:</Text>
@@ -162,6 +179,19 @@ const Settings = (props) => {
         <Modal animationType="slide" transparent={true} visible={Umodal}>
           <KeyboardAvoidingView behavior="position" style={styles.container}>
             <View style={styles.modalView}>
+              <Pressable
+                style={[styles.closeBtn, styles.btnContainer]}
+                onPress={() => {
+                  setUModal(!Umodal);
+                }}
+              >
+                <Icon
+                  name="close-outline"
+                  type="ionicon"
+                  color="#000000"
+                  iconStyle={{ fontWeight: "1600" }}
+                />
+              </Pressable>
               <View style={styles.modalContent}>
                 <View style={styles.inputArea}>
                   <Text style={styles.inputLabel}>Fisrt Name:</Text>
@@ -312,6 +342,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "40%",
     alignItems: "center",
+  },
+  btnContainer: {
+    position: "absolute",
+    right: "10%",
+    top: "5%",
+    alignItems: "center",
+    borderRadius: 800,
   },
 });
 

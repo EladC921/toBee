@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { auth } from "../db/firebaseSDK";
+import { Icon } from "react-native-elements/dist/icons/Icon";
 
 const RegisterModal = () => {
   const [signnickname, setSignNickname] = useState("Test");
@@ -99,7 +100,6 @@ const RegisterModal = () => {
         auth
           .createUserWithEmailAndPassword(signmail, csignpass)
           .then((userCredentials) => {
-
             postUserRequest();
             setOpenModal(false);
             const user = userCredentials.user;
@@ -122,7 +122,7 @@ const RegisterModal = () => {
         <View style={styles.container}>
           <View style={styles.modalView}>
             <TouchableOpacity
-              style={styles.xbut}
+              style={styles.btnContainer}
               onPress={() => setOpenModal(false)}
             >
               <Text>X</Text>
@@ -133,14 +133,15 @@ const RegisterModal = () => {
                 <TextInput
                   style={styles.inputText}
                   placeholder="Name"
-                  placeholderTextColor="white"
-                  onChangeText={(text) => setSignFirstName(text)}                />
+                  placeholderTextColor="#000000"
+                  onChangeText={(text) => setSignFirstName(text)}
+                />
               </View>
               <View style={styles.flview}>
                 <TextInput
                   style={styles.inputText}
                   placeholder="Surname"
-                  placeholderTextColor="white"
+                  placeholderTextColor="#000000"
                   onChangeText={(text) => setSignLastName(text)}
                 />
               </View>
@@ -149,7 +150,7 @@ const RegisterModal = () => {
               <TextInput
                 style={styles.inputText}
                 placeholder="Enter Nickname..."
-                placeholderTextColor="white"
+                placeholderTextColor="#000000"
                 onChangeText={(text) => setSignNickname(text)}
               />
             </View>
@@ -158,7 +159,7 @@ const RegisterModal = () => {
                 keyboardType="phone-pad"
                 style={styles.inputText}
                 placeholder="Enter Phone number..."
-                placeholderTextColor="white"
+                placeholderTextColor="#000000"
                 onChangeText={(text) => setSignPhone(text)}
               />
             </View>
@@ -167,7 +168,7 @@ const RegisterModal = () => {
                 keyboardType="email-address"
                 style={styles.inputText}
                 placeholder="Enter Email..."
-                placeholderTextColor="white"
+                placeholderTextColor="#000000"
                 onChangeText={(text) => setSignupmail(text)}
               />
             </View>
@@ -176,7 +177,7 @@ const RegisterModal = () => {
                 secureTextEntry
                 style={styles.inputText}
                 placeholder="Enter Password..."
-                placeholderTextColor="white"
+                placeholderTextColor="#000000"
                 onChangeText={(text) => setsignpass(text)}
               />
             </View>
@@ -185,7 +186,7 @@ const RegisterModal = () => {
                 secureTextEntry
                 style={styles.inputText}
                 placeholder="Confirm Password..."
-                placeholderTextColor="white"
+                placeholderTextColor="#000000"
                 onChangeText={(text) => setcpass(text)}
               />
             </View>
@@ -207,7 +208,6 @@ const RegisterModal = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFE889",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 22,
@@ -229,20 +229,17 @@ const styles = StyleSheet.create({
 
   logo_reg: {
     fontWeight: "bold",
-    fontSize: 50,
-    color: "#B35A3F",
-    position: "absolute",
-    top: 10,
+    fontSize: 30,
+    color: "#000000",
   },
   loginBtn: {
-    marginTop: 20,
-    width: "100%",
-    backgroundColor: "#B35A3F",
-    borderRadius: 30,
-    padding: 20,
+    width: 200,
+    backgroundColor: "#FEC108",
+    borderRadius: 20,
+    height: 50,
     alignItems: "center",
     justifyContent: "center",
-
+    marginTop: 40,
     marginBottom: 10,
     shadowOffset: {
       width: 0,
@@ -252,11 +249,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  loginText: {
+    color: "#000000",
+  },
   flview: {
     width: "45%",
-    backgroundColor: "#B35A3F",
-    borderRadius: 25,
-    height: 50,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    height: 40,
 
     marginBottom: 20,
     justifyContent: "center",
@@ -271,8 +271,8 @@ const styles = StyleSheet.create({
   },
   inputView: {
     width: 250,
-    backgroundColor: "#B35A3F",
-    borderRadius: 25,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
     height: 50,
     marginBottom: 20,
     justifyContent: "center",
@@ -289,11 +289,6 @@ const styles = StyleSheet.create({
     height: 50,
     color: "white",
     textAlign: "left",
-  },
-
-  forgot: {
-    color: "white",
-    fontSize: 11,
   },
 
   loginText: {
@@ -356,6 +351,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  btnContainer: {
+    position: "absolute",
+    right: "10%",
+    top: "5%",
+    alignItems: "center",
+    borderRadius: 800,
   },
 });
 export default RegisterModal;
