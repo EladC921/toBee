@@ -1,30 +1,19 @@
-import {
-  View,
-  time,
-  Text,
-  StyleSheet,
-  timeToString,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
-import {
-  Calendar,
-  CalendarList,
-  Agenda,
-  calendarTheme,
-} from "react-native-calendars";
+import { Agenda, calendarTheme } from "react-native-calendars";
 import Moment from "moment";
 
 /**test */
 const Calendaric = (props) => {
   const [userEvents, setUserEvents] = useState();
+
+  // get tasks from server
   useEffect(() => {
-    console.log("laalalalallalalalal");
-    const api_User =
+    const api_GetTasksOfUser =
       "https://proj.ruppin.ac.il/bgroup68/test2/tar5/api/Tasks/GetTasksOfRegUserInAllGroups?uid=" +
       props.user.Uid;
 
-    fetch(api_User, {
+    fetch(api_GetTasksOfUser, {
       method: "GET",
       headers: new Headers({
         "Content-Type": "application/json; charset=UTF-8",
@@ -36,17 +25,21 @@ const Calendaric = (props) => {
       })
       .then(
         (result) => {
-          let dates = [...new Set(result.map((t) => t.DueDate))];
+          let resultFiltered = result.filter((t) => !t.Completed); //get NOT completed tasks
+
+          let dates = [...new Set(resultFiltered.map((t) => t.DueDate))]; // get unique dates
 
           let events = {};
 
+          // get tasks for each date and add them to events (date is the key)
           dates.map((d) => {
-            let tmpDateVars = result.filter((t) => {
+            let tmpDateVars = resultFiltered.filter((t) => {
               return t.DueDate === d;
             });
             events[d] = [...tmpDateVars];
           });
 
+          // format the date and define the formatted key
           for (var key in events) {
             let updatedKey = Moment(key).format("YYYY-MM-DD");
             Object.defineProperty(
@@ -82,7 +75,6 @@ const Calendaric = (props) => {
   };
 
   const getCurrentDate = () => {
-
     var day = new Date().getDay();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
